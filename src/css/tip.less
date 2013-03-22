@@ -1,0 +1,115 @@
+@prefix: ecl-hotel-ui-tip;
+@borderColor: #c1d5ea;
+@borderWidth: 8px;
+@bgColor: #e2eefa;
+@arrowBorderWidth: 2px;
+
+.@{prefix} {
+    width: 268px;
+    height: 120px;
+    z-index: 1000;
+    position: absolute;
+    border: 1px solid @borderColor;
+    background-color: #f9fcff;
+
+    .@{prefix}-arrow,
+    .@{prefix}-arrow em,
+    .@{prefix}-arrow ins {       
+        width: 0;
+        height: 0;
+        font-size: 0;
+        line-height: 0;
+        display: block;
+        position: absolute;
+    }
+
+    .@{prefix}-arrow {
+        em,
+        ins {
+            border: @borderWidth solid transparent;
+
+            // 修复ie6 无法边框透明的bug
+            _border: @borderWidth solid white;
+            _filter: chroma(color=white);
+        }
+    }
+
+    // tip显示在trigger左侧(箭头在控件右侧)
+    .@{prefix}-arrow-left {
+        right: 0;
+
+        em {
+            border-right: none;
+            border-left-color: @borderColor;
+        }
+
+        ins {
+            border-right: none;
+            border-left-color: @bgColor;
+            _border-left-color: @bgColor;
+            left: -@arrowBorderWidth;
+        }
+    }
+
+    // tip显示在trigger右侧(箭头在控件左侧)
+    .@{prefix}-arrow-right{
+        left: -@borderWidth - 1;
+
+        em {
+            border-left: none;
+            border-right-color: @borderColor;
+        }
+
+        ins {
+            border-left: none;
+            border-right-color: @bgColor;
+            _border-right-color: @bgColor;
+            left: @arrowBorderWidth;
+        }
+    }
+
+    // tip显示在trigger顶部(箭头在控件底部)
+    .@{prefix}-arrow-top {
+        bottom: 0;
+
+        em {
+            border-bottom: none;
+            border-top-color: @borderColor;
+        }
+
+        ins {
+            border-bottom: none;
+            border-top-color: @bgColor;
+            _border-top-color: @bgColor;
+            top: -@arrowBorderWidth;
+        }
+    }
+
+    // tip显示在trigger底部(箭头在控件顶部)
+    .@{prefix}-arrow-bottom {
+        top: -@borderWidth;
+
+        em{
+            border-top: none;
+            border-bottom-color: @borderColor;
+        }
+
+        ins{
+            border-top: none;
+            border-bottom-color: @bgColor;
+            _border-bottom-color: @bgColor;
+            top: @arrowBorderWidth;
+        }
+    }
+
+    // 标题定义
+    .@{prefix}-title {
+        height: 50px;
+        background-color: @bgColor;
+    }
+
+    // 内容部分定义
+    .@{prefix}-body {
+
+    }
+}
