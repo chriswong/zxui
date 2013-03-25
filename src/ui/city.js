@@ -123,16 +123,15 @@ define(function (require) {
             if ( !this.rendered ) {
                 this.rendered = true;
 
-                var popup = this.popup = new Popup(options);
-                
-                this.main = this.popup.main;
-                
+                var popup = this.popup = new Popup(this.srcOptions);
 
                 popup.on('click', this.onClick);
                 popup.on('beforeShow', this.onBeforeShow);
+                
+                this.main = popup.main;
 
                 if ( options.target ) {
-                    this.target = T.g(options.target);
+                    this.setTarget(T.g(options.target));
                 }
             }
 
@@ -151,7 +150,7 @@ define(function (require) {
             var labels  = [];
             var panels  = [];
 
-            labels.push('热门城市(可直接输入城市或城市拼音)');
+            labels.push('<span>热门</span>城市(可直接输入城市或城市拼音)');
             labels.push('<a href="#" class="' + prefix + '-close">X</a>');
 
             labels.push('<ul class="' + prefix + '-labels c-clearfix">');
@@ -211,6 +210,9 @@ define(function (require) {
 
                 if ( index ) {
                     this.change(index);
+
+                    var text = el.innerHTML;
+                    this.hinter.innerHTML = (index == '0' ? '' : '拼音') + text
                 }
                 break;
 
@@ -240,9 +242,11 @@ define(function (require) {
                 popup.content = this.build();
                 popup.render();
 
-                var list    = this.main.getElementsByTagName('ul');
+                var main    = this.main;
+                var list    = main.getElementsByTagName('ul');
                 this.labels = list[0].getElementsByTagName('li');
                 this.panels = list[1].getElementsByTagName('li');
+                this.hinter = main.getElementsByTagName('span')[0];
             }
         },
 
