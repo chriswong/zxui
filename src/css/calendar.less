@@ -1,0 +1,103 @@
+@prefix: ecl-hotel-ui-cal;
+
+.@{prefix} {
+    position: absolute;
+    border: 1px solid #b5b5b5;
+    background: #fff;
+    text-align: center;
+
+    h3 {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        line-height: 19px;
+        height: 19px;
+        overflow: hidden;
+        font-size: 14px;
+        background: url(http://open.baidu.com/stat/ticket/cal.gif) 1px 0 repeat-x;
+        color: #41537b;
+        margin-bottom: 2px;
+        border: 1px solid #c6cede;
+        border-top-color: #e9eff9;
+        border-left-color: #e9eff9;
+    }
+
+    ul {
+        color: #666;
+    }
+
+    li,
+    p a {
+        float: left;
+        width: 25px;
+        font: 12px Arial;
+    }
+
+    p a {
+        color: #000;
+        height: 18px;
+        line-height: 18px;
+        margin-top: 3px;
+        text-decoration: none;
+        outline: none;
+        overflow: hidden;
+
+        &:hover {
+            color: #fff;
+            background: #eb4f03;
+        }
+
+        &.@{prefix}-pre-month,
+        &.@{prefix}-next-month {
+            color: #999;
+        }
+
+        &.@{prefix}-disabled,
+        &.@{prefix}-disabled:hover {
+            color: #ddd;
+            cursor: not-allowed;
+            background: none;
+        }
+    }
+
+} 
+.@{prefix}-month {
+    float: left;
+    margin: auto 2px;
+    width: 175px;
+    border-left:1px solid #dae2f5;
+
+    .@{prefix}-weekend {
+        color: orange;
+    }
+
+    .@{prefix}-today {
+        color: red;
+    }
+
+    .@{prefix}-checked {
+        color: #fff;
+        background: #3977d2;
+    }
+}
+
+.@{prefix}-pre,
+.@{prefix}-next {
+    width: 5px;
+    height: 9px;
+    font-size: 0;
+    position: absolute;
+    display: block;
+    overflow: hidden;
+    top: 6px;
+    background: url(http://open.baidu.com/stat/ticket/cal.gif) 0 -19px;
+}
+
+.@{prefix}-pre {
+    left: 6px;
+}
+
+.@{prefix}-next {
+    right: 6px;
+    background-position: 0 -28px;
+}

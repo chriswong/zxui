@@ -6,6 +6,7 @@
 
 ### 目前实现的组件
 
+- 日历控件 Calendar
 - 城市选择 City
 - 分页控件 Pager
 - 浮层提示 Tip

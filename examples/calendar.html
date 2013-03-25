@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Calendar</title>
+<link rel="stylesheet" href="../src/css/common.css" />
+<script>var bds={se:{},su:{},util:{},use:{},comm : {}};</script>
+<script src="../lib/common-2.3.js"></script>
+<script src="../lib/esl.js"></script>
+<link rel="stylesheet/less" type="text/css" href="../src/css/calendar.less" />
+</head>
+<body>
+<div id='content_left'><!--左侧最外层div-->
+  <div class="result-op" srcid="16873" id="1" mu="http://baike.baidu.com/view/1758.htm" data-op="{'y':'FD9FFD6B'}">
+
+<input type="text" class="calendar-trigger" /><input type="button" value="click" class="calendar-trigger" />
+<input type="text" class="calendar-trigger" /><input type="button" value="click" class="calendar-trigger" />
+<script>
+A.init(function () {
+
+    require(['../src/ui/calendar'], function (Calendar) {
+
+        new Calendar({
+          prefix: 'ecl-hotel-ui-cal',
+          triggers: 'calendar-trigger',
+          monthes: 3,
+          range: {
+            begin: '2013-03-25',
+            end: '2013-07-25'
+          },
+          process: function (el, classList, dateString) {
+            var festivals = {
+              '2013-04-04': '清明',
+              '2013-05-01': '劳动'
+            };
+
+            if ( festivals[dateString] ) {
+              // 改变文字显示，你也可以通过push一个class到classList 以便改为预设的class
+              el.innerHTML = festivals[dateString];
+            }
+          },
+          onBeforeShow: function (arg) {
+                var e = arg.event;
+                var target = T.event.getTarget(e);
+
+                // 更新定位及赋值关联的目标 target
+                this.setTarget(
+                    target.tagName == 'INPUT' && target.type == 'text'
+                    ? target
+                    : target.previousSibling
+                );
+          },
+          onPick: function (arg) {
+            this.target.value += '(' + arg.week + ')';
+          }
+        }).render();
+
+
+    });
+
+});
+</script>
+</div>
+</div>
+
+<script src="../lib/less-1.3.3.min.js"></script>
+</body>
+</html>
