@@ -210,6 +210,9 @@ define(function () {
             var thisOptions  = this.options = TO.clone(this.options);
             var eventNameReg = /^on[A-Z]/;
             var me           = this;
+            var extend       = TO.extend;
+
+            this.srcOptions = options;
 
             TO.each(options, function (val, name) {
 
@@ -219,12 +222,14 @@ define(function () {
                     // 移除on前缀，并转换第3个字符为小写，得到事件类型
                     var type = name.charAt(2).toLowerCase() + name.substr(3);
                     me.on(type, val);
+
+                    delete options[name];
                 }
-                else {
+                else if ( name in thisOptions ) {
 
                     // 只处理一层，非递归处理
                     thisOptions[name] = TO.isPlain(val) 
-                                        ? TO.extend(thisOptions[name], val)
+                                        ? extend(thisOptions[name] || {}, val)
                                         : val;
                 }
             });
