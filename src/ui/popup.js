@@ -307,7 +307,6 @@ define(function (require) {
                        ? bottom
                        : top - mainHeight;
 
-                top += first === 'b' ? offset.y : -offset.y;
             }
             else if ( first === 'l' || first === 'r' ) {
                 top = second === 't'
@@ -318,10 +317,9 @@ define(function (require) {
                        ? left - mainWidth
                        : right;
 
-                left += first === 'r' ? offset.x : -offset.x;
             }
 
-            DOM.setStyles(main, {left: left, top: top});
+            DOM.setStyles(main, {left: left + offset.y, top: top + offset.x});
 
         }
 
