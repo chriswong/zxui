@@ -87,10 +87,10 @@ define(function (require) {
             lang: {
 
                 // 上一页显示文字
-                prev: '上一页',
+                prev: '<em class="ecl-left_hotel-ui-pager-icon-l"></em>上一页',
 
                 // 下一页显示文字
-                next: '下一页',
+                next: '下一页<em class="ecl-left_hotel-ui-pager-icon-r"></em>',
 
                 // 省略号
                 ellipsis: '..'
@@ -120,6 +120,10 @@ define(function (require) {
             this.page      = 0;
 
             this.setPage(options.page | 0);
+
+            var lang = options.lang;
+            lang.prev.replace(/\{prefix\}/gi, options.prefix);
+            lang.next.replace(/\{prefix\}/gi, options.prefix);
 
             if ( options.main ) {
                 this.main = T.g(options.main);

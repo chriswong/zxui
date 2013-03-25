@@ -11,22 +11,20 @@
 </head>
 <body>
 <div id='content_left'><!--左侧最外层div-->
-  <div class="result-op" srcid="16873" id="1" mu="http://baike.baidu.com/view/1758.htm" data-op="{'y':'FD9FFD6B'}">
+    <div class="result-op" srcid="16873" id="1" mu="http://baike.baidu.com/view/1758.htm" data-op="{'y':'FD9FFD6B'}">
 
-<div id="pager" class="ecl-left_hotel-ui-pager">loading...</div>
+<div class="ecl-left_hotel-ui-pager"></div>
 <script>
 A.init(function () {
+
+    var main = this.qq('ecl-left_hotel-ui-pager')
 
     require(['../src/ui/pager'], function (Pager) {
 
         var pager = new Pager({
-            main: 'pager',
+            main: main,
             page: 0,
             total: 10,
-            lang: {
-              prev: '<em class="ecl-left_hotel-ui-pager-icon-l"></em>上一页',
-              next: '下一页<em class="ecl-left_hotel-ui-pager-icon-r"></em>'
-            },
             onChange: function (e) {
               //console.log(e);
             }
