@@ -17,12 +17,13 @@
 <input type="text" class="city-trigger" /><input type="button" value="click" class="city-trigger" />
 <script>
 A.init(function () {
+    var me = this;
 
     require(['../src/ui/city'], function (City) {
 
         new City({
           prefix: 'ecl-hotel-ui-city',
-          triggers: 'city-trigger',
+          triggers: me.q('city-trigger'),
           //target: 'city',
           onBeforeShow: function (arg) {
                 var e = arg.event;

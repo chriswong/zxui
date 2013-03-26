@@ -17,12 +17,12 @@
 <script>
 A.init(function () {
 
-    var main = this.qq('ecl-left_hotel-ui-pager')
+    var me = this;
 
     require(['../src/ui/pager'], function (Pager) {
 
         var pager = new Pager({
-            main: main,
+            main: me.qq('ecl-left_hotel-ui-pager'),
             page: 0,
             total: 10,
             onChange: function (e) {
