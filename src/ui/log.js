@@ -10,6 +10,9 @@ define(function (require) {
 	var T = baidu;
 	var DOM = T.dom;
 	var TO = T.object;
+	var parseJson = T.json.parse;
+
+	require('./control');
 
 	/**
 	 * 发送日志请求
@@ -35,9 +38,10 @@ define(function (require) {
 	 * 填充数据
 	 * 根据当前点击对象，解释对象所处XPath及url
 	 * @inner
-	 * @param {Object.<string, *>} data待发送的数据对象
+	 * @param {Object} data待发送的数据对象
 	 * @param {HTMLElement} from 当前点击对象
 	 * @param {HTMLElement} to 统计日志最上层容器
+	 * @return {Object} 合并所有HTML自定义属性和相关配置项后的数据对象
 	 */
 	var fill = function (data, from, to) {
 		var type = 'other';
@@ -45,8 +49,18 @@ define(function (require) {
 		var path = [tag];
 		var i = 1;
 		var url;
+		var nolog = 0;
 
 		DOM.getAncestorBy(from, function (el) {
+			if ( el.getAttribute('data-nolog') === '1' ) {
+				nolog = 1;
+				return true;
+			}
+			var clickData = el.getAttribute('data-click');
+			if ( clickData ) {
+				data = T.extend(parseJson(clickData), data);
+			}
+
 			if ( el !== to ) {
 				path[i ++] = el.tagName;
 
@@ -60,12 +74,17 @@ define(function (require) {
 			}
 		});
 
+		if ( nolog ) {
+			return !nolog;
+		}
+
 		path.reverse();
 
 		if ( /^a|img|input|button$/.test(tag) ) {
 			type = {a: 'link', button: 'btn'}[tag] || tag;
 
-			if ( from.type && /^button|submit|reset|image$/.test(from.type) ){
+			// 取type的前3位作判断，默认非输入框的点击都作为 btn 类型上报
+			if ( from.type && /^(rad|che|but|sub|res|ima)/.test(from.type) ){
 				type = 'btn';
 			}
 
@@ -82,6 +101,7 @@ define(function (require) {
 		}
 
 		data.rsv_xpath = path.join('-').toLowerCase() + '(' + type + ')';
+		return data;
 	};
 
 	/**
@@ -100,7 +120,7 @@ define(function (require) {
 	var options = /** @lends log.options */ {
 
 		// 日志统计服务接口地址
-		action: 'http://sclick.baidu1.com/w.gif?',
+		action: 'http://sclick.baidu.com/w.gif?',
 
 		// 日志统计顶层容器className
 		main: 'result-op',
@@ -139,16 +159,24 @@ define(function (require) {
 			return;
 		}
 
-		var data = T.extend({}, options.data);
-		var clickData = main.getAttribute('data-click');
+		var data = target.getAttribute('data-click');
 
-		if ( clickData != null ) {
-			clickData = T.json.parse(clickData);
-			data = T.extend(data, clickData);
+		if ( data ) {
+			data = parseJson(data);
+		}
+
+		data = fill(data, target, main);
+
+		// 某个上级节点配置了 data-nolog 之后
+		if ( !data ) {
+			return;
+		}
+
+		if ( options.data ) {
+			data = T.extend(T.extend({}, options.data), data);
 		}
 
 		data.t = +new Date;
-		fill(data, target, main);
 
 		send(options.action + T.url.jsonToQuery(data));
 	};
@@ -163,7 +191,7 @@ define(function (require) {
 		/**
 		 * 配置项
 		 * 
-		 * @param {Object.<string, *>} ops 可配置项
+		 * @param {Object} ops 可配置项
 		 * @type {string} ops.action 日志统计服务接口地址
 		 * @type {string} ops.main 日志统计顶层容器className
 		 * @type {string} ops.title xpath中title类型的className

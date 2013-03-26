@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>中间页log</title>
+<script>var bds={se:{},su:{},util:{},use:{},comm : {}};</script>
+<script src="../lib/common-2.3.js"></script>
+<script src="../lib/esl.js"></script>
+</head>
+<body>
+    <div class="result-op" data-click="{'a':1, 'srcid': 16873, 'p1':1, 'y':'FD9FFD6B'}">
+        统计区域一：<br />
+        <input type="button" value="click" />
+        <div data-click="{a:2, b: 2}"><input type="button" value="click" /></div>
+        <a href="http://www.baidu.com" target="_blank"  data-click="{a:3, c: 2}">baidu</a>
+    </div>
+
+
+    <div class="result-op" data-click="{'x':1, 'srcid': 16874, 'p1':2, 'y':'FD9FFD6C'}">
+        统计区域二：<br />
+        <input type="button" value="nolog" data-nolog="1" />
+        <div data-click="{x:2, y: 2}"><input type="button" value="click" /></div>
+        <a href="http://www.baidu.com" target="_blank"  data-click="{x:3, y: 2}">baidu</a>
+    </div>
+
+<script>
+(function () {
+
+    require(['../src/ui/log'], function (log) {
+        log.config({data:{a: 0, e: 1, y: 'x'}})
+        log.start();
+    });
+
+})();
+</script>
+
+</body>
+</html>
