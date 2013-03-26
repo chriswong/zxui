@@ -179,7 +179,7 @@ define(function (require) {
                 if ( !value ) {
                     return new Date();
                 }
-                format = format.split(/[^yMd]+/i);
+                format = format.split(/[^yMdW]+/i);
                 value = value.split(/\D+/);
                 var map = {};
 
@@ -220,9 +220,19 @@ define(function (require) {
             if ( T.isString(date) ) {
                 date = this.from(date);
             }
+            var options = this.options;
+            var first = options.first;
             var y = date.getFullYear();
             var M = date.getMonth() + 1;
             var d = date.getDate();
+            var week = date.getDay();
+
+            if ( first ) {
+                week = (week - 1 + 7 ) % 7;
+            }
+
+            week = this.days[week];
+
             var map = {
                 yyyy: y,
                 yy: y % 100,
@@ -230,10 +240,12 @@ define(function (require) {
                 mm: pad(M),
                 m: M,
                 dd: pad(d),
-                d: d
+                d: d,
+                w: week,
+                ww: options.lang.week + week
             };
 
-            return format.replace(/y+|M+|d+/gi, function ($0) {
+            return format.replace(/y+|M+|d+|W+/gi, function ($0) {
                 return map[$0] || '';
             });
         },
@@ -610,19 +622,18 @@ define(function (require) {
                 this.value = this.format(value, 'yyyy-MM-dd');
             }
             if ( !popup.content ) {
-                this.date = value || new Date();
+                this.date = this.from(value);
                 this.build();
             }
 
             var lastDate = this.lastDate;
             var current = this.getMonth(this.date);
-            var yM = value && this.getMonth(value);
+            var yM = this.getMonth(value);
 
-            if ( lastDate && lastDate != this.format(value) || current != yM) {
-                this.lastDate = this.format(value);
-                this.date = this.from(value || this.date);
+            if ( lastDate && lastDate != this.format(value) || current != yM ) {
+                this.date = this.from(value);
 
-                lastDate = this.getMonth(lastDate);
+                lastDate = lastDate && this.getMonth(lastDate);
                 if ( lastDate != yM || current != yM ) {
                     this.build();
                 }
@@ -630,8 +641,9 @@ define(function (require) {
                     this.updateStatus();
                 }
             }
-
-            this.lastDate = value && this.format(value);
+            else if ( value != lastDate ) {
+                this.updateStatus();
+            }
         },
 
         getMonth: function (date) {
@@ -664,16 +676,19 @@ define(function (require) {
             var week = el.getAttribute('data-week');
             var target = this.target;
 
+            var date = this.from(value, 'yyyy-MM-dd');
+            value = this.format(date);
+            this.lastDate = value;
+
             if ( target ) {
                 target.value = value;
                 target.focus();
-                this.date = this.from(value);
             }
 
             this.fire('pick', { 
-                value: this.format(this.date),
+                value: value,
                 week: this.options.lang.week + this.days[week],
-                date: this.date
+                date: date
             });
             this.hide();
         },

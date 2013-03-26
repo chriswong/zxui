@@ -18,16 +18,37 @@
 <script>
 A.init(function () {
 
+    var me = this;
+
     require(['../src/ui/calendar'], function (Calendar) {
+
+        var addDays = function (date, days) {
+            return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+        };
+
+        var now = new Date();
+        var begin = [now, addDays(now, 89)];
+        var end = [addDays(now, 1), addDays(now, 90)];
+
+        var triggers = me.q('calendar-trigger');
 
         new Calendar({
           prefix: 'ecl-hotel-ui-cal',
-          triggers: 'calendar-trigger',
+          // W为星期几，WW带周作前缀
+          dateFormat: 'yyyy-MM-dd(WW)',
+          triggers: triggers,
+          // 显示几个月
           monthes: 3,
-          range: {
-            begin: '2013-03-25',
-            end: '2013-07-25'
+          // 一周的开始日，默认为周日
+          first: 1,
+          lang: {
+            days: '一,二,三,四,五,六,日'
           },
+          // range: {
+          //   begin: '2013-03-25',
+          //   end: '2013-07-25'
+          // },
+          // 如果要处理节日
           process: function (el, classList, dateString) {
             var festivals = {
               '2013-04-04': '清明',
@@ -39,19 +60,40 @@ A.init(function () {
               el.innerHTML = festivals[dateString];
             }
           },
+          // 不指定 target 时，需要在本事件中动态指定
           onBeforeShow: function (arg) {
                 var e = arg.event;
                 var target = T.event.getTarget(e);
 
                 // 更新定位及赋值关联的目标 target
-                this.setTarget(
-                    target.tagName == 'INPUT' && target.type == 'text'
-                    ? target
-                    : target.previousSibling
-                );
+                target = target.tagName === 'INPUT' && target.type === 'text'
+                         ? target
+                         : target.previousSibling;
+
+                this.setTarget(target);
+
+                if ( target === triggers[0] ) {
+                    // 设定开始的范围
+                    this.setRange({begin: begin[0], end: begin[1]});
+                }
+                else {
+                    var date = this.from(triggers[0].value);
+                    // 在开始日期的后一天
+                    end[0] = addDays(date, 1);
+                    // 开始日期的30天结束
+                    end[1] = addDays(date, 30);
+                    
+                    // 设定结束的范围
+                    this.setRange({begin: end[0], end: end[1]});
+                }
           },
+          // 选取日期的后续处理
+          // arg = { value: week: date: }
           onPick: function (arg) {
-            this.target.value += '(' + arg.week + ')';
+            var target = this.target;
+            if ( target === triggers[0] && triggers[2].value <= target.value) {
+                triggers[2].value = this.format(addDays(arg.date, 1));
+            }
           }
         }).render();
 
