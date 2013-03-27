@@ -165,7 +165,7 @@ define(function (require) {
 			data = parseJson(data);
 		}
 
-		data = fill(data, target, main);
+		data = fill(data || {}, target, main);
 
 		// 某个上级节点配置了 data-nolog 之后
 		if ( !data ) {
