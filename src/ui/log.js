@@ -51,7 +51,7 @@ define(function (require) {
 		var url;
 		var nolog = 0;
 
-		DOM.getAncestorBy(from, function (el) {
+		var work = function (el) {
 			if ( el.getAttribute('data-nolog') === '1' ) {
 				nolog = 1;
 				return true;
@@ -72,7 +72,14 @@ define(function (require) {
 			else {
 				return true;
 			}
-		});
+		};
+
+		if ( from === to ) {
+			work(from);
+		}
+		else {
+			DOM.getAncestorBy(from, work);
+		}
 
 		if ( nolog ) {
 			return !nolog;
@@ -152,7 +159,10 @@ define(function (require) {
 	 */
 	var onClick = function (e) {
 		var target = T.event.getTarget(e);
-		var main = DOM.getAncestorByClass(target, options.main);
+		var klass = options.main;
+		var main = DOM.hasClass(target, klass)
+				   ? target
+				   : DOM.getAncestorByClass(target, klass);
 		var nolog = target.getAttribute('data-nolog') === '1';
 
 		if ( nolog || !main ) {

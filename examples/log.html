@@ -10,18 +10,20 @@
 <body>
     <div class="result-op" data-click="{'a':1, 'srcid': 16873, 'p1':1, 'y':'FD9FFD6B'}">
         统计区域一：<br />
-        <input type="button" value="click" />
-        <div data-click="{a:2, b: 2}"><input type="button" value="click" /></div>
-        <a href="http://www.baidu.com" target="_blank"  data-click="{a:3, c: 2}">baidu</a>
+        <input type="button" value="无data-click配置" />
+        <div data-click="{a:2, b: 2}"><input type="button" value="父节点有data-click配置" /></div>
+        <a href="http://www.baidu.com" target="_blank"  data-click="{a:3, c: 2}">baidu - 当前节点有data-click配置</a>
     </div>
 
 
     <div class="result-op" data-click="{'x':1, 'srcid': 16874, 'p1':2, 'y':'FD9FFD6C'}">
         统计区域二：<br />
-        <input type="button" value="nolog" data-nolog="1" />
-        <div data-click="{x:2, y: 2}"><input type="button" value="click" /></div>
-        <a href="http://www.baidu.com" target="_blank"  data-click="{x:3, y: 2}">baidu</a>
+        <input type="button" value="配置data-nolog=1" data-nolog="1" />
+        <div data-click="{x:2, y: 2}"><input type="button" value="配置x=2 y=2" /></div>
+        <a href="http://www.baidu.com" target="_blank"  data-click="{x:3, y: 2}">baidu - 配置x=3, y=2</a>
     </div>
+
+    <input class="result-op" data-click="{x:2, y: 2}" type="button" value="无父节点的点击" />
 
 <script>
 (function () {
