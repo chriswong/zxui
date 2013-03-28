@@ -50,17 +50,16 @@
         }
     }
 
-    a {
-        .@{prefix}-icon-l,
-        &:hover .@{prefix}-icon-l {
-            border-right-color: #999; 
-            border-left: none;
-        }
-        .@{prefix}-icon-r,
-        &:hover .@{prefix}-icon-r {
-            border-left-color: #999; 
-            border-right: none;
-        }
+    .@{prefix}-prev em,
+    .@{prefix}-prev:hover em{
+        border-right-color: #999; 
+        border-left: none;
+    }
+
+    .@{prefix}-next em,
+    .@{prefix}-next:hover em {
+        border-left-color: #999; 
+        border-right: none;
     }
 
     .@{prefix}-disabled {

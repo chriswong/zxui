@@ -87,10 +87,10 @@ define(function (require) {
             lang: {
 
                 // 上一页显示文字
-                prev: '<em class="ecl-left_hotel-ui-pager-icon-l"></em>上一页',
+                prev: '<em></em>上一页',
 
                 // 下一页显示文字
-                next: '下一页<em class="ecl-left_hotel-ui-pager-icon-r"></em>',
+                next: '下一页<em></em>',
 
                 // 省略号
                 ellipsis: '..'
