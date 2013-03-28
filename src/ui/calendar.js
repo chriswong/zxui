@@ -681,8 +681,13 @@ define(function (require) {
             this.lastDate = value;
 
             if ( target ) {
-                target.value = value;
-                target.focus();
+                if ( target.type ) {
+                    target.value = value;
+                    target.focus();
+                }
+                else {
+                    target.innerHTML = value;
+                }
             }
 
             this.fire('pick', { 
