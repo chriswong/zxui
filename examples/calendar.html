@@ -16,6 +16,7 @@
 <input type="text" class="calendar-trigger" /><input type="button" value="click" class="calendar-trigger" />
 <input type="text" class="calendar-trigger" /><input type="button" value="click" class="calendar-trigger" />
 <script>
+
 A.init(function () {
 
     var me = this;
@@ -37,8 +38,9 @@ A.init(function () {
           // W为星期几，WW带周作前缀
           dateFormat: 'yyyy-MM-dd(WW)',
           triggers: triggers,
+          //value: '2012-03-30',
           // 显示几个月
-          monthes: 3,
+          //monthes: 3,
           // 一周的开始日，默认为周日
           first: 1,
           lang: {
@@ -51,8 +53,10 @@ A.init(function () {
           // 如果要处理节日
           process: function (el, classList, dateString) {
             var festivals = {
+              '2013-03-08': '三八',
               '2013-04-04': '清明',
-              '2013-05-01': '劳动'
+              '2013-05-01': '劳动',
+              '2013-10-01': '国庆'
             };
 
             if ( festivals[dateString] ) {
@@ -82,13 +86,13 @@ A.init(function () {
                     end[0] = addDays(date, 1);
                     // 开始日期的30天结束
                     end[1] = addDays(date, 30);
-                    
+
                     // 设定结束的范围
                     this.setRange({begin: end[0], end: end[1]});
                 }
           },
           // 选取日期的后续处理
-          // arg = { value: week: date: }
+          // arg = { value:, week:, date: }
           onPick: function (arg) {
             var target = this.target;
             if ( target === triggers[0] && triggers[2].value <= target.value) {

@@ -10,6 +10,14 @@ define(function (require) {
 	var Popup = require('./popup');
 
     /**
+     * 标准日期格式
+     * 
+     * @const
+     * @type {string}
+     */
+    var DATE_FORMAT = 'yyyy-MM-dd';
+
+    /**
      * 阻止事件冒泡
      * 
      * @param {DOMEvent} e 事件对象
@@ -51,7 +59,7 @@ define(function (require) {
 	 * @const
 	 * @type {string}
 	 */
-	Calendar.DATE_FORMAT = 'yyyy-MM-dd';
+	Calendar.DATE_FORMAT = DATE_FORMAT;
 
 	/**
 	 * 可选中的日期区间
@@ -62,6 +70,12 @@ define(function (require) {
 	Calendar.RANGE = null;
 
 
+    /**
+     * 每个月的HTML缓存
+     * 
+     * @private
+     * @type {Object}
+     */
     var cache = {};
 
 	T.extend(
@@ -157,12 +171,15 @@ define(function (require) {
             options = this.setOptions(options);
 
             this.disabled   = options.disabled;
-            this.dateFormat = options.dateFormat || Calendar.DATE_FORMAT;
+            this.dateFormat = 
+                options.dateFormat
+                || Calendar.DATE_FORMAT
+                || DATE_FORMAT;
             
             this.setRange(options.range || Calendar.RANGE);
 
-            this.value = options.vaue;
             this.days  = options.lang.days.split(',');
+            this.value = this.format(this.from(options.value));
         },
 
         /**
@@ -539,16 +556,21 @@ define(function (require) {
             var date    = this.date;
             var now     = new Date();
 
-            var checkedValue = this.value;
-            var nowValue     = this.format(now);
+            var checkedValue = this.format(this.from(this.value), DATE_FORMAT);
+            var nowValue     = this.format(now, DATE_FORMAT);
             var range        = this.range;
-            var min = '';
-            var max = '9999-12-31';
+            var min          = '';
+            var max          = '9999-12-31';
 
             if ( range ) {
-                var format = 'yyyy-MM-dd';
-                min = range.begin && this.format(range.begin, format) || min;
-                max = range.end && this.format(range.end, format) || max;
+                min = 
+                    range.begin
+                    && this.format(range.begin, DATE_FORMAT)
+                    || min;
+                max = 
+                    range.end
+                    && this.format(range.end, DATE_FORMAT)
+                    || max;
             }
 
             var preClass     = prefix + '-pre-month';
@@ -559,17 +581,19 @@ define(function (require) {
             var weekendClass = prefix + '-weekend';
 
             var monthes = this.main.getElementsByTagName('p');
-            var i, l, j, day, days, klass, value, className;
+            var i, l, j, day, days, klass, value, className, inRange;
             for ( i = 0, l = monthes.length; i < l; i++ ) {
                 days  = monthes[i].getElementsByTagName('a');
 
                 for ( j = 0; day = days[j]; j++ ) {
-                    klass = [];
+                    klass     = [];
                     value     = day.getAttribute('data-date');
                     className = day.className;
+                    inRange   = true;
 
                     if ( range && (value < min || value > max) ) {
                         klass.push(disClass);
+                        inRange = false;
                     }
 
                     var mod = j % 7;
@@ -589,12 +613,12 @@ define(function (require) {
                             klass.push(todayClass);
                         }
 
-                        if ( checkedValue && value == checkedValue ) {
-                            klass.push(checkedClass)
+                        if ( inRange && value == checkedValue ) {
+                            klass.push(checkedClass);
                         }
 
                         if ( process ) {
-                            process.call(this, day, klass, value);
+                            process.call(this, day, klass, value, inRange);
                         }
                         
                     }
@@ -615,23 +639,24 @@ define(function (require) {
 
             var popup  = this.popup;
             var target = this.target;
-            var value  = this.value = target.value;
+            var value  = target.value;
 
             if ( value ) {
                 value = this.from(value);
-                this.value = this.format(value, 'yyyy-MM-dd');
+                this.value = this.format(value);
             }
             if ( !popup.content ) {
-                this.date = this.from(value);
+                this.date = this.from(value || this.value);
                 this.build();
             }
 
-            var lastDate = this.lastDate;
+            var lastDate = this.lastDate || '';
+            var lastTarget = this.lastTarget;
             var current = this.getMonth(this.date);
             var yM = this.getMonth(value);
 
             if ( lastDate && lastDate != this.format(value) || current != yM ) {
-                this.date = this.from(value);
+                this.date = this.from(value || this.value);
 
                 lastDate = lastDate && this.getMonth(lastDate);
                 if ( lastDate != yM || current != yM ) {
@@ -641,7 +666,7 @@ define(function (require) {
                     this.updateStatus();
                 }
             }
-            else if ( value != lastDate ) {
+            else if ( value != lastDate || target != lastTarget) {
                 this.updateStatus();
             }
         },
@@ -676,7 +701,7 @@ define(function (require) {
             var week = el.getAttribute('data-week');
             var target = this.target;
 
-            var date = this.from(value, 'yyyy-MM-dd');
+            var date = this.from(value, DATE_FORMAT);
             value = this.format(date);
             this.lastDate = value;
 
