@@ -1,6 +1,6 @@
-@prefix: ecl-hotel-ui-cal;
+@cal-prefix: ecl-hotel-ui-cal;
 
-.@{prefix} {
+.@{cal-prefix} {
     position: absolute;
     border: 1px solid #b5b5b5;
     background: #fff;
@@ -47,13 +47,8 @@
             background: #eb4f03;
         }
 
-        &.@{prefix}-pre-month,
-        &.@{prefix}-next-month {
-            color: #999;
-        }
-
-        &.@{prefix}-disabled,
-        &.@{prefix}-disabled:hover {
+        &.@{cal-prefix}-disabled,
+        &.@{cal-prefix}-disabled:hover {
             color: #ddd;
             cursor: not-allowed;
             background: none;
@@ -61,28 +56,33 @@
     }
 
 } 
-.@{prefix}-month {
+.@{cal-prefix}-month {
     float: left;
     margin: auto 2px;
     width: 175px;
     border-left:1px solid #dae2f5;
 
-    .@{prefix}-weekend {
-        color: orange;
-    }
-
-    .@{prefix}-today {
+    .@{cal-prefix}-today {
         color: red;
     }
 
-    .@{prefix}-checked {
+    .@{cal-prefix}-weekend {
+        color: orange;
+    }
+
+    .@{cal-prefix}-checked {
         color: #fff;
         background: #3977d2;
     }
+
+    .@{cal-prefix}-pre-month,
+    .@{cal-prefix}-next-month {
+        color: #999;
+    }
 }
 
-.@{prefix}-pre,
-.@{prefix}-next {
+.@{cal-prefix}-pre,
+.@{cal-prefix}-next {
     width: 5px;
     height: 9px;
     font-size: 0;
@@ -93,11 +93,11 @@
     background: url(http://open.baidu.com/stat/ticket/cal.gif) 0 -19px;
 }
 
-.@{prefix}-pre {
+.@{cal-prefix}-pre {
     left: 6px;
 }
 
-.@{prefix}-next {
+.@{cal-prefix}-next {
     right: 6px;
     background-position: 0 -28px;
 }

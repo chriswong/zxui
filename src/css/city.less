@@ -1,6 +1,6 @@
-@prefix: ecl-hotel-ui-city;
+@city-prefix: ecl-hotel-ui-city;
 
-.@{prefix} {
+.@{city-prefix} {
     width: 360px;
     position: absolute;
     z-index: 1000;
@@ -14,12 +14,12 @@
         text-decoration: none;
     }
 }
-.@{prefix}-labels,
-.@{prefix}-panels {
+.@{city-prefix}-labels,
+.@{city-prefix}-panels {
     list-style: none;
 }
 
-.@{prefix}-close {
+.@{city-prefix}-close {
     color: #B4B4B4;
     font: bold 12px/1.2 'Comic Sans MS';
     padding: 0 3px;
@@ -28,7 +28,7 @@
     top: 8px;
 }
 
-.@{prefix}-labels {
+.@{city-prefix}-labels {
     border-top: 1px dashed #ddd;
     border-bottom: 1px solid #ddd;
     padding-top: 8px;
@@ -45,19 +45,19 @@
         color: #0069CA;
     }
 
-    .@{prefix}-active {
+    .@{city-prefix}-active {
         background-color: #E8EDF1;
     }
 }
 
-.@{prefix}-panels {
+.@{city-prefix}-panels {
     li {
         display: none;
         float: left;
         line-height: 18px;
     }
 
-    .@{prefix}-active {
+    .@{city-prefix}-active {
         display: block;
     }
     a {

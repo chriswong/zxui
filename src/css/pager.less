@@ -1,6 +1,6 @@
-@prefix: ecl-left_hotel-ui-pager;
+@pager-prefix: ecl-left_hotel-ui-pager;
 
-.@{prefix} { 
+.@{pager-prefix} { 
     a {
         display: inline-block; 
         margin: 3px; 
@@ -29,40 +29,40 @@
         &:hover em {
             border-color: #EFF4FA; 
         }
-        &.@{prefix}-ellipsis {
+        &.@{pager-prefix}-ellipsis {
             border: none;
         }
     }
 
-    .@{prefix}-current {
+    .@{pager-prefix}-current {
         font-weight: 700;
         border: none;    
         color: #666;
         cursor: default;
     }
 
-    .@{prefix}-current:hover,
-    .@{prefix}-ellipsis:hover,
-    .@{prefix}-disabled:hover {
+    .@{pager-prefix}-current:hover,
+    .@{pager-prefix}-ellipsis:hover,
+    .@{pager-prefix}-disabled:hover {
         background: none;
         em {
             border-color: #FFF;
         }
     }
 
-    .@{prefix}-prev em,
-    .@{prefix}-prev:hover em{
+    .@{pager-prefix}-prev em,
+    .@{pager-prefix}-prev:hover em{
         border-right-color: #999; 
         border-left: none;
     }
 
-    .@{prefix}-next em,
-    .@{prefix}-next:hover em {
+    .@{pager-prefix}-next em,
+    .@{pager-prefix}-next:hover em {
         border-left-color: #999; 
         border-right: none;
     }
 
-    .@{prefix}-disabled {
+    .@{pager-prefix}-disabled {
         color: #999;
         cursor: default;
     }

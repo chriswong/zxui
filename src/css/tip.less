@@ -1,20 +1,20 @@
-@prefix: ecl-hotel-ui-tip;
-@borderColor: #c1d5ea;
-@borderWidth: 8px;
-@bgColor: #e2eefa;
-@arrowBorderWidth: 2px;
+@tip-prefix: ecl-hotel-ui-tip;
+@tip-border-color: #c1d5ea;
+@tip-border-width: 8px;
+@tip-background-color: #e2eefa;
+@tip-arrow-border-width: 2px;
 
-.@{prefix} {
+.@{tip-prefix} {
     width: 268px;
     height: 120px;
     z-index: 1000;
     position: absolute;
-    border: 1px solid @borderColor;
+    border: 1px solid @tip-border-color;
     background-color: #f9fcff;
 
-    .@{prefix}-arrow,
-    .@{prefix}-arrow em,
-    .@{prefix}-arrow ins {       
+    .@{tip-prefix}-arrow,
+    .@{tip-prefix}-arrow em,
+    .@{tip-prefix}-arrow ins {       
         width: 0;
         height: 0;
         font-size: 0;
@@ -23,93 +23,93 @@
         position: absolute;
     }
 
-    .@{prefix}-arrow {
+    .@{tip-prefix}-arrow {
         em,
         ins {
-            border: @borderWidth solid transparent;
+            border: @tip-border-width solid transparent;
 
             // 修复ie6 无法边框透明的bug
-            _border: @borderWidth solid white;
+            _border: @tip-border-width solid white;
             _filter: chroma(color=white);
         }
     }
 
     // tip显示在trigger左侧(箭头在控件右侧)
-    .@{prefix}-arrow-left {
+    .@{tip-prefix}-arrow-left {
         right: 0;
 
         em {
             border-right: none;
-            border-left-color: @borderColor;
+            border-left-color: @tip-border-color;
         }
 
         ins {
             border-right: none;
-            border-left-color: @bgColor;
-            _border-left-color: @bgColor;
-            left: -@arrowBorderWidth;
+            border-left-color: @tip-background-color;
+            _border-left-color: @tip-background-color;
+            left: -@tip-arrow-border-width;
         }
     }
 
     // tip显示在trigger右侧(箭头在控件左侧)
-    .@{prefix}-arrow-right{
-        left: -@borderWidth - 1;
+    .@{tip-prefix}-arrow-right{
+        left: -@tip-border-width - 1;
 
         em {
             border-left: none;
-            border-right-color: @borderColor;
+            border-right-color: @tip-border-color;
         }
 
         ins {
             border-left: none;
-            border-right-color: @bgColor;
-            _border-right-color: @bgColor;
-            left: @arrowBorderWidth;
+            border-right-color: @tip-background-color;
+            _border-right-color: @tip-background-color;
+            left: @tip-arrow-border-width;
         }
     }
 
     // tip显示在trigger顶部(箭头在控件底部)
-    .@{prefix}-arrow-top {
+    .@{tip-prefix}-arrow-top {
         bottom: 0;
 
         em {
             border-bottom: none;
-            border-top-color: @borderColor;
+            border-top-color: @tip-border-color;
         }
 
         ins {
             border-bottom: none;
-            border-top-color: @bgColor;
-            _border-top-color: @bgColor;
-            top: -@arrowBorderWidth;
+            border-top-color: @tip-background-color;
+            _border-top-color: @tip-background-color;
+            top: -@tip-arrow-border-width;
         }
     }
 
     // tip显示在trigger底部(箭头在控件顶部)
-    .@{prefix}-arrow-bottom {
-        top: -@borderWidth;
+    .@{tip-prefix}-arrow-bottom {
+        top: -@tip-border-width;
 
         em{
             border-top: none;
-            border-bottom-color: @borderColor;
+            border-bottom-color: @tip-border-color;
         }
 
         ins{
             border-top: none;
-            border-bottom-color: @bgColor;
-            _border-bottom-color: @bgColor;
-            top: @arrowBorderWidth;
+            border-bottom-color: @tip-background-color;
+            _border-bottom-color: @tip-background-color;
+            top: @tip-arrow-border-width;
         }
     }
 
     // 标题定义
-    .@{prefix}-title {
+    .@{tip-prefix}-title {
         height: 50px;
-        background-color: @bgColor;
+        background-color: @tip-background-color;
     }
 
     // 内容部分定义
-    .@{prefix}-body {
+    .@{tip-prefix}-body {
 
     }
 }
