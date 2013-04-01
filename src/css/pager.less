@@ -2,15 +2,15 @@
 
 .@{pager-prefix} { 
     a {
-        display: inline-block; 
+        display: block; 
+        float: left;
         margin: 3px; 
         text-decoration: none; 
         border: 1px solid #CCC;
         overflow: hidden;
-        *zoom: 1;
         padding: 2px 5px;
-        color: #0033CC;
-        font: normal 12px/16px Arial, Helvetica, sans-serif;
+        color: #03C;
+        font: normal 12px/1.2 Arial, Helvetica, sans-serif;
         text-align: center;
 
         em { 
@@ -18,9 +18,6 @@
             border: 5px solid #fff;
             font-size: 0;
             margin: auto 3px;
-            height: 0;
-            width: 0;
-            line-height: 1;
             *zoom: 1;
         }
         &:hover {
