@@ -87,10 +87,10 @@ define(function (require) {
             lang: {
 
                 // 上一页显示文字
-                prev: '<em></em>上一页',
+                prev: '<em></em><span>上一页</span>',
 
                 // 下一页显示文字
-                next: '下一页<em></em>',
+                next: '<span>下一页</span><em></em>',
 
                 // 省略号
                 ellipsis: '..'
@@ -309,8 +309,16 @@ define(function (require) {
                 return;
             }
 
-            if ( target.tagName != 'A' ) {
-                target = target.parentNode;
+            if ( target.tagName !== 'A' ) {
+                var main = this.main;
+                target = T.dom.getAncestorBy(target, function (el) {
+                    // 最高访问到控件根容器, 避免到文档根节点
+                    return el.tagName === 'A' || el === main;
+                });
+                
+                if ( target === main) {
+                    return;
+                }
             }
 
             var current = target.getAttribute('data-page');
