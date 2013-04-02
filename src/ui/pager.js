@@ -87,10 +87,10 @@ define(function (require) {
             lang: {
 
                 // 上一页显示文字
-                prev: '<em></em><span>上一页</span>',
+                prev: '<em></em>上一页',
 
                 // 下一页显示文字
-                next: '<span>下一页</span><em></em>',
+                next: '下一页<em></em>',
 
                 // 省略号
                 ellipsis: '..'
