@@ -149,8 +149,8 @@ define(function (require) {
             var prefix = options.prefix;
             var main   = this.main = document.createElement('div');
 
-            main.className        = prefix;
-            main.innerHTML        = options.tpl.replace(/{prefix}/g, prefix);
+            main.className  = prefix;
+            main.innerHTML  = options.tpl.replace(/{prefix}/g, prefix);
             main.style.left = '-2000px';
 
             this.events = {
@@ -223,9 +223,10 @@ define(function (require) {
             var events  = this.events;
             var flag    = options.flag;
 
-            this.triggers = typeof triggers == 'string'
-                            ? T.q(options.triggers)
-                            : (triggers.length ? triggers : [triggers]);
+            this.triggers = 
+                typeof triggers === 'string'
+                ? T.q(options.triggers)
+                : (triggers.length ? triggers : [triggers]);
 
             if ( events ) {
                 T.each(this.triggers, function (trigger) {
@@ -253,6 +254,7 @@ define(function (require) {
          */
         onResize: function (e) {
             clearTimeout(this.resizeTimer);
+
             var me = this;
             this.resizeTimer = setTimeout( function () {
                 me.show(me.current);
@@ -320,9 +322,9 @@ define(function (require) {
             T.on(window, 'resize', this.onResize);
 
             elements.title.innerHTML = this.title || '';
-            elements.body.innerHTML = this.content;
+            elements.body.innerHTML  = this.content;
 
-            T[ this.title ? 'show' : 'hide'](elements.title);
+            T[this.title ? 'show' : 'hide'](elements.title);
 
             if ( !options.arrow ) {
                 T.hide(elements.arrow);
@@ -359,32 +361,30 @@ define(function (require) {
          * @private
          */
         computePosition: function () {
-            var options = this.options;
-            var target = this.current;
-            var main = this.main;
-            var arrow = this.elements.arrow;
-            var dir = options.arrow;
-            var position = DOM.getPosition(target);
-            var prefix = options.prefix + '-arrow';
+            var options      = this.options;
+            var target       = this.current;
+            var main         = this.main;
+            var arrow        = this.elements.arrow;
+            var dir          = options.arrow;
+            var position     = DOM.getPosition(target);
+            var prefix       = options.prefix + '-arrow';
 
-            var top = position.top;
-            var left = position.left;
+            var top          = position.top;
+            var left         = position.left;
+            var width        = target.offsetWidth;
+            var height       = target.offsetHeight;
+            var right        = left + width;
+            var bottom       = top + height;
 
-            var width = target.offsetWidth;
-            var height = target.offsetHeight;
+            var mainWidth    = main.offsetWidth;
+            var mainHeight   = main.offsetHeight;
 
-            var right = left + width;
-            var bottom = top + height;
+            var arrowWidth   = arrow.firstChild.offsetWidth;
+            var arrowHeight  = arrow.firstChild.offsetHeight;
 
-            var mainWidth = main.offsetWidth;
-            var mainHeight = main.offsetHeight;
-
-            var arrowWidth = arrow.firstChild.offsetWidth;
-            var arrowHeight = arrow.firstChild.offsetHeight;
-
-            var scrollTop = PAGE.getScrollTop();
-            var scrollLeft = PAGE.getScrollLeft();
-            var scrollRight = scrollLeft + PAGE.getViewWidth();
+            var scrollTop    = PAGE.getScrollTop();
+            var scrollLeft   = PAGE.getScrollLeft();
+            var scrollRight  = scrollLeft + PAGE.getViewWidth();
             var scrollBottom = scrollTop + PAGE.getViewHeight();
 
             // 属性配置优于实例配置
@@ -421,17 +421,17 @@ define(function (require) {
                 second = dir.charAt(1);
             }
 
-            var lrtb = { l: 'left', r: 'right', t: 'top', b: 'bottom' };
+            var lrtb   = { l: 'left', r: 'right', t: 'top', b: 'bottom' };
             var offset = options.offset;
 
             arrow.className = prefix + ' ' + prefix + '-' + lrtb[first];
 
             // 改变箭头方向后需要校准箭头尺寸
-            arrowWidth = arrow.firstChild.offsetWidth;
+            arrowWidth  = arrow.firstChild.offsetWidth;
             arrowHeight = arrow.firstChild.offsetHeight;
 
             var middleLeft = (mainWidth - arrowWidth ) / 2;
-            var middleTop = (mainHeight - arrowHeight ) / 2;
+            var middleTop  = (mainHeight - arrowHeight ) / 2;
 
             if ( first === 'b' || first === 't' ) {
                 left = second === 'l' 

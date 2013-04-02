@@ -172,7 +172,7 @@ define(function (require) {
             var oldTarget = this.target;
             this.fire('beforeShow', { event: e });
 
-            if ( oldTarget != this.target) {
+            if ( oldTarget !== this.target) {
                 this.hide();
             }
 
@@ -180,6 +180,7 @@ define(function (require) {
 
             var me = this;
             this.trigger = T.event.getTarget(e);
+
             this.timer = setTimeout(function () {
                 T.on(document, 'click', me.onHide);
                 T.on(window, 'resize', me.onResize);
@@ -193,7 +194,7 @@ define(function (require) {
          */
         onHide: function (e) {
             var target = T.event.getTarget(e);
-            var main = this.main;
+            var main   = this.main;
 
             if ( main === target || DOM.contains(main, target) ) {
                 return;
@@ -239,27 +240,25 @@ define(function (require) {
          * @private
          */
         computePosition: function () {
-            var options = this.options;
-            var target = this.target || this.triggers[0];
-            var main = this.main;
-            var dir = options.dir;
-            var position = DOM.getPosition(target);
+            var options      = this.options;
+            var target       = this.target || this.triggers[0];
+            var main         = this.main;
+            var dir          = options.dir;
+            var position     = DOM.getPosition(target);
 
-            var top = position.top;
-            var left = position.left;
+            var top          = position.top;
+            var left         = position.left;
+            var width        = target.offsetWidth;
+            var height       = target.offsetHeight;
+            var right        = left + width;
+            var bottom       = top + height;
 
-            var width = target.offsetWidth;
-            var height = target.offsetHeight;
+            var mainWidth    = main.offsetWidth;
+            var mainHeight   = main.offsetHeight;
 
-            var right = left + width;
-            var bottom = top + height;
-
-            var mainWidth = main.offsetWidth;
-            var mainHeight = main.offsetHeight;
-
-            var scrollTop = PAGE.getScrollTop();
-            var scrollLeft = PAGE.getScrollLeft();
-            var scrollRight = scrollLeft + PAGE.getViewWidth();
+            var scrollTop    = PAGE.getScrollTop();
+            var scrollLeft   = PAGE.getScrollLeft();
+            var scrollRight  = scrollLeft + PAGE.getViewWidth();
             var scrollBottom = scrollTop + PAGE.getViewHeight();
 
             // 属性配置优于实例配置

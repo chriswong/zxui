@@ -212,7 +212,7 @@ define(function (require) {
                     this.change(index);
 
                     var text = el.innerHTML;
-                    this.hinter.innerHTML = (index == '0' ? '' : '拼音') + text
+                    this.hinter.innerHTML = (index === '0' ? '' : '拼音') + text
                 }
                 break;
 
@@ -301,7 +301,7 @@ define(function (require) {
 
             i |= 0;
 
-            if (i != index ) {
+            if (i !== index ) {
 
                 T.removeClass(labels[index], activeClass);
                 T.removeClass(panels[index], activeClass);

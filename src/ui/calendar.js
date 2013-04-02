@@ -196,8 +196,10 @@ define(function (require) {
                 if ( !value ) {
                     return new Date();
                 }
+
                 format = format.split(/[^yMdW]+/i);
-                value = value.split(/\D+/);
+                value  = value.split(/\D+/);
+
                 var map = {};
 
                 for ( var i = 0, l = format.length; i < l; i++ ) {
@@ -213,13 +215,16 @@ define(function (require) {
                         map[format[i].toLowerCase()] = value[i];
                     }
                 }
-                var year = map.yyyy
-                            || map.y
-                            || ((map.yy < 50 ? '20' : '19') + map.yy);
+                var year  =
+                    map.yyyy
+                    || map.y
+                    || ((map.yy < 50 ? '20' : '19') + map.yy);
+
                 var month = (map.m || map.mm) | 0;
-                var date = (map.d || map.dd) | 0; 
+                var date  = (map.d || map.dd) | 0; 
                 return new Date(year | 0, month - 1, date);
              }
+
              return value;
         },
 
@@ -237,12 +242,13 @@ define(function (require) {
             if ( T.isString(date) ) {
                 date = this.from(date);
             }
+
             var options = this.options;
-            var first = options.first;
-            var y = date.getFullYear();
-            var M = date.getMonth() + 1;
-            var d = date.getDate();
-            var week = date.getDay();
+            var first   = options.first;
+            var y       = date.getFullYear();
+            var M       = date.getMonth() + 1;
+            var d       = date.getDate();
+            var week    = date.getDay();
 
             if ( first ) {
                 week = (week - 1 + 7 ) % 7;
@@ -301,11 +307,11 @@ define(function (require) {
          */
         build: function (date) {
             var options = this.options;
-            var html = [];
+            var html    = [];
 
             date = date || this.date;
 
-            var year = date.getFullYear();
+            var year  = date.getFullYear();
             var month = date.getMonth();
             var current;
 
@@ -315,10 +321,11 @@ define(function (require) {
             }
 
             var prefix = options.prefix;
-            var range = this.range;
+            var range  = this.range;
             if ( !range || this.getMonth(range.begin) < this.getMonth(date) ) {
                 html.push('<a href="#" class="' + prefix + '-pre"></a>');               
             }
+
             var last = new Date(year, month + options.monthes - 1, 1);
             if ( !range || this.getMonth(range.end) > this.getMonth(last) ) {
                 html.push('<a href="#" class="' + prefix + '-next"></a>');
@@ -363,12 +370,15 @@ define(function (require) {
             var firstDay = options.first;
             var days = this.days;
             html.push('<ul class="c-clearfix">');
+
             for ( i = 0, l = days.length; i < l; i++ ) {
-                klass = i == weeks - 1 
-                        || firstDay && i == weeks - 2
-                        || !firstDay && i == firstDay
-                        ? ' class="' + prefix + '-weekend"'
-                        : '';
+                klass = 
+                    i == weeks - 1 
+                    || firstDay && i == weeks - 2
+                    || !firstDay && i == firstDay
+                    ? ' class="' + prefix + '-weekend"'
+                    : '';
+
                 html.push('<li' + klass + '>' + days[i] + '</li>');
             }
             html.push('</ul>');
@@ -486,11 +496,11 @@ define(function (require) {
             case 'A':
                 T.event.preventDefault(e);
 
-                var prefix = this.options.prefix;
+                var prefix    = this.options.prefix;
                 var preClass  = prefix + '-pre'
                 var nextClass = prefix + '-next';
-                var disClass = prefix + '-disabled';
-                var hasClass = T.dom.hasClass;
+                var disClass  = prefix + '-disabled';
+                var hasClass  = T.dom.hasClass;
 
                 // 上月操作
                 if ( hasClass(el, preClass) ) {
@@ -538,8 +548,10 @@ define(function (require) {
          */
         showNextMonth: function () {
             var date = this.date;
+
             date.setDate(1);
             date.setMonth(date.getMonth() + 1);
+
             this.build(date);
         },
 
@@ -597,7 +609,11 @@ define(function (require) {
                     }
 
                     var mod = j % 7;
-                    if ( mod == 6 || first && mod == 5 || !first && mod == 0 ) {
+                    if ( 
+                        mod === 6
+                        ||  first && mod === 5 
+                        || !first && mod === 0
+                    ) {
                         klass.push(weekendClass);
                     }
 
@@ -609,11 +625,11 @@ define(function (require) {
                     }
                     else {
 
-                        if ( value == nowValue ) {
+                        if ( value === nowValue ) {
                             klass.push(todayClass);
                         }
 
-                        if ( inRange && value == checkedValue ) {
+                        if ( inRange && value === checkedValue ) {
                             klass.push(checkedClass);
                         }
 
@@ -645,36 +661,43 @@ define(function (require) {
                 value = this.from(value);
                 this.value = this.format(value);
             }
+
             if ( !popup.content ) {
                 this.date = this.from(value || this.value);
                 this.build();
             }
 
-            var lastDate = this.lastDate || '';
+            var lastDate   = this.lastDate || '';
             var lastTarget = this.lastTarget;
-            var current = this.getMonth(this.date);
-            var yM = this.getMonth(value);
+            var current    = this.getMonth(this.date);
+            var yM         = this.getMonth(value);
 
-            if ( lastDate && lastDate != this.format(value) || current != yM ) {
+            if (
+                lastDate
+                && lastDate !== this.format(value)
+                || current !== yM
+            ) {
                 this.date = this.from(value || this.value);
 
                 lastDate = lastDate && this.getMonth(lastDate);
-                if ( lastDate != yM || current != yM ) {
+                if ( lastDate !== yM || current !== yM ) {
                     this.build();
                 }
                 else {
                     this.updateStatus();
                 }
             }
-            else if ( value != lastDate || target != lastTarget) {
+            else if ( value !== lastDate || target !== lastTarget) {
                 this.updateStatus();
             }
         },
 
         getMonth: function (date) {
-            return typeof date == 'number'
-                    ? date
-                    : this.format(this.from(date), 'yyyyMM');
+            return (
+                typeof date === 'number'
+                ? date
+                : this.format(this.from(date), 'yyyyMM')
+            );
         },
 
         /**
@@ -697,12 +720,12 @@ define(function (require) {
          * @param {HTMLElement} el 点击的当前事件源对象
          */
         pick: function (el) {
-            var value = el.getAttribute('data-date');
-            var week = el.getAttribute('data-week');
+            var value  = el.getAttribute('data-date');
+            var week   = el.getAttribute('data-week');
             var target = this.target;
+            var date   = this.from(value, DATE_FORMAT);
 
-            var date = this.from(value, DATE_FORMAT);
-            value = this.format(date);
+            value         = this.format(date);
             this.lastDate = value;
 
             if ( target ) {
@@ -785,8 +808,9 @@ define(function (require) {
             if ( !range ) {
                 return;
             }
+
             var begin = range.begin;
-            var end = range.end;
+            var end   = range.end;
 
             if ( begin && T.isString(begin) ) {
                 range.begin = this.from(begin);
@@ -816,7 +840,8 @@ define(function (require) {
          */
         validate: function (){
             var value = this.target.value;
-        	return value && this.format(this.from(value)) == value;
+
+        	return value && this.format(this.from(value)) === value;
         }
 
 

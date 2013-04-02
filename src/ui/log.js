@@ -25,7 +25,7 @@ define(function (require) {
 	    return function (url) {
 	        var index = list.push(new Image) - 1;
 
-	        list[index].onload = list[index].onerror =function () {
+	        list[index].onload = list[index].onerror = function () {
 	            list[index] = list[index].onload = list[index].onerror = null;
 	            delete list[index];
 	        };
@@ -186,7 +186,7 @@ define(function (require) {
 			data = T.extend(T.extend({}, options.data), data);
 		}
 
-		data.t = +new Date;
+		data.t = (+new Date).toString(36);
 
 		send(options.action + T.url.jsonToQuery(data));
 	};

@@ -148,7 +148,7 @@ define(function () {
     var indexOf = function (source, target) {
         var index = -1;
 
-        for (var i = 0, l = source.length; i < l; i ++) {
+        for (var i = 0, l = source.length; i < l; i++) {
             if (source[i] === target) {
                 index = i;
                 break;
@@ -228,9 +228,10 @@ define(function () {
                 else if ( name in thisOptions ) {
 
                     // 只处理一层，非递归处理
-                    thisOptions[name] = TO.isPlain(val) 
-                                        ? extend(thisOptions[name] || {}, val)
-                                        : val;
+                    thisOptions[name] = 
+                        TO.isPlain(val) 
+                        ? extend(thisOptions[name] || {}, val)
+                        : val;
                 }
             });
 
@@ -270,7 +271,7 @@ define(function () {
          * @protected
          */
         init: function () {
-            throw 'not implement';
+            throw 'not implement init';
         },
 
 
@@ -279,7 +280,7 @@ define(function () {
          * 
          */
         render: function () {
-            throw 'not implement';
+            throw 'not implement render';
         },
 
         /**
