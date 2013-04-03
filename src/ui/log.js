@@ -51,7 +51,7 @@ define(function (require) {
 		var url;
 		var nolog = 0;
 
-		var work = function (el) {
+		var walk = function (el) {
 			if ( el.getAttribute('data-nolog') === '1' ) {
 				nolog = 1;
 				return true;
@@ -75,10 +75,10 @@ define(function (require) {
 		};
 
 		if ( from === to ) {
-			work(from);
+			walk(from);
 		}
 		else {
-			DOM.getAncestorBy(from, work);
+			DOM.getAncestorBy(from, walk);
 		}
 
 		if ( nolog ) {
