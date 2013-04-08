@@ -706,6 +706,10 @@ define(function (require) {
          * @param {HTMLElement} target 新的 target 节点
          */
         setTarget: function (target) {
+            if ( !target || target.nodeType !== 1) {
+                throw new Error('target 为 null 或非 Element 节点');
+            }
+            
             this.target = target;
 
             if ( this.popup ) {

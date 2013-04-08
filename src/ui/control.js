@@ -271,7 +271,7 @@ define(function () {
          * @protected
          */
         init: function () {
-            throw 'not implement init';
+            throw new Error('not implement init');
         },
 
 
@@ -280,7 +280,7 @@ define(function () {
          * 
          */
         render: function () {
-            throw 'not implement render';
+            throw new Error('not implement render');
         },
 
         /**
