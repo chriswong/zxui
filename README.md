@@ -6,7 +6,7 @@
 
 ### 目前实现的组件
 
-- 日历控件 Calendar
-- 城市选择 City
-- 分页控件 Pager
-- 浮层提示 Tip
+- 日历控件 [Calendar](http://chriswong.github.com/zxui/examples/calendar.html)
+- 城市选择 [City](http://chriswong.github.com/zxui/examples/city.html)
+- 分页控件 [Pager](http://chriswong.github.com/zxui/examples/pager.html)
+- 浮层提示 [Tip](http://chriswong.github.com/zxui/examples/tip.html)
