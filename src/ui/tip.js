@@ -3,20 +3,28 @@
  * @file  提示层控件
  * @author  chris(wfsr@foxmail.com)
  */
+
 define(function (require) {
 
-	var T = baidu;
+    var T = baidu;
     var DOM = T.dom;
     var PAGE = T.page;
-    var Base = require('./control');
+    var Control = require('./control');
 
+    /**
+     * 从事件源查找目标DOM节点
+     * 
+     * @param {DOMEvent} e DOM事件对象
+     * @param {string} className 目标的className
+     * @return {?HTMLElement} 找到的目标对象
+     */
     var getTarget = function (e, className) {
         var target = T.event.getTarget(e);
 
-        if ( !DOM.hasClass(target, className) ) {
+        if (!DOM.hasClass(target, className)) {
             target = DOM.getAncestorByClass(target, className);
 
-            if ( !target ) {
+            if (!target) {
                 return null;
             }
         }
@@ -28,12 +36,13 @@ define(function (require) {
      * 提示层控件
      * 
      * @constructor
-     * @extends  Base
+     * @requires Control
+     * @extends  Control
+     * @exports Tip
      */
     var Tip = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
-    }
-    T.inherits(Tip, Base);
+    };
 
     /**
      * 提示框消失的延迟时间，单位毫秒
@@ -44,30 +53,28 @@ define(function (require) {
     Tip.HIDE_DELAY = 500;
 
 
-    T.extend(
-        Tip.prototype, 
-        /** @lends  Tip.prototype */{
+    Tip.prototype = {
 
         type: 'Tip',
 
         /**
          * 控件配置项
          * 
-         * @type {Object} options 配置项
-         * @param {boolean} options.disabled 控件的不可用状态
-         * @param {string|HTMLElement} options.main 控件渲染容器
-         * @param {boolean|string=} options.arrow 提示框的箭头参数，默认为false
-         * @param {number=} options.hideDelay 提示框消失的延迟时间，默认值为Tip.HIDE_DELAY
-         * @param {string=} options.mode 提示的显示模式，over|click|auto。默认为over
-         * @param {string=} options.title 提示的标题信息，默认为null
-         * @param {string} options.content 提示的内容信息
-         * @param {string} options.prefix 控件class前缀，同时将作为main的class之一
-         * @param {string} options.triggers 自动绑定本控件功能的class
-         * @param {string} options.flag 标识作为trigger的class
-         * @param {Object.<string, number>} options.offset 浮层显示的偏移量
-         * @param {number} options.offset.x x 轴方向偏移量
-         * @param {number} options.offset.y y轴方向偏移量
-         * @param {string} options.tpl 浮层内部HTML模板
+         * @type {Object}
+         * @property {boolean} disabled 控件的不可用状态
+         * @property {string|HTMLElement} main 控件渲染容器
+         * @property {boolean|string=} arrow 提示框的箭头参数，默认为false
+         * @property {number=} hideDelay 提示框消失的延迟时间，默认值为Tip.HIDE_DELAY
+         * @property {string=} mode 提示的显示模式，over|click|auto。默认为over
+         * @property {string=} title 提示的标题信息，默认为null
+         * @property {string} content 提示的内容信息
+         * @property {string} prefix 控件class前缀，同时将作为main的class之一
+         * @property {string} triggers 自动绑定本控件功能的class
+         * @property {string} flag 标识作为trigger的class
+         * @property {Object.<string, number>} offset 浮层显示的偏移量
+         * @property {number} offset.x x 轴方向偏移量
+         * @property {number} offset.y y轴方向偏移量
+         * @property {string} tpl 浮层内部HTML模板
          */
         options: {
 
@@ -125,9 +132,9 @@ define(function (require) {
         },
 
         /**
-         * 绑定 this 到实例方法
+         * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @type {string} 逗号分隔的方法名列表
+         * @type {string}
          */
         binds: 'onResize, onShow, onHide, hide',
 
@@ -135,7 +142,8 @@ define(function (require) {
          * 控件初始化
          * 
          * @private
-         * @param {Object} options 控件配置项 @see Tip#options
+         * @param {Object} options 控件配置项
+         * @see Tip#options
          */
         init: function (options) {
             options = this.setOptions(options);
@@ -145,7 +153,6 @@ define(function (require) {
             this.title     = options.title;
             this.content   = options.content;
 
-            var me     = this;
             var prefix = options.prefix;
             var main   = this.main = document.createElement('div');
 
@@ -169,6 +176,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @fires module:Tip#click
          */
         render: function () {
 
@@ -177,13 +185,19 @@ define(function (require) {
             var options = this.options;
             var events  = this.events;
 
-            if ( !this.rendered ) {
+            if (!this.rendered) {
                 this.rendered = true;
 
                 document.body.appendChild(main);
 
                 T.on(main, 'click', function (e) {
-                    me.fire('click');
+
+                    /**
+                     * @event module:Tip#click
+                     * @type {Object}
+                     * @property {DOMEvent} event 事件源对象
+                     */
+                    me.fire('click', {event: e});
                 });
 
                 T.on(main, 'mouseenter', function () {
@@ -206,7 +220,7 @@ define(function (require) {
 
             }
 
-            if ( !events && this.triggers ) {
+            if (!events && this.triggers) {
                 this.show(this.triggers[0]);
             }
         },
@@ -215,7 +229,7 @@ define(function (require) {
          * 增加触发tips的DOM
          * 
          * @param {string|HTMLElement|HTMLCollection|Array} triggers 
-         *        className/dom节点/dom集合或dom节点数组
+         * className/dom节点/dom集合或dom节点数组
          */
         addTriggers: function (triggers) {
             var me      = this;
@@ -228,7 +242,7 @@ define(function (require) {
                 ? T.q(options.triggers)
                 : (triggers.length ? triggers : [triggers]);
 
-            if ( events ) {
+            if (events) {
                 T.each(this.triggers, function (trigger) {
                     T.addClass(trigger, flag);
                     T.on(trigger, events.on, me.onShow);
@@ -250,13 +264,12 @@ define(function (require) {
          * 浏览器可视尺寸改变时处理
          * 
          * @private
-         * @param {DOMEvent} e DOM 事件对象
          */
-        onResize: function (e) {
+        onResize: function () {
             clearTimeout(this.resizeTimer);
 
             var me = this;
-            this.resizeTimer = setTimeout( function () {
+            this.resizeTimer = setTimeout(function () {
                 me.show(me.current);
             }, 100);
         },
@@ -267,18 +280,25 @@ define(function (require) {
          * 
          * @private
          * @param {DOMEvent} e DOM 事件对象
+         * @fires module:Tip#beforeShow 显示前事件
          */
-        onShow: function(e){
+        onShow: function (e) {
             var target = getTarget(e, this.options.flag);
            
             this.clear();
 
-            if ( !target || this.current === target ) {
+            if (!target || this.current === target) {
                 return;
             }
 
             this.current = target;
 
+            /**
+             * @event module:Tip#beforeShow
+             * @type {Object}
+             * @property {HTMLElement} target 事件源 DOM 对象
+             * @property {DOMEvent} e 事件源对象
+             */
             this.fire('beforeShow', { target: target, event: e});
 
             this.show(target);
@@ -295,7 +315,7 @@ define(function (require) {
 
             this.clear();
             
-            if ( options.hideDelay ) {
+            if (options.hideDelay) {
                 this.timer = setTimeout(this.hide, options.hideDelay);
             }
         },
@@ -304,10 +324,10 @@ define(function (require) {
          * 显示浮层
          * 
          * @param {?HTMLElement=} target 触发显示浮层的节点
+         * @fires module:Tip#show 显示事件
          */
         show: function (target) {
             var options  = this.options;
-            var main     = this.main;
             var events   = this.events;
             var elements = this.elements;
  
@@ -315,7 +335,7 @@ define(function (require) {
            
             this.current = target;
 
-            if ( events && target ) {
+            if (events && target) {
                 T.on(target, events.un, this.onHide);
             }
 
@@ -326,12 +346,17 @@ define(function (require) {
 
             T[this.title ? 'show' : 'hide'](elements.title);
 
-            if ( !options.arrow ) {
+            if (!options.arrow) {
                 T.hide(elements.arrow);
             }
 
             this.computePosition();
 
+            /**
+             * @event module:Tip#show
+             * @type {Object}
+             * @property {HTMLElement} target 事件源 DOM 对象
+             */
             this.fire('show', {target: target});
 
         },
@@ -339,9 +364,9 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
+         * @fires module:Tip#hide 隐藏事件
          */
         hide: function () {
-            var options = this.options;
             var main    = this.main;
 
             this.clear();
@@ -352,6 +377,9 @@ define(function (require) {
             this.current = null;
             T.un(window, 'resize', this.onResize);
 
+            /**
+             * @event module:Tip#hide
+             */
             this.fire('hide');
         },
 
@@ -389,27 +417,27 @@ define(function (require) {
 
             // 属性配置优于实例配置
             var dirFromAttr = target.getAttribute('data-tooltips');
-            if ( dirFromAttr ) {
+            if (dirFromAttr) {
                 dir = /[trbl]{2}/.test(dirFromAttr) ? dirFromAttr : '1';
             }
 
             var second, first;
 
             // 未指定方向时自动按下右上左顺序计算可用方向
-            if ( !dir || dir === '1') {
-                if ( bottom + arrowHeight + mainHeight <= scrollBottom ) {
+            if (!dir || dir === '1') {
+                if (bottom + arrowHeight + mainHeight <= scrollBottom) {
                     first = 'b';
                     second = left + mainWidth > scrollRight ? 'r' : 'l';
                 }
-                else if ( right + mainWidth + arrowWidth <= scrollRight ) {
+                else if (right + mainWidth + arrowWidth <= scrollRight) {
                     first = 'r';
                     second = top + mainHeight > scrollBottom ? 'b' : 't';
                 }
-                else if ( top - mainHeight - arrowHeight >= scrollTop ) {
+                else if (top - mainHeight - arrowHeight >= scrollTop) {
                     first = 't';
                     second = left + mainWidth > scrollRight ? 'r' : 'l';
                 }
-                else if ( left - mainWidth - arrowWidth >= scrollLeft ) {
+                else if (left - mainWidth - arrowWidth >= scrollLeft) {
                     first = 'l';
                     second = top + mainHeight > scrollBottom ? 'b' : 't';
                 }
@@ -430,10 +458,10 @@ define(function (require) {
             arrowWidth  = arrow.firstChild.offsetWidth;
             arrowHeight = arrow.firstChild.offsetHeight;
 
-            var middleLeft = (mainWidth - arrowWidth ) / 2;
-            var middleTop  = (mainHeight - arrowHeight ) / 2;
+            var middleLeft = (mainWidth - arrowWidth) / 2;
+            var middleTop  = (mainHeight - arrowHeight) / 2;
 
-            if ( first === 'b' || first === 't' ) {
+            if (first === 'b' || first === 't') {
                 left = second === 'l' 
                        ? left
                        : right - mainWidth;
@@ -458,7 +486,7 @@ define(function (require) {
                 DOM.setStyle(arrow, 'top', '');
 
             }
-            else if ( first === 'l' || first === 'r' ) {
+            else if (first === 'l' || first === 'r') {
                 top = second === 't'
                       ? top
                       : bottom - mainHeight;
@@ -488,7 +516,8 @@ define(function (require) {
 
         }
 
-    });
+    };
+    T.inherits(Tip, Control);
 
     return Tip;
-})
+});

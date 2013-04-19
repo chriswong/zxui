@@ -3,10 +3,11 @@
  * @file  比PC-UI WCal好用的日历控件
  * @author  chris(wfsr@foxmail.com)
  */
+
 define(function (require) {
 
 	var T = baidu;
-	var Base = require('./control');
+	var Control = require('./control');
 	var Popup = require('./popup');
 
     /**
@@ -46,17 +47,23 @@ define(function (require) {
 	 * 比PC-UI WCal好用的日历控件
 	 * 
 	 * @constructor
+     * @requires Control
+     * @requires Popup
+     * @exports Calendar
+     * @example
+     * new Calendar({
+     *     dateFormat: 'yyyy-MM-dd(WW)',    // W为星期几，WW带周作前缀
+     *     triggers: '.triggers',
+     *     target: '.input'
+     *  });
 	 */
 	var Calendar = function () {
 		this.constructor.superClass.constructor.apply(this, arguments);
 	};
-	T.inherits(Calendar, Base);
-
 
 	/**
 	 * 全局日期格式
 	 * 
-	 * @const
 	 * @type {string}
 	 */
 	Calendar.DATE_FORMAT = DATE_FORMAT;
@@ -64,7 +71,6 @@ define(function (require) {
 	/**
 	 * 可选中的日期区间
 	 * 
-	 * @const
 	 * @type {?Object}
 	 */
 	Calendar.RANGE = null;
@@ -78,34 +84,32 @@ define(function (require) {
      */
     var cache = {};
 
-	T.extend(
-        Calendar.prototype, 
-
-        /** @lends  Calendar.prototype */{
+	Calendar.prototype = {
 
         type: 'Calendar',
 
         /**
          * 控件配置项
          * 
-         * @type {Object} options 配置项
-         * @param {boolean} options.disabled 控件的不可用状态
-         * @param {string|HTMLElement} options.main 控件渲染容器
-         * @param {string} options.prefix 控件class前缀，同时将作为main的class之一
-         * @param {string|HTMLElement} options.target 计算日历显示时相对位置的目标对象
-         * @param {string} options.triggers 点击显示日历的节点
-         * @param {string} options.dateFormat 日期显示的格式化方式
-         * @param {?Object} options.range 可选中的日期区间
-         * @param {?string} options.value 当前选中的日期
-         * @param {Function} options.process 处理当前显示日历中的每一天，多用于节日样式
-         *                   process(el, classList, dateString)
-         *                   执行时 this 指向当前实例，el 为当前日的dom节点(A标签)，
-         *                   classList 为 el 即将要应用的class数组引用，dateString 为
-         *                   yyyy-MM-dd格式的当前日期字符串
-         * @param {number} options.monthes 同时显示几个月
-         * @param {number} first 一周的起始日，0为周日，1为周一
-         * @param {Object} options.lang 预设模板
-         * @param {string} options.lang.days 一周对应的显示
+         * @type {Object}
+         * @property {boolean} disabled 控件的不可用状态
+         * @property {string|HTMLElement} main 控件渲染容器
+         * @property {string} prefix 控件class前缀，同时将作为main的class之一
+         * @property {string|HTMLElement} target 计算日历显示时相对位置的目标对象
+         * @property {string} triggers 点击显示日历的节点
+         * @property {string} dateFormat 日期显示的格式化方式
+         * @property {?Object} range 可选中的日期区间
+         * @property {?string} value 当前选中的日期
+         * @property {Function} process 处理当前显示日历中的每一天，多用于节日样式
+         * process(el, classList, dateString)
+         * 执行时 this 指向当前实例，el 为当前日的dom节点(A标签)，
+         * classList 为 el 即将要应用的class数组引用，dateString 为
+         * yyyy-MM-dd格式的当前日期字符串
+         * @property {number} monthes 同时显示几个月
+         * @property {number} first 一周的起始日，0为周日，1为周一
+         * @property {Object} lang 预设模板
+         * @property {string} lang.week 对于 '周' 的称呼
+         * @property {string} lang.days 一周对应的显示
          */
         options: {
 
@@ -155,9 +159,9 @@ define(function (require) {
         },
 
         /**
-         * 绑定 this 到实例方法
+         * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @type {string} 逗号分隔的方法名列表
+         * @type {string}
          */
         binds: 'onClick,onBeforeShow',
 
@@ -165,7 +169,8 @@ define(function (require) {
          * 控件初始化
          * 
          * @private
-         * @param {Object} options 控件配置项 @see Calendar#options
+         * @param {Object} options 控件配置项
+         * @see module:Calendar#options
          */
         init: function (options) {
             options = this.setOptions(options);
@@ -191,9 +196,9 @@ define(function (require) {
          */
         from: function (value, format) {
             format = format || this.dateFormat;
-             if ( T.isString(value) ) {
+            if (T.isString(value)) {
 
-                if ( !value ) {
+                if (!value) {
                     return new Date();
                 }
 
@@ -202,30 +207,29 @@ define(function (require) {
 
                 var map = {};
 
-                for ( var i = 0, l = format.length; i < l; i++ ) {
-                    if ( 
+                for (var i = 0, l = format.length; i < l; i++) {
+                    if (
                         format[i]
                         && value[i]
                         && (
                             format[i].length > 1
-                            && value[i].length == format[i].length
-                            || format[i].length == 1
+                            && value[i].length === format[i].length
+                            || format[i].length === 1
                            )
                     ) {
                         map[format[i].toLowerCase()] = value[i];
                     }
                 }
-                var year  =
-                    map.yyyy
+                var year  = map.yyyy
                     || map.y
                     || ((map.yy < 50 ? '20' : '19') + map.yy);
 
                 var month = (map.m || map.mm) | 0;
                 var date  = (map.d || map.dd) | 0; 
                 return new Date(year | 0, month - 1, date);
-             }
+            }
 
-             return value;
+            return value;
         },
 
         /**
@@ -233,13 +237,13 @@ define(function (require) {
          * 
          * @param {Date} date 源日期对象
          * @param {string=} format 日期格式，默认为当前实例的dateFormat
-         * @return {[type]} [return description]
+         * @return {string} 格式化后的日期字符串
          */
         format: function (date, format) {
             // 控件不包含时间，所以不存在大小写区别
             format = (format || this.dateFormat).toLowerCase();
 
-            if ( T.isString(date) ) {
+            if (T.isString(date)) {
                 date = this.from(date);
             }
 
@@ -250,8 +254,8 @@ define(function (require) {
             var d       = date.getDate();
             var week    = date.getDay();
 
-            if ( first ) {
-                week = (week - 1 + 7 ) % 7;
+            if (first) {
+                week = (week - 1 + 7) % 7;
             }
 
             week = this.days[week];
@@ -278,12 +282,9 @@ define(function (require) {
          * 
          */
         render: function () {
-
-            var me      = this;
-            var main    = this.main;
             var options = this.options;
 
-            if ( !this.rendered ) {
+            if (!this.rendered) {
                 this.rendered = true;
 
                 var popup = this.popup = new Popup(this.srcOptions);
@@ -294,7 +295,7 @@ define(function (require) {
                 this.main = popup.main;
                 T.addClass(this.main, 'c-clearfix');
 
-                if ( options.target ) {
+                if (options.target) {
                     this.setTarget(T.g(options.target));
                 }
             }
@@ -315,27 +316,52 @@ define(function (require) {
             var month = date.getMonth();
             var current;
 
-            for (var i = 0, l = options.monthes; i < l; i++) {
+            for (var i = 0, len = options.monthes; i < len; i++) {
                 current = new Date(year, month + i, 1);
                 html.push(this.buildMonth(current));
             }
 
             var prefix = options.prefix;
-            var range  = this.range;
-            if ( !range || this.getMonth(range.begin) < this.getMonth(date) ) {
-                html.push('<a href="#" class="' + prefix + '-pre"></a>');               
-            }
-
-            var last = new Date(year, month + options.monthes - 1, 1);
-            if ( !range || this.getMonth(range.end) > this.getMonth(last) ) {
-                html.push('<a href="#" class="' + prefix + '-next"></a>');
-            }
+            html.push('<a href="#" class="' + prefix + '-pre"></a>');
+            html.push('<a href="#" class="' + prefix + '-next"></a>');
 
             var popup = this.popup;
             popup.content = html.join('');
             popup.render();
 
             this.updateStatus();
+            this.updatePrevNextStatus(date);
+        },
+
+        updatePrevNextStatus: function (date) {
+            var options = this.options;
+            var prefix = options.prefix;
+            var range  = this.range;
+            var prev = T.q(prefix + '-pre', this.main)[0];
+            var next = T.q(prefix + '-next', this.main)[0];
+
+            date = date || this.date || this.from(this.value);
+
+            if (prev) {
+                T[!range 
+                    || this.getMonth(range.begin) < this.getMonth(date)
+                    ? 'show' : 'hide'
+                ](prev);
+
+            }
+
+
+            var last = new Date(
+                date.getFullYear(),
+                date.getMonth() + options.monthes - 1,
+                1
+            );
+            if (next) {
+                T[!range
+                    || this.getMonth(range.end) > this.getMonth(last)
+                    ? 'show' : 'hide'
+                ](next);
+            }
         },
 
         /**
@@ -350,7 +376,7 @@ define(function (require) {
             var day   = date.getDay();
             var yM    = year + pad(month);
 
-            if ( cache[yM]) {
+            if (cache[yM]) {
                 return cache[yM];
             }
 
@@ -365,17 +391,16 @@ define(function (require) {
             html.push('<h3>' + year + '年' + month + '月</h3>');
 
             var i;
-            var l;
+            var len;
             var klass;
             var firstDay = options.first;
             var days = this.days;
             html.push('<ul class="c-clearfix">');
 
-            for ( i = 0, l = days.length; i < l; i++ ) {
-                klass = 
-                    i == weeks - 1 
-                    || firstDay && i == weeks - 2
-                    || !firstDay && i == firstDay
+            for (i = 0, l = days.length; i < len; i++) {
+                klass = i === weeks - 1 
+                    || firstDay && i === weeks - 2
+                    || !firstDay && i === firstDay
                     ? ' class="' + prefix + '-weekend"'
                     : '';
 
@@ -396,8 +421,8 @@ define(function (require) {
             var first = (weeks + day + 1 - today % weeks) % weeks;
 
             // 处理上月
-            l = first - firstDay;
-            if ( l > 0 ) {
+            len = first - firstDay;
+            if (len > 0) {
                 date.setDate(0);
                 y = date.getFullYear();
                 M = date.getMonth() + 1;
@@ -405,10 +430,9 @@ define(function (require) {
                 yM = [y, pad(M), ''].join(separator);
                 klass = prefix + '-pre-month';
 
-                for ( i = d - l + 1; i <= d; i++ ) {
+                for (i = d - len + 1; i <= d; i++) {
                     week = week % weeks;
-                    html.push(
-                        ''
+                    html.push(''
                         + '<a href="#" hidefocus'
                         +   ' class="' + klass + '"'
                         +   ' data-date="' + yM + pad(i) + '"'
@@ -424,16 +448,15 @@ define(function (require) {
             }
 
             // 恢复到当前月;
-            date.setMonth(month)
+            date.setMonth(month);
             date.setDate(0);
 
             yM = [year, pad(month), ''].join(separator);
 
             // 处理当前月
-            for ( i = 1, l = date.getDate(); i <= l; i++ ) {
+            for (i = 1, len = date.getDate(); i <= len; i++) {
                 week = week % weeks;
-                html.push(
-                    ''
+                html.push(''
                     + '<a href="#" hidefocus '
                     +   ' data-date="' + yM + pad(i) + '"'
                     +   ' data-week="' + week + '"'
@@ -445,18 +468,17 @@ define(function (require) {
             }
 
             // 处理下月;
-            date.setDate(l + 1);
+            date.setDate(len + 1);
             y = date.getFullYear();
             M = date.getMonth() + 1;
             yM = [y, pad(M), ''].join(separator);
             klass = prefix + '-next-month';
 
-            l = weeks * rows - (l + first - firstDay);
+            len = weeks * rows - (len + Math.max(0, first - firstDay));
 
-            for ( i = 1; i <= l; i++ ) {
+            for (i = 1; i <= len; i++) {
                 week = week % weeks;
-                html.push(
-                    ''
+                html.push(''
                     + '<a href="#" hidefocus'
                     +   ' class="' + klass + '"'
                     +   ' data-date="' + yM + pad(i) + '"'
@@ -471,48 +493,49 @@ define(function (require) {
             html.push('</p>');
             html.push('</div>');
 
-            return cache[yM] = html.join('');
+            cache[yM] = html.join('');
+            return cache[yM];
         },
 
         /**
          * 处理选单点击事件
          * 
+         * @private
          * @param {Object} args 从 Popup 传来的事件对象
          */
         onClick: function (args) {
             var e = args.event;
 
-            if ( !e ) {
+            if (!e) {
                 return;
             }
 
             var el     = T.event.getTarget(e);
             var tag    = el.tagName;
             var target = this.target;
-            var value  = el.getAttribute('data-date');
 
-            switch(tag) {
+            switch (tag) {
 
             case 'A':
                 T.event.preventDefault(e);
 
                 var prefix    = this.options.prefix;
-                var preClass  = prefix + '-pre'
+                var preClass  = prefix + '-pre';
                 var nextClass = prefix + '-next';
                 var disClass  = prefix + '-disabled';
                 var hasClass  = T.dom.hasClass;
 
                 // 上月操作
-                if ( hasClass(el, preClass) ) {
+                if (hasClass(el, preClass)) {
                     this.showPreMonth();
                     stopPropagation(e);
                 }
                 // 下月操作
-                else if ( hasClass(el, nextClass) ) {
+                else if (hasClass(el, nextClass)) {
                     this.showNextMonth();
                     stopPropagation(e);
                 }
-                else if ( !hasClass(el, disClass) ) {
+                else if (!hasClass(el, disClass)) {
                     this.pick(el);
                 }
 
@@ -520,7 +543,7 @@ define(function (require) {
 
             default:
 
-                if ( target ) {
+                if (target) {
                     target.select();
                 }
                 break;
@@ -555,6 +578,7 @@ define(function (require) {
             this.build(date);
         },
 
+        /* jshint boss: true */
         /**
          * 根据选择的日期和当前日期更新每个日期的状态
          * 
@@ -565,16 +589,17 @@ define(function (require) {
             var prefix  = options.prefix;
             var process = options.process;
             var first   = options.first;
-            var date    = this.date;
             var now     = new Date();
 
-            var checkedValue = this.format(this.from(this.value), DATE_FORMAT);
-            var nowValue     = this.format(now, DATE_FORMAT);
-            var range        = this.range;
-            var min          = '';
-            var max          = '9999-12-31';
+            var checkedValue = this.target.value
+                && this.format(this.from(this.value), DATE_FORMAT);
 
-            if ( range ) {
+            var nowValue = this.format(now, DATE_FORMAT);
+            var range    = this.range;
+            var min      = '';
+            var max      = '9999-12-31';
+
+            if (range) {
                 min = 
                     range.begin
                     && this.format(range.begin, DATE_FORMAT)
@@ -593,23 +618,23 @@ define(function (require) {
             var weekendClass = prefix + '-weekend';
 
             var monthes = this.main.getElementsByTagName('p');
-            var i, l, j, day, days, klass, value, className, inRange;
-            for ( i = 0, l = monthes.length; i < l; i++ ) {
+            var i, len, j, day, days, klass, value, className, inRange;
+            for (i = 0, len = monthes.length; i < len; i++) {
                 days  = monthes[i].getElementsByTagName('a');
 
-                for ( j = 0; day = days[j]; j++ ) {
+                for (j = 0; day = days[j]; j++) {
                     klass     = [];
                     value     = day.getAttribute('data-date');
                     className = day.className;
                     inRange   = true;
 
-                    if ( range && (value < min || value > max) ) {
+                    if (range && (value < min || value > max)) {
                         klass.push(disClass);
                         inRange = false;
                     }
 
                     var mod = j % 7;
-                    if ( 
+                    if (
                         mod === 6
                         ||  first && mod === 5 
                         || !first && mod === 0
@@ -617,23 +642,23 @@ define(function (require) {
                         klass.push(weekendClass);
                     }
 
-                    if ( ~className.indexOf(preClass) ) {
+                    if (~className.indexOf(preClass)) {
                         klass.push(preClass);
                     }
-                    else if ( ~className.indexOf(nextClass) ) {
+                    else if (~className.indexOf(nextClass)) {
                         klass.push(nextClass);
                     }
                     else {
 
-                        if ( value === nowValue ) {
+                        if (value === nowValue) {
                             klass.push(todayClass);
                         }
 
-                        if ( inRange && value === checkedValue ) {
+                        if (inRange && value === checkedValue) {
                             klass.push(checkedClass);
                         }
 
-                        if ( process ) {
+                        if (process) {
                             process.call(this, day, klass, value, inRange);
                         }
                         
@@ -649,20 +674,27 @@ define(function (require) {
          * 
          * @private
          * @param {Object} arg 事件参数
+         * @fires module:Calendar#beforeShow
          */
         onBeforeShow: function (arg) {
+
+            /**
+             * @event module:Calendar#beforeShow
+             * @type {Object}
+             * @property {DOMEvent} event 事件源对象
+             */
             this.fire('beforeShow', arg);
 
             var popup  = this.popup;
             var target = this.target;
             var value  = target.value;
 
-            if ( value ) {
+            if (value) {
                 value = this.from(value);
                 this.value = this.format(value);
             }
 
-            if ( !popup.content ) {
+            if (!popup.content) {
                 this.date = this.from(value || this.value);
                 this.build();
             }
@@ -680,14 +712,14 @@ define(function (require) {
                 this.date = this.from(value || this.value);
 
                 lastDate = lastDate && this.getMonth(lastDate);
-                if ( lastDate !== yM || current !== yM ) {
+                if (lastDate !== yM || current !== yM) {
                     this.build();
                 }
                 else {
                     this.updateStatus();
                 }
             }
-            else if ( value !== lastDate || target !== lastTarget) {
+            else if (value !== lastDate || target !== lastTarget) {
                 this.updateStatus();
             }
         },
@@ -706,13 +738,13 @@ define(function (require) {
          * @param {HTMLElement} target 新的 target 节点
          */
         setTarget: function (target) {
-            if ( !target || target.nodeType !== 1) {
+            if (!target || target.nodeType !== 1) {
                 throw new Error('target 为 null 或非 Element 节点');
             }
             
             this.target = target;
 
-            if ( this.popup ) {
+            if (this.popup) {
                 this.popup.target = target;
             }
         },
@@ -722,6 +754,7 @@ define(function (require) {
          * 
          * @private
          * @param {HTMLElement} el 点击的当前事件源对象
+         * @fires module:Calendar#pick
          */
         pick: function (el) {
             var value  = el.getAttribute('data-date');
@@ -732,8 +765,8 @@ define(function (require) {
             value         = this.format(date);
             this.lastDate = value;
 
-            if ( target ) {
-                if ( target.type ) {
+            if (target) {
+                if (target.type) {
                     target.value = value;
                     target.focus();
                 }
@@ -742,6 +775,13 @@ define(function (require) {
                 }
             }
 
+            /**
+             * @event module:Calendar#pick
+             * @type {Object}
+             * @property {string} value 选中日期的格式化
+             * @property {string} week 选中日期的格式化星期
+             * @property {Date} date 选中的日期对象
+             */
             this.fire('pick', { 
                 value: value,
                 week: this.options.lang.week + this.days[week],
@@ -755,23 +795,33 @@ define(function (require) {
          * 显示浮层
          * 
          * @param {?HTMLElement=} target 触发显示浮层的节点
+         * @fires module:Calendar#show 显示事件
          */
         show: function (target) {
 
             this.popup.show();
 
-            this.fire('show');
+            /**
+             * @event module:Calendar#show
+             * @type {object}
+             * @property {?HTMLElement=} target 触发显示浮层的节点
+             */
+            this.fire('show', {target: target});
 
         },
 
         /**
          * 隐藏浮层
          * 
+         * @fires module:Calendar#hide 隐藏事件
          */
         hide: function () {
             
             this.popup.hide();
 
+            /**
+             * @event module:Calendar#hide
+             */
             this.fire('hide');
         },
 
@@ -780,8 +830,8 @@ define(function (require) {
          * 
          * @return {boolean} 是否为指定格式的日期值
          */
-        checkValidity: function (){
-        	return this.validate();
+        checkValidity: function () {
+            return this.validate();
         },
 
         /**
@@ -789,8 +839,8 @@ define(function (require) {
          * 
          * @return {string} 当前日期格式化值
          */
-        getValue: function (){
-        	return this.format(this.date);
+        getValue: function () {
+            return this.format(this.date);
         },
 
         /**
@@ -798,32 +848,32 @@ define(function (require) {
          * 
          * @return {Date} 获取到的日期
          */
-        getValueAsDate: function (){
-        	return this.date;
+        getValueAsDate: function () {
+            return this.date;
         },
 
         /**
          * 设置允许选中的日期区间
          * 
          * @param {Object} range 允许选择的日期区间
-         * @return {[type]} [return description]
          */
-        setRange: function (range){
-            if ( !range ) {
+        setRange: function (range) {
+            if (!range) {
                 return;
             }
 
             var begin = range.begin;
             var end   = range.end;
 
-            if ( begin && T.isString(begin) ) {
+            if (begin && T.isString(begin)) {
                 range.begin = this.from(begin);
             }
 
-            if ( end && T.isString(end) ) {
+            if (end && T.isString(end)) {
                 range.end = this.from(end);
             }
-        	this.range = range;
+            this.range = range;
+            this.updatePrevNextStatus();
         },
 
         /**
@@ -831,8 +881,8 @@ define(function (require) {
          * 
          * @param {string} value 要设置的日期
          */
-        setValue: function (value){
-        	this.date = this.from(value);
+        setValue: function (value) {
+            this.date = this.from(value);
             this.value = this.format(this.date);
         },
 
@@ -842,14 +892,15 @@ define(function (require) {
          * 
          * @return {boolean} 验证结果
          */
-        validate: function (){
+        validate: function () {
             var value = this.target.value;
-
-        	return value && this.format(this.from(value)) === value;
+            return value && this.format(this.from(value)) === value;
         }
 
 
-    });
+    };
+    T.inherits(Calendar, Control);
+
 
     return Calendar;
 

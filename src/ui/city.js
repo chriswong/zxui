@@ -3,10 +3,11 @@
  * @file  国内城市选择提示层
  * @author  chris(wfsr@foxmail.com)
  */
+
 define(function (require) {
 
 	var T = baidu;
-	var Base = require('./control');
+	var Control = require('./control');
 	var Popup = require('./popup');
 	
 	
@@ -15,28 +16,30 @@ define(function (require) {
 	 * 国内城市选择控件
 	 * 
 	 * @constructor
+     * @requires Control
+     * @requires Popup
+     * @exports City
 	 */
 	var City = function () {
 		this.constructor.superClass.constructor.apply(this, arguments);
 	};
-	T.inherits(City, Base);
 
-
-    T.extend(
-        City.prototype, 
-        /** @lends  City.prototype */{
+    City.prototype = {
 
         type: 'City',
 
         /**
          * 控件配置项
          * 
-         * @type {Object} options 配置项 @see Popup#options
-         * @param {boolean} options.disabled 控件的不可用状态
-         * @param {string|HTMLElement} options.main 控件渲染容器
-         * @param {string} options.prefix 控件class前缀，同时将作为main的class之一
-         * @param {number} index 默认激活的标签索引
-         * @param {string} activeClass 激活标签、内容的class
+         * @see Popup#options
+         * @type {Object}
+         * @property {boolean} disabled 控件的不可用状态
+         * @property {string|HTMLElement} main 控件渲染容器
+         * @property {string} prefix 控件class前缀，同时将作为main的class之一
+         * @property {number} index 默认激活的标签索引
+         * @property {string} activeClass 激活标签、内容的class
+         * @property {boolean} autoFill 是否自动填充默认城市数据(机票可用城市数据)
+         * @property {?string} hideCities 需要隐藏的城市
          */
         options: {
 
@@ -55,7 +58,7 @@ define(function (require) {
             // 激活标签、内容的class
             activeClass: 'active',
 
-            // 自动填充默认城市数据(机票可用城市数据)
+            // 是否自动填充默认城市数据(机票可用城市数据)
             autoFill: true,
 
             // 需要隐藏的城市
@@ -63,9 +66,9 @@ define(function (require) {
         },
 
         /**
-         * 绑定 this 到实例方法
+         * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @type {string} 逗号分隔的方法名列表
+         * @type {string}
          */
         binds: 'onClick,onBeforeShow',
 
@@ -82,7 +85,7 @@ define(function (require) {
 
             var tabs = this.tabs = [];
 
-            if ( options.autoFill ) {
+            if (options.autoFill) {
                 tabs.push('热门|'
                         + '上海,北京,广州,昆明,西安,成都,深圳,厦门,乌鲁木齐,南京,'
                         + '重庆,杭州,大连,长沙,海口,哈尔滨,青岛,沈阳,三亚,济南,'
@@ -127,7 +130,7 @@ define(function (require) {
         fill: function (tabsOrItem) {
             var tabs = this.tabs;
 
-            if ( T.isString(tabsOrItem) ) {
+            if (T.isString(tabsOrItem)) {
                 tabs.push(tabsOrItem);
             }
             else {
@@ -145,9 +148,8 @@ define(function (require) {
         render: function () {
 
             var options = this.options;
-            var main    = this.main;
 
-            if ( !this.rendered ) {
+            if (!this.rendered) {
                 this.rendered = true;
 
                 var popup = this.popup = new Popup(this.srcOptions);
@@ -157,7 +159,7 @@ define(function (require) {
                 
                 this.main = popup.main;
 
-                if ( options.target ) {
+                if (options.target) {
                     this.setTarget(T.g(options.target));
                 }
             }
@@ -183,9 +185,9 @@ define(function (require) {
             labels.push('<ul class="' + prefix + '-labels c-clearfix">');
             panels.push('<ul class="' + prefix + '-panels">');
 
-            var comma = ','
+            var comma = ',';
             var hideCities = options.hideCities;
-            if ( hideCities ) {
+            if (hideCities) {
                 hideCities = comma + hideCities.replace(/\s+/g, '') + comma;
             }
 
@@ -195,7 +197,7 @@ define(function (require) {
                 T.each(cities.split(comma), function (city) {
                     if (
                         !hideCities
-                        || !~hideCities.indexOf(comma + city + comma )
+                        || !~hideCities.indexOf(comma + city + comma)
                     ) {
                         links.push(''
                             + '<a href="#" title="' + city + '">'
@@ -206,11 +208,14 @@ define(function (require) {
                 });
 
                 return links.join('');
-            }
+            };
 
             T.each(this.tabs, function (tab, i, start) {
                 tab = tab.split('|');
-                start = '<li data-idx="' + i + '"' + (i == index ? active : '');
+                start = '<li data-idx="'
+                    + i
+                    + '"'
+                    + (i === index ? active : '');
                 labels.push(start + '>' + tab[0] + '</li>');
                 panels.push(start + '>' + makeLinks(tab[1]) + '</li>');
             });
@@ -224,12 +229,14 @@ define(function (require) {
         /**
          * 处理选单点击事件
          * 
+         * @private
          * @param {Object} args 从 Popup 传来的事件对象
+         * @fires module:City#click 点击事件
          */
         onClick: function (args) {
             var e = args.event;
 
-            if ( !e ) {
+            if (!e) {
                 return;
             }
             var el     = T.event.getTarget(e);
@@ -237,7 +244,7 @@ define(function (require) {
             var target = this.target;
             var index  = el.getAttribute('data-idx');
 
-            switch(tag) {
+            switch (tag) {
 
             case 'A':
                 T.event.preventDefault(e);
@@ -248,23 +255,28 @@ define(function (require) {
 
             case 'LI':
 
-                if ( index ) {
+                if (index) {
                     this.change(index);
 
                     var text = el.innerHTML;
-                    this.hinter.innerHTML = (index === '0' ? '' : '拼音') + text
+                    this.hinter.innerHTML = (index === '0' ? '' : '拼音') + text;
                 }
                 break;
 
             default:
 
-                if ( target ) {
+                if (target) {
                     target.select();
                 }
                 break;
 
             }
 
+            /**
+             * @event module:City#click
+             * @type {Object}
+             * @property {DOMEvent} event 事件源对象
+             */
             this.fire('click', args);
         },
 
@@ -273,11 +285,18 @@ define(function (require) {
          * 
          * @private
          * @param {Object} arg 事件参数
+         * @fires module:City#beforeShow 显示前事件
          */
         onBeforeShow: function (arg) {
+
+            /**
+             * @event module:City#beforeShow
+             * @type {Object}
+             * @property {DOMEvent} event 事件源对象
+             */
             this.fire('beforeShow', arg);
 
-            if ( !this.labels ) {
+            if (!this.labels) {
                 var popup = this.popup;
                 popup.content = this.build();
                 popup.render();
@@ -294,15 +313,16 @@ define(function (require) {
          * 动态更新 target
          * 
          * @param {HTMLElement} target 新的 target 节点
+         * @throws 如果 target 为非 Element 节点将抛出异常
          */
         setTarget: function (target) {
-            if ( !target || target.nodeType !== 1) {
+            if (!target || target.nodeType !== 1) {
                 throw new Error('target 为 null 或非 Element 节点');
             }
 
             this.target = target;
 
-            if ( this.popup ) {
+            if (this.popup) {
                 this.popup.target = target;
             }
         },
@@ -312,13 +332,14 @@ define(function (require) {
          * 
          * @private
          * @param {HTMLElement} el 点击的当前事件源对象
+         * @fires module:City#pick
          */
         pick: function (el) {
             var value = el.innerHTML;
             var target = this.target;
 
-            if ( target ) {
-                if ( target.type ) {
+            if (target) {
+                if (target.type) {
                     target.value = value;
                     target.focus();
                 }
@@ -327,6 +348,11 @@ define(function (require) {
                 }
             }
 
+            /**
+             * @event module:City#pick
+             * @type {Object}
+             * @property {string} value 选中的城市
+             */
             this.fire('pick', { value: value });
             this.hide();
         },
@@ -345,7 +371,7 @@ define(function (require) {
 
             i |= 0;
 
-            if (i !== index ) {
+            if (i !== index) {
 
                 T.removeClass(labels[index], activeClass);
                 T.removeClass(panels[index], activeClass);
@@ -361,27 +387,38 @@ define(function (require) {
          * 显示浮层
          * 
          * @param {?HTMLElement=} target 触发显示浮层的节点
+         * @fires module:City#show 显示事件
          */
         show: function (target) {
 
             this.popup.show();
 
-            this.fire('show');
+            /**
+             * @event module:City#show
+             * @type {Object}
+             * @property {?HTMLElement=} target 触发显示浮层的节点
+             */
+            this.fire('show', {target: target});
 
         },
 
         /**
          * 隐藏浮层
          * 
+         * @fires module:City#hide 隐藏事件
          */
         hide: function () {
             
             this.popup.hide();
 
+            /**
+             * @event module:City#hide
+             */
             this.fire('hide');
         }
 
-    });
+    };
+    T.inherits(City, Control);
 
     return City;
 
