@@ -1,0 +1,4 @@
+--exclude-list=common.css
+--ignore=underscore-property-hack,star-property-hack,qualified-headings,unique-headings,outline-none,box-model
+--errors=ids
+--warnings=import

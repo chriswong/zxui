@@ -1,5 +1,11 @@
 @cal-prefix: ecl-hotel-ui-cal;
 
+.@{cal-prefix} h3,
+.@{cal-prefix}-pre,
+.@{cal-prefix}-next {
+    background: url(http://open.baidu.com/stat/ticket/cal.gif) 0 -19px;
+}
+
 .@{cal-prefix} {
     position: absolute;
     border: 1px solid #b5b5b5;
@@ -14,7 +20,8 @@
         height: 19px;
         overflow: hidden;
         font-size: 14px;
-        background: url(http://open.baidu.com/stat/ticket/cal.gif) 1px 0 repeat-x;
+        background-position: 1px 0;
+        background-repeat: repeat-x;
         color: #41537b;
         margin-bottom: 2px;
         border: 1px solid #c6cede;
@@ -90,7 +97,6 @@
     display: block;
     overflow: hidden;
     top: 6px;
-    background: url(http://open.baidu.com/stat/ticket/cal.gif) 0 -19px;
 }
 
 .@{cal-prefix}-pre {
