@@ -15,6 +15,8 @@
 
 <input type="text" class="calendar-trigger" /><input type="button" value="click" class="calendar-trigger" />
 <input type="text" class="calendar-trigger" /><input type="button" value="click" class="calendar-trigger" />
+
+<input type="text" class="calendar-target calendar-trigger1" /><input type="button" value="click" class="calendar-trigger1" />
 <script>
 
 A.init(function () {
@@ -81,11 +83,13 @@ A.init(function () {
                     this.setRange({begin: begin[0], end: begin[1]});
                 }
                 else {
-                    var date = this.from(triggers[0].value);
-                    // 在开始日期的后一天
-                    end[0] = addDays(date, 1);
-                    // 开始日期的30天结束
-                    end[1] = addDays(date, 30);
+                    if (triggers[0].value) {
+                      var date = this.from(triggers[0].value);
+                      // 在开始日期的后一天
+                      end[0] = addDays(date, 1);
+                      // 开始日期的30天结束
+                      end[1] = addDays(date, 30);
+                    }
 
                     // 设定结束的范围
                     this.setRange({begin: end[0], end: end[1]});
@@ -99,6 +103,12 @@ A.init(function () {
                 triggers[2].value = this.format(addDays(arg.date, 1));
             }
           }
+        }).render();
+
+        new Calendar({
+          prefix: 'ecl-hotel-ui-cal',
+          triggers: me.q('calendar-trigger1'),
+          target: me.qq('calendar-target'),
         }).render();
 
 
