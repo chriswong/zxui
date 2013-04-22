@@ -171,19 +171,25 @@ define(function () {
      * 只可继承，不可实例化
      * @constructor
      * @exports Control
-     * @fires Control#beforeinit
-     * @fires Control#afterinit
+     * @fires module:Control#beforeinit
+     * @fires module:Control#afterinit
      */
     var Control = function () {
 
         this.children = [];
         this._listners = {};
 
+        /**
+         * @event module:Control#beforeinit
+         */
         this.fire('beforeinit');
 
         this.bindEvents(this.binds);
         this.init.apply(this, arguments);
 
+        /**
+         * @event module:Control#beforeinit
+         */
         this.fire('afterinit');
 
     };
@@ -462,10 +468,13 @@ define(function () {
         /**
          * 销毁控件
          * 
-         * @fires Control#dispose
+         * @fires module:Control#dispose
          */
         dispose: function () {
 
+            /**
+             * @event module:Control#dispose
+             */
             this.fire('dispose');
 
             for (var type in this._listners) {

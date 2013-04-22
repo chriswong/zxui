@@ -16,21 +16,26 @@ define(function (require) {
      * 弹出层控件
      * 
      * @constructor
+     * @extends module:Control
      * @requires Control
-     * @extends Control
      * @exports Popup
+     * @see module:City
+     * @see module:Calendar
      */
     var Popup = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
+    T.inherits(Popup, Control);
 
-    Popup.prototype = {
+    T.extend(Popup.prototype,
+    /** @lends module:Popup.prototype */ {
 
         type: 'Popup',
 
         /**
          * 控件配置项
          * 
+         * @name module:Popup#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
          * @property {string|HTMLElement} main 控件渲染容器
@@ -138,7 +143,8 @@ define(function (require) {
          * 控件初始化
          * 
          * @private
-         * @params {Object} options 配置项 @see Popup.prototype.options
+         * @params {Object} options 配置项
+         * @see module:Popup#options
          */
         init: function (options) {
             options = this.setOptions(options);
@@ -387,10 +393,7 @@ define(function (require) {
 
         }
 
-    };
-
-    T.inherits(Popup, Control);
+    });
 
     return Popup;
-
 });

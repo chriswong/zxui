@@ -6,9 +6,9 @@
 
 define(function (require) {
 
-	var T = baidu;
-	var Control = require('./control');
-	var Popup = require('./popup');
+    var T = baidu;
+    var Control = require('./control');
+    var Popup = require('./popup');
 
     /**
      * 标准日期格式
@@ -41,39 +41,43 @@ define(function (require) {
         return (n > 9 ? '' : '0') + n;
     }
 
-	
+    
 
-	/**
-	 * 比PC-UI WCal好用的日历控件
-	 * 
-	 * @constructor
-     * @requires Control
+    /**
+     * 比PC-UI WCal好用的日历控件
+     * 
+     * @constructor
+     * @extends module:Control
+     * @requires module:Control
      * @requires Popup
      * @exports Calendar
      * @example
+     * &lt;input type="text" class="input triggers" /&gt;
+     * &lt;input type="button" value="click" class="triggers" /&gt;
      * new Calendar({
      *     dateFormat: 'yyyy-MM-dd(WW)',    // W为星期几，WW带周作前缀
      *     triggers: '.triggers',
      *     target: '.input'
-     *  });
-	 */
-	var Calendar = function () {
-		this.constructor.superClass.constructor.apply(this, arguments);
-	};
+     *  }).render();
+     */
+    var Calendar = function () {
+        this.constructor.superClass.constructor.apply(this, arguments);
+    };
+    T.inherits(Calendar, Control);
 
-	/**
-	 * 全局日期格式
-	 * 
-	 * @type {string}
-	 */
-	Calendar.DATE_FORMAT = DATE_FORMAT;
+    /**
+     * 全局日期格式
+     * 
+     * @type {string}
+     */
+    Calendar.DATE_FORMAT = DATE_FORMAT;
 
-	/**
-	 * 可选中的日期区间
-	 * 
-	 * @type {?Object}
-	 */
-	Calendar.RANGE = null;
+    /**
+     * 可选中的日期区间
+     * 
+     * @type {?Object}
+     */
+    Calendar.RANGE = null;
 
 
     /**
@@ -84,13 +88,16 @@ define(function (require) {
      */
     var cache = {};
 
-	Calendar.prototype = {
+    T.extend(Calendar.prototype,
+    /** @lends module:Calendar.prototype */ {
 
         type: 'Calendar',
 
         /**
          * 控件配置项
          * 
+         * @name module:Calendar#options
+         * @see module:Popup#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
          * @property {string|HTMLElement} main 控件渲染容器
@@ -898,11 +905,7 @@ define(function (require) {
         }
 
 
-    };
-    T.inherits(Calendar, Control);
-
+    });
 
     return Calendar;
-
-
 });

@@ -6,32 +6,41 @@
 
 define(function (require) {
 
-	var T = baidu;
-	var Control = require('./control');
-	var Popup = require('./popup');
-	
-	
-
-	/**
-	 * 国内城市选择控件
-	 * 
-	 * @constructor
+    var T = baidu;
+    var Control = require('./control');
+    var Popup = require('./popup');
+    
+    /**
+     * 国内城市选择控件
+     * 
+     * @constructor
+     * @extends module:Control
      * @requires Control
      * @requires Popup
      * @exports City
-	 */
-	var City = function () {
-		this.constructor.superClass.constructor.apply(this, arguments);
-	};
+     * @example
+     * &lt;input type="text" class="input triggers" /&gt;
+     * &lt;input type="button" value="click" class="triggers" /&gt;
+     * new City({
+     *     triggers: '.triggers',
+     *     target: '.input'
+     *  }).render();
+     */
+    var City = function () {
+        this.constructor.superClass.constructor.apply(this, arguments);
+    };
+    T.inherits(City, Control);
 
-    City.prototype = {
+    T.extend(City.prototype,
+    /** @lends module:City.prototype */ {
 
         type: 'City',
 
         /**
          * 控件配置项
          * 
-         * @see Popup#options
+         * @name module:City#options
+         * @see module:Popup#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
          * @property {string|HTMLElement} main 控件渲染容器
@@ -76,7 +85,8 @@ define(function (require) {
          * 控件初始化
          * 
          * @private
-         * @param {Object} options 控件配置项 @see City#options
+         * @param {Object} options 控件配置项
+         * @see City#options
          */
         init: function (options) {
             options       = this.setOptions(options);
@@ -417,11 +427,8 @@ define(function (require) {
             this.fire('hide');
         }
 
-    };
-    T.inherits(City, Control);
+    });
 
     return City;
-
-
 });
-		
+        

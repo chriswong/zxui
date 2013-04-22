@@ -116,6 +116,7 @@ define(function (require) {
     /**
      * 配置项
      * 
+     * @name module:log.options
      * @type {Object}
      */
     var options = {
@@ -221,13 +222,16 @@ define(function (require) {
      * 中间页日志统计模块
      * 
      * @module log
+     * @example
+     * log.config({action: 'http://www.domain.com/api'});
+     * log.start();
      */
     var exports = {
 
         /**
          * 配置项
          * 
-         * @see options
+         * @see module:log.options
          * @param {Object} ops 可配置项
          * @param {string=} ops.action 日志统计服务接口地址
          * @param {string=} ops.main 日志统计顶层容器className

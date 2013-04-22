@@ -36,13 +36,25 @@ define(function (require) {
      * 提示层控件
      * 
      * @constructor
+     * @extends module:Control
      * @requires Control
      * @extends  Control
      * @exports Tip
+     * @example
+     * new Tip({
+     *     mode: 'over',
+     *     arrow: "1",
+     *     offset: { x: 5, y: 5},
+     *     onBeforeShow: function () {
+     *       this.title = Math.random();
+     *     }
+     * }).render();
+     * 
      */
     var Tip = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
+    T.inherits(Tip, Control);
 
     /**
      * 提示框消失的延迟时间，单位毫秒
@@ -53,13 +65,15 @@ define(function (require) {
     Tip.HIDE_DELAY = 500;
 
 
-    Tip.prototype = {
+    T.extend(Tip.prototype,
+    /** @lends module:Tip.prototype */ {
 
         type: 'Tip',
 
         /**
          * 控件配置项
          * 
+         * @name module:Tip#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
          * @property {string|HTMLElement} main 控件渲染容器
@@ -143,7 +157,7 @@ define(function (require) {
          * 
          * @private
          * @param {Object} options 控件配置项
-         * @see Tip#options
+         * @see module:Tip#options
          */
         init: function (options) {
             options = this.setOptions(options);
@@ -516,8 +530,7 @@ define(function (require) {
 
         }
 
-    };
-    T.inherits(Tip, Control);
+    });
 
     return Tip;
 });

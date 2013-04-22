@@ -14,13 +14,25 @@ define(function (require) {
      * 
      * 提供Ajax数据分页功能
      * @constructor
+     * @extends module:Control
      * @requires Control
-     * @extends Control
      * @exports Pager
+     * @example
+     * &lt;div class="pager-container"&gt;&lt;/div&gt;
+     * new Pager({
+     *     main: T.qq('pager-container'),
+     *     total: 10,
+     *     onChange: function (e) {
+     *         // load new date
+     *         this.setPage(e.page);
+     *         this.render();
+     *     }
+     *  }).render();
      */
     var Pager = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
+    T.inherits(Pager, Control);
 
     /**
      * 当页数较多时，中间显示页码的个数
@@ -30,13 +42,15 @@ define(function (require) {
     Pager.SHOW_COUNT = 5;
 
 
-    Pager.prototype = {
+    T.extend(Pager.prototype,
+    /** @lends module:Pager.prototype */{
 
         type: 'Pager',
 
         /**
          * 控件配置项
          * 
+         * @name module:Pager#optioins
          * @type {Object}
          * @property {boolean} options.disabled 控件的不可用状态
          * @property {string|HTMLElement} options.main 控件渲染容器
@@ -106,7 +120,8 @@ define(function (require) {
          * 控件初始化
          * 
          * @private
-         * @param {Object} options 控件配置项 @see Pager.prototype.options
+         * @param {Object} options 控件配置项
+         * @see module:Pager#options
          */
         init: function (options) {
             options = this.setOptions(options);
@@ -346,8 +361,7 @@ define(function (require) {
                 this.fire('change', { page: current });
             }
         }
-    };
-    T.inherits(Pager, Control);
+    });
 
     return Pager;
 });
