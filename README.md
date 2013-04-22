@@ -10,4 +10,5 @@
 - 城市选择 [City](http://chriswong.github.io/zxui/examples/city.html)
 - 分页控件 [Pager](http://chriswong.github.io/zxui/examples/pager.html)
 - 浮层提示 [Tip](http://chriswong.github.io/zxui/examples/tip.html)
+- 点击统计 [Log](http://chriswong.github.io/zxui/examples/log.html)
 - 条件过滤 [Filter](http://chriswong.github.io/zxui/examples/filter.html)
