@@ -10,3 +10,4 @@
 - 城市选择 [City](http://chriswong.github.io/zxui/examples/city.html)
 - 分页控件 [Pager](http://chriswong.github.io/zxui/examples/pager.html)
 - 浮层提示 [Tip](http://chriswong.github.io/zxui/examples/tip.html)
+- 浮层提示 [Filter](http://chriswong.github.io/zxui/examples/filter.html)
