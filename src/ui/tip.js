@@ -409,7 +409,7 @@ define(function (require) {
          * 
          * @return {boolean} 可见的状态
          */
-        isVisible: function() {
+        isVisible: function () {
 
             return !!this.current;
 
@@ -422,10 +422,10 @@ define(function (require) {
          * 
          * @param {string} html
          */
-        setTitle: function(html) {
+        setTitle: function (html) {
             this.title = html || '';
 
-            var elements = this.elements
+            var elements = this.elements;
             elements.title.innerHTML = this.title;
             T[this.title ? 'show' : 'hide'](elements.title);
         },
@@ -435,7 +435,7 @@ define(function (require) {
          * 
          * @param {string} html 要提示的内容的HTML
          */
-        setContent: function(html) {
+        setContent: function (html) {
             this.content = html || '';
             this.elements.body.innerHTML = this.content; 
         },
@@ -574,12 +574,11 @@ define(function (require) {
                     'left',
 
                     // 在目标宽于提示层或 dir 为 tc 或 bc 时，箭头相对提示层水平居中
-                    width > mainWidth || second === 'c'
-                        ? middleLeft
-                        : {
-                            l: (width - arrowWidth) / 2,
-                            r: (mainWidth - (width - arrowWidth) / 2)
-                        }[second]
+                    {
+                        c: middleLeft,
+                        l: (width - arrowWidth) / 2,
+                        r: (mainWidth - (width - arrowWidth) / 2)
+                    }[width > mainWidth ? 'c' : second]
                 );
                 DOM.setStyle(arrow, 'top', '');
 
@@ -603,12 +602,11 @@ define(function (require) {
                     'top',
 
                     // 在目标高于提示层或 dir 为 lc 或 rc 时，箭头相对提示层垂直居中
-                    height > mainHeight || second === 'c'
-                        ? middleTop
-                        : {
-                            t: (height - arrowHeight) / 2,
-                            b: (mainHeight - (height - arrowHeight) / 2)
-                        }[second]
+                    {
+                        c: middleTop,
+                        t: (height - arrowHeight) / 2,
+                        b: (mainHeight - (height - arrowHeight) / 2)
+                    }[height > mainHeight ? 'c' : second]
                 );
                 DOM.setStyle(arrow, 'left', '');
 
