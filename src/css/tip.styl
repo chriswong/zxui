@@ -10,7 +10,7 @@ $tip-arrow-border-width = 2px
     z-index 1000
     position absolute
     border 1px solid tip-border-color
-    background-color #f9fcff
+    background-color tip-background-color
 
     .{tip-prefix}-arrow
     .{tip-prefix}-arrow em
@@ -23,13 +23,19 @@ $tip-arrow-border-width = 2px
         position absolute
 
     .{tip-prefix}-arrow
-        em,
-        ins
+        em
             border $tip-border-width solid transparent
 
             // 修复ie6 无法边框透明的bug
-            _border $tip-border-width solid white
-            _filter chroma(color=white)
+            _border $tip-border-width solid tip-background-color
+            _filter chroma(color=tip-background-color)
+
+        ins
+            border $tip-border-width solid transparent
+            
+            // 修复ie6 无法边框透明的bug
+            _border $tip-border-width solid tip-border-color
+            _filter chroma(color=tip-border-color)
 
 
     // tip显示在trigger左侧(箭头在控件右侧)
