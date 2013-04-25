@@ -397,19 +397,36 @@ define(function (require) {
             this.fire('hide');
         },
 
+        /**
+         * 判断TIP是否被展现
+         * 
+         * @return {Boolean}
+         */
         isShowing: function() {
 
             return !!this.current;
 
         },
 
+        /**
+         * 设置BODY元素的innerHTML
+         * 
+         * @param {html text} html
+         */
         setBody: function(html) {
             this.elements.body.innerHTML = html; 
         },
 
+        /**
+         * 设置TITLE元素的innerHTML
+         * 
+         * 如果参数html为空，则会隐藏TIP的title
+         * 
+         * @param {html text} html
+         */
         setTitle: function(html) {
-            this.title = html;
-            this.elements.title.innerHTML = html;
+            this.title = html || '';
+            this.elements.title.innerHTML = this.title;
             T[this.title ? 'show' : 'hide'](elements.title);
         },
 
