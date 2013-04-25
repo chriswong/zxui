@@ -43,7 +43,8 @@ define(function (require) {
          * @property {string} triggers 触发显示弹出层的节点
          * @property {string} content 提示的内容信息
          * @property {string} dir 弹出层相对 target 的位置，支持8个方向
-         * 可选值：tr | rt | rb | br | bl | lb | lt | tl，默认为 bl
+         * 可选值（默认为 bl）：
+         * tr | rt | rb | br | bl | lb | lt | tl | tc | rc | bc | lc
          * 也可通过在 triggers 上设置 data-popup来指定
          * @property {string} prefix 控件class前缀，同时将作为main的class之一
          * @property {Object.<string, number>} offset 弹出层显示的偏移量
@@ -90,7 +91,7 @@ define(function (require) {
 
             /**
              * 弹出层显示在 trigger 的相对位置
-             * 可选值：tr | rt | rb | br | bl | lb | lt | tl
+             * 可选值：tr | rt | rb | br | bl | lb | lt | tl | tc | rc | bc | lc
              * 也可通过在 triggers 上设置 data-popup来指定
              * 
              * @type {string}
@@ -317,16 +318,21 @@ define(function (require) {
             var dir          = options.dir;
             var position     = DOM.getPosition(target);
 
+            // 目标的8个关键坐标点
             var top          = position.top;
             var left         = position.left;
             var width        = target.offsetWidth;
             var height       = target.offsetHeight;
             var right        = left + width;
             var bottom       = top + height;
+            var center       = left + (width / 2);
+            var middle       = top + (height / 2);
 
+            // 提示层宽高
             var mainWidth    = main.offsetWidth;
             var mainHeight   = main.offsetHeight;
 
+            // 视窗范围
             var scrollTop    = PAGE.getScrollTop();
             var scrollLeft   = PAGE.getScrollLeft();
             var scrollRight  = scrollLeft + PAGE.getViewWidth();
@@ -340,52 +346,89 @@ define(function (require) {
 
             var second, first;
 
-            // 未指定方向时自动按下右上左顺序计算可用方向
+            // 未指定方向时自动按下右上左顺序计算可用方向（以不超出视窗为原则）
             if (dir === 'auto') {
+
+                // 目标宽度大于提示层宽度时优先考虑水平居中
+                var horiz = width > mainWidth
+                        || left - (mainWidth - width) / 2 > 0
+                        && right + (mainWidth - width) / 2 <= scrollRight
+                        ? 'c'
+                        : left + mainWidth > scrollRight
+                            ? 'r'
+                            : 'l';
+
+                // 目标高度大于提示层高度时优先考虑垂直居中
+                var vertical = height > mainHeight
+                        || top - (mainHeight - height) / 2 > 0
+                        && bottom + (mainHeight - height) / 2 <= scrollBottom
+                        ? 'c'
+                        : top + mainHeight > scrollBottom
+                            ? 'b'
+                            : 't';
+
+                // 如果提示层在目标下边未超出视窗
                 if (bottom + mainHeight <= scrollBottom) {
                     first = 'b';
-                    second = left + mainWidth > scrollRight ? 'r' : 'l';
+                    second = horiz;
                 }
+
+                // 如果提示层在目标右侧未超出视窗
                 else if (right + mainWidth <= scrollRight) {
                     first = 'r';
-                    second = top + mainHeight > scrollBottom ? 'b' : 't';
+                    second = vertical;
                 }
+
+                // 如果提示层在目标上边未超出视窗
                 else if (top - mainHeight >= scrollTop) {
                     first = 't';
-                    second = left + mainWidth > scrollRight ? 'r' : 'l';
+                    second = horiz;
                 }
+
+                // 如果提示层在目标左侧未超出视窗
                 else if (left - mainWidth >= scrollLeft) {
                     first = 'l';
-                    second = top + mainHeight > scrollBottom ? 'b' : 't';
+                    second = vertical;
                 }
 
                 dir = first + second;
             }
             else {
+
+                // 从 dir 中分拆水平和垂直方向值，方便后续计算
                 first = dir.charAt(0);
                 second = dir.charAt(1);
             }
 
             var offset = options.offset;
 
-            if (first === 'b' || first === 't') {
-                left = second === 'l' 
-                       ? left
-                       : right - mainWidth;
+            // 提示层在目标上部或下部显示时的定位处理
+            if ({t: 1, b: 1}[first]) {
+                left = {
+                    l: left,
+                    c: center - (mainWidth / 2),
+                    r: right - mainWidth
+                }[second];
 
-                top = first === 'b'
-                       ? bottom
-                       : top - mainHeight;
+                top = {
+                    t: top - mainHeight,
+                    b: bottom
+                }[first];
 
             }
-            else if (first === 'l' || first === 'r') {
-                top = second === 't'
-                      ? top
-                      : bottom - mainHeight;
 
-                left = first === 'l'
-                       ? left - mainWidth
-                       : right;
+            // 提示层在目标左边或右边显示时的定位处理
+            else if ({l: 1, r: 1}[first]) {
+                top = {
+                    t: top,
+                    c: middle - (mainHeight / 2),
+                    b: bottom - mainHeight
+                }[second];
+
+                left = {
+                    l: left - mainWidth - offset.x,
+                    r: right + offset.x
+                }[first];
 
             }
 
