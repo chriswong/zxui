@@ -77,7 +77,10 @@ define(function (require) {
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
          * @property {string|HTMLElement} main 控件渲染容器
-         * @property {boolean|string=} arrow 提示框的箭头参数，默认为false
+         * @property {boolean|string=} arrow 提示框的箭头参数，默认为false，不带箭头
+         * 可以初始化时通过指定arrow属性为“1”开启箭头模式，也可以手动指定箭头方向：
+         * tr | rt | rb | br | bl | lb | lt | tl | tc | rc | bc | lc
+         * 也可通过在 triggers 上设置 data-tooltips来指定
          * @property {number=} hideDelay 提示框消失的延迟时间，默认值为Tip.HIDE_DELAY
          * @property {string=} mode 提示的显示模式，over|click|auto。默认为over
          * @property {string=} title 提示的标题信息，默认为null
@@ -100,7 +103,8 @@ define(function (require) {
 
             // 提示框的箭头参数，默认为false，不带箭头
             // 可以初始化时通过指定arrow属性为“1”开启箭头模式
-            // 也可以手动指定箭头方向：tr | rt | rb | br | bl | lb | lt | tl。
+            // 也可以手动指定箭头方向：
+            // tr | rt | rb | br | bl | lb | lt | tl | tc | rc | bc | lc。
             // 也可通过在 triggers 上设置 data-tooltips来指定
             arrow: false,
 
@@ -332,6 +336,9 @@ define(function (require) {
             if (options.hideDelay) {
                 this.timer = setTimeout(this.hide, options.hideDelay);
             }
+            else {
+                this.hide();
+            }
         },
 
         /**
@@ -398,37 +405,39 @@ define(function (require) {
         },
 
         /**
-         * 判断TIP是否被展现
+         * 判断提示层是否可见
          * 
-         * @return {Boolean}
+         * @return {boolean} 可见的状态
          */
-        isShowing: function() {
+        isVisible: function() {
 
             return !!this.current;
 
         },
 
         /**
-         * 设置BODY元素的innerHTML
+         * 设置提示层的标题部分内容
          * 
-         * @param {html text} html
-         */
-        setBody: function(html) {
-            this.content = html || '';
-            this.elements.body.innerHTML = this.content; 
-        },
-
-        /**
-         * 设置TITLE元素的innerHTML
+         * 如果参数为空，则隐藏提示层的标题部分
          * 
-         * 如果参数html为空，则会隐藏TIP的title
-         * 
-         * @param {html text} html
+         * @param {string} html
          */
         setTitle: function(html) {
             this.title = html || '';
-            this.elements.title.innerHTML = this.title;
+
+            var elements = this.elements
+            elements.title.innerHTML = this.title;
             T[this.title ? 'show' : 'hide'](elements.title);
+        },
+
+        /**
+         * 设置提示层显示的内容
+         * 
+         * @param {string} html 要提示的内容的HTML
+         */
+        setContent: function(html) {
+            this.content = html || '';
+            this.elements.body.innerHTML = this.content; 
         },
 
         /**
@@ -445,19 +454,27 @@ define(function (require) {
             var position     = DOM.getPosition(target);
             var prefix       = options.prefix + '-arrow';
 
+            // 目标的8个关键坐标点
             var top          = position.top;
             var left         = position.left;
             var width        = target.offsetWidth;
             var height       = target.offsetHeight;
             var right        = left + width;
             var bottom       = top + height;
+            var center       = left + (width / 2);
+            var middle       = top + (height / 2);
 
+            // 提示层宽高
             var mainWidth    = main.offsetWidth;
             var mainHeight   = main.offsetHeight;
 
+            // 箭头宽高
+            // XXX: 如果通过 tpl 修改了控件模板，
+            // 或者针对箭头部分改了样式，此处得到结果不对或者报错
             var arrowWidth   = arrow.firstChild.offsetWidth;
             var arrowHeight  = arrow.firstChild.offsetHeight;
 
+            // 视窗范围
             var scrollTop    = PAGE.getScrollTop();
             var scrollLeft   = PAGE.getScrollLeft();
             var scrollRight  = scrollLeft + PAGE.getViewWidth();
@@ -466,33 +483,75 @@ define(function (require) {
             // 属性配置优于实例配置
             var dirFromAttr = target.getAttribute('data-tooltips');
             if (dirFromAttr) {
-                dir = /[trbl]{2}/.test(dirFromAttr) ? dirFromAttr : '1';
+                dir = /[trblc]{2}/.test(dirFromAttr) ? dirFromAttr : '1';
             }
 
             var second, first;
 
-            // 未指定方向时自动按下右上左顺序计算可用方向
+            // 未指定方向时自动按下右上左顺序计算可用方向（以不超出视窗为原则）
             if (!dir || dir === '1') {
+
+                // 如果提示层在目标下边未超出视窗
                 if (bottom + arrowHeight + mainHeight <= scrollBottom) {
                     first = 'b';
-                    second = left + mainWidth > scrollRight ? 'r' : 'l';
+
+                    // 目标宽度大于提示层宽度时优先考虑水平居中
+                    second = width > mainWidth
+                        || left - (mainWidth - width) / 2 > 0
+                        && right + (mainWidth - width) / 2 <= scrollRight
+                        ? 'c'
+                        : left + mainWidth > scrollRight
+                            ? 'r'
+                            : 'l';
                 }
+
+                // 如果提示层在目标右侧未超出视窗
                 else if (right + mainWidth + arrowWidth <= scrollRight) {
                     first = 'r';
-                    second = top + mainHeight > scrollBottom ? 'b' : 't';
+
+                    // 目标高度大于提示层高度时优先考虑水平居中
+                    second = height > mainHeight
+                        || top - (mainHeight - height) / 2 > 0
+                        && bottom + (mainHeight - height) / 2 <= scrollBottom
+                        ? 'c'
+                        : top + mainHeight > scrollBottom
+                            ? 'b'
+                            : 't';
                 }
+
+                // 如果提示层在目标上边未超出视窗
                 else if (top - mainHeight - arrowHeight >= scrollTop) {
                     first = 't';
-                    second = left + mainWidth > scrollRight ? 'r' : 'l';
+
+                    // 目标宽度大于提示层宽度时优先考虑水平居中
+                    second = width > mainWidth
+                        || left - (mainWidth - width) / 2 > 0
+                        && right + (mainWidth - width) / 2 <= scrollRight
+                        ? 'c'
+                        : left + mainWidth > scrollRight
+                            ? 'r'
+                            : 'l';
                 }
+
+                // 如果提示层在目标左侧未超出视窗
                 else if (left - mainWidth - arrowWidth >= scrollLeft) {
                     first = 'l';
-                    second = top + mainHeight > scrollBottom ? 'b' : 't';
+
+                    // 目标高度大于提示层高度时优先考虑水平居中
+                    second = height > mainHeight
+                        || top - (mainHeight - height) / 2 > 0
+                        && bottom + (mainHeight - height) / 2 <= scrollBottom
+                        ? 'c'
+                        : top + mainHeight > scrollBottom
+                            ? 'b'
+                            : 't';
                 }
 
                 dir = first + second;
             }
             else {
+
+                // 从 dir 中分拆水平和垂直方向值，方便后续计算
                 first = dir.charAt(0);
                 second = dir.charAt(1);
             }
@@ -502,59 +561,68 @@ define(function (require) {
 
             arrow.className = prefix + ' ' + prefix + '-' + lrtb[first];
 
-            // 改变箭头方向后需要校准箭头尺寸
+            // 改变箭头方向后需要校准箭头宽高
+            // XXX: 如果通过 tpl 修改了控件模板，
+            // 或者针对箭头部分改了样式，此处得到结果不对或者报错
             arrowWidth  = arrow.firstChild.offsetWidth;
             arrowHeight = arrow.firstChild.offsetHeight;
 
             var middleLeft = (mainWidth - arrowWidth) / 2;
             var middleTop  = (mainHeight - arrowHeight) / 2;
 
-            if (first === 'b' || first === 't') {
-                left = second === 'l' 
-                       ? left
-                       : right - mainWidth;
+            // 提示层在目标上部或下部显示时的定位处理
+            if ({t: 1, b: 1}[first]) {
+                left = {
+                    l: left,
+                    c: center - (mainWidth / 2),
+                    r: right - mainWidth
+                }[second];
 
-                top = first === 'b'
-                       ? bottom + arrowHeight
-                       : top - arrowHeight - mainHeight;
-
-                top += first === 'b' ? offset.y : -offset.y;
+                top = {
+                    t: top - arrowHeight - mainHeight - offset.y,
+                    b: bottom + arrowHeight + offset.y
+                }[first];
 
                 DOM.setStyle(
                     arrow,
                     'left',
-                    width > mainWidth
-                    ? middleLeft
-                    : (
-                        second === 'l'
-                        ? (width - arrowWidth) / 2
-                        : (mainWidth - (width - arrowWidth) / 2)
-                    )
+
+                    // 在目标宽于提示层或 dir 为 tc 或 bc 时，箭头相对提示层水平居中
+                    width > mainWidth || second === 'c'
+                        ? middleLeft
+                        : {
+                            l: (width - arrowWidth) / 2,
+                            r: (mainWidth - (width - arrowWidth) / 2)
+                        }[second]
                 );
                 DOM.setStyle(arrow, 'top', '');
 
             }
-            else if (first === 'l' || first === 'r') {
-                top = second === 't'
-                      ? top
-                      : bottom - mainHeight;
 
-                left = first === 'l'
-                       ? left - arrowWidth - mainWidth
-                       : right + arrowWidth;
+            // 提示层在目标左边或右边显示时的定位处理
+            else if ({l: 1, r: 1}[first]) {
+                top = {
+                    t: top,
+                    c: middle - (mainHeight / 2),
+                    b: bottom - mainHeight
+                }[second];
 
-                left += first === 'r' ? offset.x : -offset.x;
+                left = {
+                    l: left - arrowWidth - mainWidth - offset.x,
+                    r: right + arrowWidth + offset.x
+                }[first];
 
                 DOM.setStyle(
                     arrow,
                     'top',
-                    height > mainHeight
-                    ? middleTop
-                    : (
-                        second === 't'
-                        ? (height - arrowHeight) / 2
-                        : (mainHeight - (height - arrowHeight) / 2)
-                    )
+
+                    // 在目标高于提示层或 dir 为 lc 或 rc 时，箭头相对提示层垂直居中
+                    height > mainHeight || second === 'c'
+                        ? middleTop
+                        : {
+                            t: (height - arrowHeight) / 2,
+                            b: (mainHeight - (height - arrowHeight) / 2)
+                        }[second]
                 );
                 DOM.setStyle(arrow, 'left', '');
 
