@@ -397,6 +397,22 @@ define(function (require) {
             this.fire('hide');
         },
 
+        isShowing: function() {
+
+            return !!this.current;
+
+        },
+
+        setBody: function(html) {
+            this.elements.body.innerHTML = html; 
+        },
+
+        setTitle: function(html) {
+            this.title = html;
+            this.elements.title.innerHTML = html;
+            T[this.title ? 'show' : 'hide'](elements.title);
+        },
+
         /**
          * 计算浮层及箭头显示位置
          * 
