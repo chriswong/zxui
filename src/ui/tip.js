@@ -491,60 +491,46 @@ define(function (require) {
             // 未指定方向时自动按下右上左顺序计算可用方向（以不超出视窗为原则）
             if (!dir || dir === '1') {
 
-                // 如果提示层在目标下边未超出视窗
-                if (bottom + arrowHeight + mainHeight <= scrollBottom) {
-                    first = 'b';
-
-                    // 目标宽度大于提示层宽度时优先考虑水平居中
-                    second = width > mainWidth
+                // 目标宽度大于提示层宽度时优先考虑水平居中
+                var horiz = width > mainWidth
                         || left - (mainWidth - width) / 2 > 0
                         && right + (mainWidth - width) / 2 <= scrollRight
                         ? 'c'
                         : left + mainWidth > scrollRight
                             ? 'r'
                             : 'l';
+
+                // 目标高度大于提示层高度时优先考虑垂直居中
+                var vertical = height > mainHeight
+                        || top - (mainHeight - height) / 2 > 0
+                        && bottom + (mainHeight - height) / 2 <= scrollBottom
+                        ? 'c'
+                        : top + mainHeight > scrollBottom
+                            ? 'b'
+                            : 't';
+
+                // 如果提示层在目标下边未超出视窗
+                if (bottom + arrowHeight + mainHeight <= scrollBottom) {
+                    first = 'b';
+                    second = horiz;
                 }
 
                 // 如果提示层在目标右侧未超出视窗
                 else if (right + mainWidth + arrowWidth <= scrollRight) {
                     first = 'r';
-
-                    // 目标高度大于提示层高度时优先考虑水平居中
-                    second = height > mainHeight
-                        || top - (mainHeight - height) / 2 > 0
-                        && bottom + (mainHeight - height) / 2 <= scrollBottom
-                        ? 'c'
-                        : top + mainHeight > scrollBottom
-                            ? 'b'
-                            : 't';
+                    second = vertical;
                 }
 
                 // 如果提示层在目标上边未超出视窗
                 else if (top - mainHeight - arrowHeight >= scrollTop) {
                     first = 't';
-
-                    // 目标宽度大于提示层宽度时优先考虑水平居中
-                    second = width > mainWidth
-                        || left - (mainWidth - width) / 2 > 0
-                        && right + (mainWidth - width) / 2 <= scrollRight
-                        ? 'c'
-                        : left + mainWidth > scrollRight
-                            ? 'r'
-                            : 'l';
+                    second = horiz;
                 }
 
                 // 如果提示层在目标左侧未超出视窗
                 else if (left - mainWidth - arrowWidth >= scrollLeft) {
                     first = 'l';
-
-                    // 目标高度大于提示层高度时优先考虑水平居中
-                    second = height > mainHeight
-                        || top - (mainHeight - height) / 2 > 0
-                        && bottom + (mainHeight - height) / 2 <= scrollBottom
-                        ? 'c'
-                        : top + mainHeight > scrollBottom
-                            ? 'b'
-                            : 't';
+                    second = vertical;
                 }
 
                 dir = first + second;
