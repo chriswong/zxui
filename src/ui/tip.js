@@ -414,7 +414,8 @@ define(function (require) {
          * @param {html text} html
          */
         setBody: function(html) {
-            this.elements.body.innerHTML = html; 
+            this.content = html || '';
+            this.elements.body.innerHTML = this.content; 
         },
 
         /**
