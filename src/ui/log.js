@@ -17,6 +17,7 @@ define(function (require) {
      * 
      * @inner
      * @param {string} url 日志完整地址
+     * @fires module:log#send
      */
     var send = (function () {
         var list = [];
@@ -29,12 +30,20 @@ define(function (require) {
             };
 
             list[index].src = url;
+
+
+            /**
+             * @event module:log#send
+             * @type {Object}
+             * @property {string} url 当前统计请求的完整地址
+             */
+            exports.fire('send', {url: url});
         };
     })();
 
     /**
      * 填充数据
-     * 根据当前点击对象，解释对象所处XPath及url
+     * 根据当前点击对象，解释对象所处 XPath 及 url
      * @inner
      * @param {Object} data待发送的数据对象
      * @param {HTMLElement} from 当前点击对象
@@ -83,6 +92,7 @@ define(function (require) {
             return !nolog;
         }
 
+        // 反转 XPath 顺序
         path.reverse();
 
         if (/^a|img|input|button$/.test(tag)) {
@@ -116,7 +126,6 @@ define(function (require) {
     /**
      * 配置项
      * 
-     * @name module:log.options
      * @type {Object}
      */
     var options = {
@@ -182,10 +191,12 @@ define(function (require) {
      * 页面点击监听
      * 
      * @inner
-     * @param {DOMEvent} e DOM事件对象
+     * @param {?DOMEvent} e DOM 事件对象
+     * @param {HTMLElement=} el 指定触发统计的 HTMLElement
+     * @fires module:log#click
      */
-    var onClick = function (e) {
-        var target = T.event.getTarget(e);
+    var onClick = function (e, el) {
+        var target = el || T.event.getTarget(e);
         var klass = options.main;
         var nolog = target.getAttribute('data-nolog') === '1';
         var main = DOM.hasClass(target, klass)
@@ -215,6 +226,14 @@ define(function (require) {
 
         data.t = (+new Date()).toString(36);
 
+        /**
+         * @event module:log#click
+         * @type {Object}
+         * @property {string} rsv_xpath 事件源 DOM 节点的XPath(type)
+         * @property {string} t 时间截的 36 进制表示
+         */
+        exports.fire('click', {data: data});
+
         send(options.action + T.url.jsonToQuery(data));
     };
 
@@ -231,7 +250,7 @@ define(function (require) {
         /**
          * 配置项
          * 
-         * @see module:log.options
+         * @see options
          * @param {Object} ops 可配置项
          * @param {string=} ops.action 日志统计服务接口地址
          * @param {string=} ops.main 日志统计顶层容器className
@@ -260,8 +279,60 @@ define(function (require) {
          */
         stop: function () {
             T.un(document, 'click', onClick);
+        },
+
+        /**
+         * 模拟点击指定的 HTMLElement 以发送统计
+         * 
+         * @param {HTMLElement} el 需要模拟点击触发统计的 HTMLElement
+         */
+        click: function (el) {
+            onClick(null, el);
+        },
+
+        /**
+         * 手动发送统计请求
+         * 
+         * @param {Object} data 要发送的数据
+         */
+        send: function (data) {
+            send(options.action + T.url.jsonToQuery(data));
         }
     };
+
+    var observe = T.lang.Class.prototype;
+    T.extend(exports, {
+
+        /**
+         * 添加事件绑定
+         * 
+         * @static
+         * @method module:log.on
+         * @param {?string} type 事件类型
+         * @param {Function} listner 要添加绑定的监听器
+         */
+        on: observe.addEventListener,
+
+        /**
+         * 解除事件绑定
+         * 
+         * @static
+         * @method module:log.un
+         * @param {string=} type 事件类型
+         * @param {Function=} listner 要解除绑定的监听器
+         */
+        un: observe.removeEventListener,
+
+        /**
+         * 触发指定事件
+         * 
+         * @static
+         * @method module:log.fire
+         * @param {string} type 事件类型
+         * @param {Object} args 透传的事件数据对象
+         */
+        fire: observe.dispatchEvent
+    });
 
     return exports;
 });
