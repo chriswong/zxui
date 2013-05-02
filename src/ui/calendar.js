@@ -41,14 +41,12 @@ define(function (require) {
         return (n > 9 ? '' : '0') + n;
     }
 
-    
-
     /**
      * 比PC-UI WCal好用的日历控件
      * 
      * @constructor
      * @extends module:Control
-     * @requires module:Control
+     * @requires Control
      * @requires Popup
      * @exports Calendar
      * @example
@@ -285,6 +283,21 @@ define(function (require) {
         },
 
         /**
+         * 取得指定日期的 yyyyMM 格式化后字符串值
+         * 
+         * @private
+         * @param {?Date=} date 待格式化的日期
+         * @return {string} 按 yyyyMM格式化后的日期字符串
+         */
+        getYYYYMM: function (date) {
+            return (
+                typeof date === 'number'
+                ? date
+                : this.format(this.from(date), 'yyyyMM')
+            );
+        },
+
+        /**
          * 绘制控件
          * 
          */
@@ -340,6 +353,12 @@ define(function (require) {
             this.updatePrevNextStatus(date);
         },
 
+        /**
+         * 更新上下月按钮状态
+         * 
+         * @private
+         * @param {?Date=} date 当前日期
+         */
         updatePrevNextStatus: function (date) {
             var options = this.options;
             var prefix = options.prefix;
@@ -351,7 +370,7 @@ define(function (require) {
 
             if (prev) {
                 T[!range 
-                    || this.getMonth(range.begin) < this.getMonth(date)
+                    || this.getYYYYMM(range.begin) < this.getYYYYMM(date)
                     ? 'show' : 'hide'
                 ](prev);
 
@@ -363,9 +382,9 @@ define(function (require) {
                 date.getMonth() + options.monthes - 1,
                 1
             );
-            if (next) {
+            if ( next) {
                 T[!range
-                    || this.getMonth(range.end) > this.getMonth(last)
+                    || this.getYYYYMM(range.end) > this.getYYYYMM(last)
                     ? 'show' : 'hide'
                 ](next);
             }
@@ -708,8 +727,8 @@ define(function (require) {
 
             var lastDate   = this.lastDate || '';
             var lastTarget = this.lastTarget;
-            var current    = this.getMonth(this.date);
-            var yM         = this.getMonth(value);
+            var current    = this.getYYYYMM(this.date);
+            var yM         = this.getYYYYMM(value);
 
             if (
                 lastDate
@@ -718,7 +737,7 @@ define(function (require) {
             ) {
                 this.date = this.from(value || this.value);
 
-                lastDate = lastDate && this.getMonth(lastDate);
+                lastDate = lastDate && this.getYYYYMM(lastDate);
                 if (lastDate !== yM || current !== yM) {
                     this.build();
                 }
@@ -729,14 +748,6 @@ define(function (require) {
             else if (value !== lastDate || target !== lastTarget) {
                 this.updateStatus();
             }
-        },
-
-        getMonth: function (date) {
-            return (
-                typeof date === 'number'
-                ? date
-                : this.format(this.from(date), 'yyyyMM')
-            );
         },
 
         /**
@@ -796,7 +807,6 @@ define(function (require) {
             });
             this.hide();
         },
-
 
         /**
          * 显示浮层

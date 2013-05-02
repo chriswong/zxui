@@ -310,6 +310,11 @@ define(function (require) {
             });
         },
 
+        /**
+         * 启用指定选项组
+         * 
+         * @param {string} key 选项组关键字
+         */
         enableItems: function (key) {
             var disabledClass = this.options.disabledClass;
             var group = this.groups[key];
