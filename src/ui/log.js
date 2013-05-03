@@ -95,7 +95,10 @@ define(function (require) {
         // 反转 XPath 顺序
         path.reverse();
 
-        if (/^a|img|input|button$/.test(tag)) {
+        if (/\bOP_LOG_(TITLE|LINK|IMG|BTN|OTHERS)/i.test(from.className)) {
+            type = RegExp.$1.toLowerCase();
+        }
+        else if (/^a|img|input|button$/.test(tag)) {
             type = {a: 'link', button: 'btn'}[tag] || tag;
 
             // 取type的前3位作判断，默认非输入框的点击都作为 btn 类型上报
