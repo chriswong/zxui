@@ -308,6 +308,7 @@ define(function (require) {
                 this.rendered = true;
 
                 var popup = this.popup = new Popup(this.srcOptions);
+                this.addChild(popup);
 
                 popup.on('click', this.onClick);
                 popup.on('beforeShow', this.onBeforeShow);
@@ -626,12 +627,10 @@ define(function (require) {
             var max      = '9999-12-31';
 
             if (range) {
-                min = 
-                    range.begin
+                min = range.begin
                     && this.format(range.begin, DATE_FORMAT)
                     || min;
-                max = 
-                    range.end
+                max = range.end
                     && this.format(range.end, DATE_FORMAT)
                     || max;
             }
@@ -857,7 +856,9 @@ define(function (require) {
          * @return {string} 当前日期格式化值
          */
         getValue: function () {
-            return this.format(this.date);
+            var date = this.date;
+            var target = this.target;
+            return this.format(date || target && target.value || this.value);
         },
 
         /**
@@ -866,7 +867,7 @@ define(function (require) {
          * @return {Date} 获取到的日期
          */
         getValueAsDate: function () {
-            return this.date;
+            return this.from(this.getValue());
         },
 
         /**
@@ -911,7 +912,32 @@ define(function (require) {
          */
         validate: function () {
             var value = this.target.value;
-            return value && this.format(this.from(value)) === value;
+
+            if ( value ) {
+                var date = this.from(value);
+                if (this.format(date) === value) {
+
+                    var range = this.range;
+                    var min   = '';
+                    var max   = '9999-12-31';
+
+                    if (range) {
+                        min = range.begin
+                            && this.format(range.begin, DATE_FORMAT)
+                            || min;
+                        max = range.end
+                            && this.format(range.end, DATE_FORMAT)
+                            || max;
+
+                        value = this.format(date, DATE_FORMAT);
+
+                        return value >= min && value <= max;
+                    }
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 
