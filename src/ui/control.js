@@ -477,6 +477,11 @@ define(function () {
              */
             this.fire('dispose');
 
+            var child;
+            while (child = this.children.pop()) {
+                child.dispose();
+            }
+
             for (var type in this._listners) {
                 this.un(type);
             }
