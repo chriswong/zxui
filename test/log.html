@@ -164,7 +164,7 @@ require(['../src/ui/log'], function (log) {
         });
 
         it('type - link for OP_LOG_LINK', function () {
-            log.on('click', function (json) {console.log(json.data.rsv_xpath)
+            log.on('click', function (json) {
                 expect(json.data.rsv_xpath).toMatch(/\(link\)/);
 
                 log.un('click', arguments.callee);
