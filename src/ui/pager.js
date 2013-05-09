@@ -12,7 +12,7 @@ define(function (require) {
     /**
      * 分页控件
      * 
-     * 提供Ajax数据分页功能
+     * 提供Ajax及本地数据分页功能
      * @constructor
      * @extends module:Control
      * @requires Control
