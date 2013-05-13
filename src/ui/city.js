@@ -45,6 +45,7 @@ define(function (require) {
          * @property {boolean} disabled 控件的不可用状态
          * @property {string|HTMLElement} main 控件渲染容器
          * @property {string} prefix 控件class前缀，同时将作为main的class之一
+         * @property {string} hintText 控件标题区域显示的提示文字
          * @property {number} index 默认激活的标签索引
          * @property {string} activeClass 激活标签、内容的class
          * @property {boolean} autoFill 是否自动填充默认城市数据(机票可用城市数据)
@@ -60,6 +61,9 @@ define(function (require) {
 
             // 控件class前缀，同时将作为main的class之一
             prefix: 'ecl-hotel-ui-city',
+            
+            // 控件标题区域显示的提示文字
+            hintText: '(可直接输入城市或城市拼音)',
 
             // 默认激活的标签索引
             index: 0,
@@ -189,7 +193,7 @@ define(function (require) {
             var labels  = [];
             var panels  = [];
 
-            labels.push('<span>热门</span>城市(可直接输入城市或城市拼音)');
+            labels.push('<span>热门</span>城市' + options.hintText);
             labels.push('<a href="#" class="' + prefix + '-close">X</a>');
 
             labels.push('<ul class="' + prefix + '-labels c-clearfix">');
