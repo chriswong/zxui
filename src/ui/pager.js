@@ -323,15 +323,17 @@ define(function (require) {
              */
             this.fire('click');
 
-            if (this.disabled || !target) {
+            var main = this.main;
+            if (this.disabled || !target || target === main) {
                 return;
             }
 
             if (target.tagName !== 'A') {
-                var main = this.main;
                 target = T.dom.getAncestorBy(target, function (el) {
+
                     // 最高访问到控件根容器, 避免到文档根节点
                     return el.tagName === 'A' || el === main;
+                    
                 });
                 
                 if (target === main) {
