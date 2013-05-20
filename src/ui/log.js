@@ -21,13 +21,19 @@ define(function (require) {
      */
     var send = (function () {
         var list = [];
-        return function (url) {
+        var encode = function (value) {
+            return encodeURIComponent(value);
+        };
+
+        return function (data) {
             var index = list.push(new Image()) - 1;
 
             list[index].onload = list[index].onerror = function () {
                 list[index] = list[index].onload = list[index].onerror = null;
                 delete list[index];
             };
+
+            var url = options.action + T.url.jsonToQuery(data, encode);
 
             list[index].src = url;
 
@@ -237,7 +243,7 @@ define(function (require) {
          */
         exports.fire('click', {data: data});
 
-        send(options.action + T.url.jsonToQuery(data));
+        send(data);
     };
 
     /**
@@ -298,9 +304,7 @@ define(function (require) {
          * 
          * @param {Object} data 要发送的数据
          */
-        send: function (data) {
-            send(options.action + T.url.jsonToQuery(data));
-        }
+        send: send
     };
 
     var observe = T.lang.Class.prototype;
