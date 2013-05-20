@@ -1,9 +1,9 @@
-知心组件库 (zxui)
+知心组件库 (zxui) [![Build Status](https://travis-ci.org/chriswong/zxui.png?branch=master)](https://travis-ci.org/chriswong/zxui)
+
 =====================
 
 知心组件库是 ecom ui 1.1 规范的一个轻量级实现。依赖于 [Tangram 1.3.9](https://github.com/BaiduFE/Tangram-base) 和 [ESL](https://github.com/ecomfe/esl)
 
-[![Build Status](https://travis-ci.org/chriswong/zxui.png?branch=master)](https://travis-ci.org/chriswong/zxui)
 
 
 ### 目前实现的组件
