@@ -8,7 +8,7 @@ module.exports = function (grunt) {
         
         jshint: {
             options: grunt.file.readJSON('src/ui/.jshintrc'),
-            files: ['src/ui/*.js']
+            files: ['src/ui/*.js', 'test/spec/*.js']
         },
 
         less: {
@@ -23,17 +23,17 @@ module.exports = function (grunt) {
             }
         },
 
-        stylus: {
-            compile: {
-                files: [{
-                    expand: true,
-                    cwd: 'src/css',
-                    src: '*.styl',
-                    dest: 'asset/css',
-                    ext: '.css'
-                }]
-            }
-        },
+        // stylus: {
+        //     compile: {
+        //         files: [{
+        //             expand: true,
+        //             cwd: 'src/css',
+        //             src: '*.styl',
+        //             dest: 'asset/css',
+        //             ext: '.css'
+        //         }]
+        //     }
+        // },
 
         csslint: {
             options: {
@@ -50,11 +50,11 @@ module.exports = function (grunt) {
         },
 
         watch: {
-            styles: {
+            less: {
                 options: {
                   debounceDelay: 250
                 },
-                files: 'src/css/*.styl',
+                files: 'src/css/*.less',
                 tasks: ['clean', 'stylus:compile', 'csslint']
             }
         },
@@ -76,12 +76,29 @@ module.exports = function (grunt) {
             }
         },
 
-        jasmine: {
-            task: {
-                src: 'src/**/*.js',
+        connect: {
+            test: {
                 options: {
-                    specs: 'spec/*Spec.js',
-                    template: require('grunt-template-jasmine-requirejs')
+                    port: 8888
+                }
+            }
+        },
+
+        jasmine: {
+            requirejs: {
+                src: 'src/ui/*.js',
+                options: {
+                    styles: '<%= csslint.src %>',
+                    specs: 'test/spec/*Spec.js',
+                    helpers: 'test/spec/*Helper.js',
+                    vendor: ['./lib/vars.js', './lib/common-2.3.js'],
+                    host: 'http://localhost:<%= connect.test.options.port %>',
+                    template: require('grunt-template-jasmine-requirejs'),
+                    templateOptions: {
+                        requireConfig: {
+                            baseUrl: './src/ui/'
+                        }
+                    }
                 }
             }
         }
@@ -92,14 +109,17 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-contrib-stylus');
+    // grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-jsdoc');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
 
 
-    grunt.registerTask('default', ['clean'/*, 'jshint', 'less', 'stylus', 'csslint'*/]);
+    grunt.registerTask('base', ['clean', 'jshint', 'less', 'csslint']);
+    grunt.registerTask('test', ['base', 'connect', 'jasmine']);
+    grunt.registerTask('default', ['base']);
 
 }
