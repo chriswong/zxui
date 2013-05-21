@@ -19,6 +19,7 @@
 <input type="text" class="city-trigger1" />
 <input type="button" value="click" class="city-trigger1" />
 <input type="text" class="city-trigger1" /><input type="button" value="click" class="city-trigger1" />
+<div class="embed-city-holder"></div>
 <script>
 A.init(function () {
     var me = this;
@@ -47,6 +48,7 @@ A.init(function () {
         // 自定义城市数据示例
         var city = new City({
           prefix: 'ecl-hotel-ui-city',
+          main: me.qq('embed-city-holder'),
           triggers: me.q('city-trigger1'),
 
           // 不自动填充默认城市数据

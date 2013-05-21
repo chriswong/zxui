@@ -37,7 +37,6 @@ define(function (require) {
 
             list[index].src = url;
 
-
             /**
              * @event module:log#send
              * @type {Object}

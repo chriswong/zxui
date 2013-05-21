@@ -22,7 +22,8 @@ define(function () {
      *             
      * @returns {HTMLElement|null} 指定元素className最近的祖先元素，查找不到时返回null
      */
-    T.dom.getAncestorByClass = function (element, className) {
+    T.dom.getAncestorByClass = T.dom.getAncestorByClass
+        || function (element, className) {
         // from Tangram 1.5.2.2
         element = baidu.dom.g(element);
         className = new RegExp(
@@ -40,7 +41,7 @@ define(function () {
         return null;
     };
 
-    EVENT._eventFilter = EVENT._eventFilter || {};
+    var eventFilter = EVENT._eventFilter = EVENT._eventFilter || {};
 
 
 
@@ -56,7 +57,8 @@ define(function () {
      * @param {DOMEvent} e          DOM事件
      */
 
-    EVENT._eventFilter._crossElementBoundary = function (listener, e) {
+    eventFilter._crossElementBoundary = eventFilter._crossElementBoundary
+        || function (listener, e) {
         var related = e.relatedTarget,
             current = e.currentTarget;
         if (
@@ -76,7 +78,7 @@ define(function () {
     };
 
 
-    T.fn.bind = function (func, scope) {
+    T.fn.bind = T.fn.bind || function (func, scope) {
         var xargs = arguments.length > 2 ? [].slice.call(arguments, 2) : null;
         return function () {
             var fn = baidu.lang.isString(func) ? scope[func] : func,
@@ -94,9 +96,9 @@ define(function () {
      * mouseenter事件仅在鼠标进入元素区域触发一次,
      *    当鼠标在元素内部移动的时候不会多次触发.
      */
-    EVENT._eventFilter.mouseenter = window.attachEvent 
+    eventFilter.mouseenter = window.attachEvent 
         ? null 
-        : function (element, type, listener) {
+        : eventFilter.mouseenter || function (element, type, listener) {
             return {
                 type: 'mouseover',
                 listener: baidu.fn.bind(
@@ -114,18 +116,18 @@ define(function () {
      * mouseleave事件仅在鼠标移出元素区域触发一次,
      *    当鼠标在元素区域内部移动的时候不会触发.
      */
-    EVENT._eventFilter.mouseleave = window.attachEvent 
+    eventFilter.mouseleave = window.attachEvent 
         ? null
-        : function (element, type, listener) {
-        return {
-            type: 'mouseout',
-            listener: baidu.fn.bind(
-                EVENT._eventFilter._crossElementBoundary,
-                this,
-                listener
-            )
+        : eventFilter.mouseleave || function (element, type, listener) {
+            return {
+                type: 'mouseout',
+                listener: baidu.fn.bind(
+                    EVENT._eventFilter._crossElementBoundary,
+                    this,
+                    listener
+                )
+            };
         };
-    };
 
 
     /**
@@ -133,7 +135,7 @@ define(function () {
      * 
      * @return {number} 横向滚动量
      */
-    T.page.getScrollLeft = function () {
+    T.page.getScrollLeft = T.page.getScrollLeft || function () {
         var d = document;
         return (window.pageXOffset
                 || d.documentElement.scrollLeft

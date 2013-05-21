@@ -158,10 +158,17 @@ define(function (require) {
             }
 
             var prefix = options.prefix;
-            var main   = this.main = document.createElement('div');
+            var main   = this.main = options.main 
+                && T.g(options.main)
+                || document.createElement('div');
 
-            main.className  = prefix;
-            main.style.left = '-2000px';
+            if (options.main) {
+                T.addClass(main, prefix);
+            }
+            else {
+                main.className  = prefix;
+                main.style.left = '-2000px';
+            }
 
             var me       = this;
             var triggers = options.triggers;
@@ -187,7 +194,7 @@ define(function (require) {
 
             if (!this.rendered) {
                 this.rendered = true;
-                document.body.appendChild(main);
+                !this.options.main && document.body.appendChild(main);
 
                 var me = this;
 

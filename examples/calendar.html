@@ -17,6 +17,7 @@
 <input type="text" class="calendar-trigger" /><input type="button" value="click" class="calendar-trigger" />
 
 <input type="text" class="calendar-target calendar-trigger1" /><input type="button" value="click" class="calendar-trigger1" />
+<div class="embed-calendar-holder"></div>
 <script>
 
 A.init(function () {
@@ -107,6 +108,7 @@ A.init(function () {
 
         new Calendar({
           prefix: 'ecl-hotel-ui-cal',
+          main: me.qq('embed-calendar-holder'),
           triggers: me.q('calendar-trigger1'),
           target: me.qq('calendar-target'),
         }).render();
