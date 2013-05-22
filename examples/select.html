@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Select</title>
+<link rel="stylesheet" href="../src/css/common.css" />
+<script src="../lib/vars.js"></script>
+<script src="../lib/common-2.3.js"></script>
+<script src="../lib/esl.js"></script>
+<link rel="stylesheet/less" type="text/css" href="../src/css/select.less" />
+</head>
+<body>
+<div id='content_left'><!--左侧最外层div-->
+  <div class="result-op" srcid="16873" id="1" mu="http://baike.baidu.com/view/1758.htm" data-op="{'y':'FD9FFD6B'}">
+
+<div>
+  筛选： 
+  <a href="#" class="ecl-ui-sel-target"><b>商圈</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>价格</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>星级</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>品牌</b><i></i></a>
+  <p class="ecl-ui-sel">
+    <a href="#" data-value="0">不限</a>
+    <a href="#" data-value="1">中关村、上地</a>
+    <a href="#" data-value="2">亚运村</a>
+    <a href="#" data-value="3">公主坟商圈</a>
+    <a href="#" data-value="4">劲松潘家园</a>
+    <a href="#" data-value="5">北京南站商圈</a>
+  </p>
+
+  
+  <p class="ecl-ui-sel">
+    <a href="#" data-value="0">不限</a>
+    <a href="#" data-value="1">200元以下</a>
+    <a href="#" data-value="2">200元-300元</a>
+    <a href="#" data-value="3">300元-500元</a>
+    <a href="#" data-value="4">500元以上</a>
+  </p>
+  
+  
+  <p class="ecl-ui-sel">
+    <a href="#" data-value="0">不限</a>
+    <a href="#" data-value="1">经济型</a>
+    <a href="#" data-value="2">二星级/普通</a>
+    <a href="#" data-value="3">三星级/舒适</a>
+    <a href="#" data-value="4">四星级/高档</a>
+    <a href="#" data-value="5">五星级/豪华</a>
+  </p>
+  
+  
+  <p class="ecl-ui-sel">
+    <a href="#" data-value="0">不限</a>
+    <a href="#" data-value="1">7天连锁</a>
+    <a href="#" data-value="2">如家快捷</a>
+    <a href="#" data-value="3">汉庭酒店</a>
+    <a href="#" data-value="4">99连锁</a>
+  </p>
+  
+</div>
+  <script>
+
+A.init(function () {
+
+    var me = this;
+
+    require(['../src/ui/select'], function (Select) {
+
+        var mains = me.q('ecl-ui-sel');
+        var targets = me.q('ecl-ui-sel-target');
+
+        T.each(mains, function (main, i) {
+
+          new Select({
+            prefix: 'ecl-ui-sel',
+            main: mains[i],
+            target: targets[i],
+            offset: {
+              y: -1
+            },
+            onChange: function (arg) {
+              window.console && console.log(arg);
+            }
+          }).render();
+
+        });
+
+
+    });
+
+});
+</script>
+</div>
+</div>
+
+<script src="../lib/less-1.3.3.min.js"></script>
+</body>
+</html>
