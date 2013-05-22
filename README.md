@@ -14,3 +14,4 @@
 - 浮层提示 [Tip](http://chriswong.github.io/zxui/examples/tip.html)
 - 点击统计 [Log](http://chriswong.github.io/zxui/examples/log.html)
 - 条件过滤 [Filter](http://chriswong.github.io/zxui/examples/filter.html)
+- 下拉选项 [Filter](http://chriswong.github.io/zxui/examples/select.html)
