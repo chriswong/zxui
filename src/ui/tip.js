@@ -66,6 +66,7 @@ define(function (require) {
 
 
     T.extend(Tip.prototype,
+        
     /** @lends module:Tip.prototype */ {
 
         type: 'Tip',

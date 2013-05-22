@@ -28,6 +28,7 @@ define(function (require) {
     T.inherits(Popup, Control);
 
     T.extend(Popup.prototype,
+        
     /** @lends module:Popup.prototype */ {
 
         type: 'Popup',
@@ -210,7 +211,9 @@ define(function (require) {
 
             }
 
-            main.innerHTML = this.content;
+            if (!this.options.main) {
+                main.innerHTML = this.content;
+            }
         },
 
         /**

@@ -54,6 +54,7 @@ define(function (require) {
 
 
     T.extend(Filter.prototype,
+        
     /** @lends module:Filter.prototype */ {
 
         type: 'Filter',

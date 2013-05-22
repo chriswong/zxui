@@ -32,6 +32,7 @@ define(function (require) {
     T.inherits(City, Control);
 
     T.extend(City.prototype,
+        
     /** @lends module:City.prototype */ {
 
         type: 'City',

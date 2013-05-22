@@ -87,6 +87,7 @@ define(function (require) {
     var cache = {};
 
     T.extend(Calendar.prototype,
+        
     /** @lends module:Calendar.prototype */ {
 
         type: 'Calendar',

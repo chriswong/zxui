@@ -43,6 +43,7 @@ define(function (require) {
 
 
     T.extend(Pager.prototype,
+        
     /** @lends module:Pager.prototype */{
 
         type: 'Pager',
