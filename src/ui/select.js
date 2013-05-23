@@ -151,6 +151,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @return {module:Select} 当前实例
          */
         render: function () {
             var options = this.options;
@@ -174,6 +175,8 @@ define(function (require) {
 
                 this.main = popup.main;
             }
+
+            return this;
         },
 
 
@@ -281,10 +284,11 @@ define(function (require) {
          * 
          * @private
          * @param {HTMLElement} el 点击的当前事件源对象
+         * @param {boolean} isSilent 静默模式，是否发送事件通知
          * @fires module:Select#pick
          * @fires module:Select#change
          */
-        pick: function (el) {
+        pick: function (el, isSilent) {
             var options = this.options;
             var target = this.target;
             var realTarget = this.realTarget;
@@ -298,18 +302,22 @@ define(function (require) {
 
             this.hide();
 
-            /**
-             * @event module:Select#pick
-             * @type {Object}
-             * @property {string} value 选中项的值
-             * @property {string} text 选中项的文字
-             * @property {Date} shortText 选中项的文字的切割值
-             */
-            this.fire('pick', { 
-                value: value,
-                text: text,
-                shortText: shortText
-            });
+            if (!isSilent) {
+
+                /**
+                 * @event module:Select#pick
+                 * @type {Object}
+                 * @property {string} value 选中项的值
+                 * @property {string} text 选中项的文字
+                 * @property {Date} shortText 选中项的文字的切割值
+                 */
+                this.fire('pick', { 
+                    value: value,
+                    text: text,
+                    shortText: shortText
+                });
+
+            }
 
             if (value === lastValue) {              
                 return;
@@ -333,19 +341,31 @@ define(function (require) {
             var klass = options.prefix + '-checked';
             T[value ? 'addClass' : 'removeClass'](target, klass);
 
-            /**
-             * @event module:Select#change
-             * @type {Object}
-             * @property {string} value 选中项的值
-             * @property {string} text 选中项的文字
-             * @property {Date} shortText 选中项的文字的切割值
-             */
-            this.fire('change', { 
-                value: value,
-                text: text,
-                shortText: shortText
-            });
+            if (!isSilent) {
 
+                /**
+                 * @event module:Select#change
+                 * @type {Object}
+                 * @property {string} value 选中项的值
+                 * @property {string} text 选中项的文字
+                 * @property {Date} shortText 选中项的文字的切割值
+                 */
+                this.fire('change', { 
+                    value: value,
+                    text: text,
+                    shortText: shortText
+                });           
+            }
+
+        },
+
+        /**
+         * 重置选项
+         * 
+         * 将选项恢复到初始值，依赖于第一个选项，其值为 0 或空
+         */
+        reset: function () {
+            this.pick(T.dom.first(this.main), true);
         }
     });
 
