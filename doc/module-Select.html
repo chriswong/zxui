@@ -64,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 67
+        <a href="select.js.html">select.js</a>, line 80
     </li></ul></dd>
     
     
@@ -87,7 +87,7 @@
       y: -1
     },
     onChange: function (arg) {
-      console.log(arg);
+      window.console && console.log(arg);
     }
   }).render();</code></pre>
 
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 118
+        <a href="select.js.html">select.js</a>, line 131
     </li></ul></dd>
     
     
@@ -382,7 +382,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 79
+        <a href="select.js.html">select.js</a>, line 92
     </li></ul></dd>
     
     
@@ -447,7 +447,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 256
+        <a href="select.js.html">select.js</a>, line 272
     </li></ul></dd>
     
     
@@ -569,7 +569,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 127
+        <a href="select.js.html">select.js</a>, line 140
     </li></ul></dd>
     
     
@@ -693,7 +693,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 208
+        <a href="select.js.html">select.js</a>, line 224
     </li></ul></dd>
     
     
@@ -815,7 +815,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 173
+        <a href="select.js.html">select.js</a>, line 189
     </li></ul></dd>
     
     
@@ -884,7 +884,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 227
+        <a href="select.js.html">select.js</a>, line 243
     </li></ul></dd>
     
     
@@ -912,7 +912,7 @@
         
             
 <dt>
-    <h4 class="name" id="pick"><span class="type-signature">&lt;private> </span>pick<span class="signature">(el)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="pick"><span class="type-signature">&lt;private> </span>pick<span class="signature">(el, isSilent)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -974,6 +974,29 @@
         </tr>
 	
 	
+	
+        <tr>
+            
+                <td class="name"><code>isSilent</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">静默模式，是否发送事件通知</td>
+        </tr>
+	
+	
 	</tbody>
 </table>
     
@@ -1001,7 +1024,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 274
+        <a href="select.js.html">select.js</a>, line 291
     </li></ul></dd>
     
     
@@ -1036,7 +1059,7 @@
         
             
 <dt>
-    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {Select}</span></h4>
     
     
 </dt>
@@ -1077,7 +1100,100 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 142
+        <a href="select.js.html">select.js</a>, line 156
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    当前实例
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Select</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        重置选项
+
+将选项恢复到初始值，依赖于第一个选项，其值为 0 或空
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="select.js.html">select.js</a>, line 367
     </li></ul></dd>
     
     
@@ -1208,7 +1324,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 238
+        <a href="select.js.html">select.js</a>, line 254
     </li></ul></dd>
     
     
@@ -1347,7 +1463,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 210
+        <a href="select.js.html">select.js</a>, line 226
     </li></ul></dd>
     
     
@@ -1519,7 +1635,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 323
+        <a href="select.js.html">select.js</a>, line 346
     </li></ul></dd>
     
     
@@ -1584,7 +1700,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 260
+        <a href="select.js.html">select.js</a>, line 276
     </li></ul></dd>
     
     
@@ -1756,7 +1872,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 288
+        <a href="select.js.html">select.js</a>, line 307
     </li></ul></dd>
     
     
@@ -1894,7 +2010,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="select.js.html">select.js</a>, line 242
+        <a href="select.js.html">select.js</a>, line 258
     </li></ul></dd>
     
     
@@ -1937,7 +2053,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed May 22 2013 20:08:56 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu May 23 2013 16:40:27 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
