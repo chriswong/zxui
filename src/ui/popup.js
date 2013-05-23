@@ -189,6 +189,7 @@ define(function (require) {
          * 绘制控件
          * 
          * @fires module:Popup#click 点击事件
+         * @return {module:Popup} 当前实例
          */
         render: function () {
             var main = this.main;
@@ -211,9 +212,11 @@ define(function (require) {
 
             }
 
-            if (!this.options.main) {
+            if (this.content) {
                 main.innerHTML = this.content;
             }
+
+            return this;
         },
 
         /**
