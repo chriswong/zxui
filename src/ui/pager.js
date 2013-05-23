@@ -174,6 +174,7 @@ define(function (require) {
          * 绘制控件
          * 
          * @description 页数小于2页时可配置控件隐藏
+         * @return {module:Pager} 当前实例
          */
         render: function () {
             if (!this.main) {
@@ -189,6 +190,8 @@ define(function (require) {
             else {
                 T.hide(main);
             }
+
+            return this;
         },
 
         /**

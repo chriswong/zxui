@@ -115,6 +115,7 @@ define(function (require) {
          * 
          * @param {string=|HTMLElement=} wrapper 作为组件根元素的DOM节点
          * @throws 如果控件根元素不存在将抛出异常
+         * @return {module:Filter} 当前实例
          */
         render: function (wrapper) {
             var main    = wrapper && T.g(wrapper) || this.main;
@@ -141,6 +142,8 @@ define(function (require) {
 
                 T.on(main, 'click', this.onClick);
             }
+
+            return this;
         },
 
         /**

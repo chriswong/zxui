@@ -301,6 +301,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @return {module:Calendar} 当前实例
          */
         render: function () {
             var options = this.options;
@@ -321,6 +322,8 @@ define(function (require) {
                     this.setTarget(T.g(options.target));
                 }
             }
+
+            return this;
         },
 
         /**

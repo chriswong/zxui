@@ -38,7 +38,6 @@ define(function (require) {
      * @constructor
      * @extends module:Control
      * @requires Control
-     * @extends  Control
      * @exports Tip
      * @example
      * new Tip({
@@ -196,6 +195,7 @@ define(function (require) {
          * 绘制控件
          * 
          * @fires module:Tip#click
+         * @return {module:Tip} 当前实例
          */
         render: function () {
 
@@ -242,6 +242,8 @@ define(function (require) {
             if (!events && this.triggers) {
                 this.show(this.triggers[0]);
             }
+
+            return this;
         },
 
         /**

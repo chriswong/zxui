@@ -155,6 +155,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @return {module:City} 当前实例
          */
         render: function () {
 
@@ -174,6 +175,8 @@ define(function (require) {
                     this.setTarget(T.g(options.target));
                 }
             }
+
+            return this;
 
         },
 

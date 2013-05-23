@@ -293,6 +293,7 @@ define(function () {
         /**
          * 渲染控件
          * 
+         * @return {module:Control} 当前实例
          */
         render: function () {
             throw new Error('not implement render');
