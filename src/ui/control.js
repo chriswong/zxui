@@ -1,7 +1,9 @@
 /**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
+ * 
  * @file 控件基类
- * @author  chris(wfsr@foxmail.com)
+ * @author chris(wfsr@foxmail.com)
  */
 
 define(function () {
@@ -14,13 +16,14 @@ define(function () {
      * @name baidu.dom.getAncestorByClass
      * @function
      * @grammar baidu.dom.getAncestorByClass(element, className)
-     * @param {HTMLElement|string} element 目标元素或目标元素的id
+     * @param {(HTMLElement | string)} element 目标元素或目标元素的id
      * @param {string} className 祖先元素的class，只支持单个class
      * @remark 使用者应保证提供的className合法性，不应包含不合法字符，
      * className合法字符参考：http://www.w3.org/TR/CSS2/syndata.html。
      * @see baidu.dom.getAncestorBy,baidu.dom.getAncestorByTag
      *             
-     * @returns {HTMLElement|null} 指定元素className最近的祖先元素，查找不到时返回null
+     * @returns {(HTMLElement | null)} 指定元素className最近的祖先元素，
+     * 查找不到时返回null
      */
     T.dom.getAncestorByClass = T.dom.getAncestorByClass
         || function (element, className) {
@@ -51,26 +54,22 @@ define(function () {
      * 
      * @name baidu.event._eventFilter._crossElementBoundary
      * @function
-     * @grammar baidu.event._eventFilter._crossElementBoundary(listener, e)
-     * 
-     * @param {function} listener   要触发的函数
+     * @param {Function} listener   要触发的函数
      * @param {DOMEvent} e          DOM事件
      */
-
     eventFilter._crossElementBoundary = eventFilter._crossElementBoundary
         || function (listener, e) {
         var related = e.relatedTarget,
             current = e.currentTarget;
-        if (
-           related === false || 
-           // 如果current和related都是body，contains函数会返回false
-           current === related ||
-           // Firefox有时会把XUL元素作为relatedTarget
-           // 这些元素不能访问parentNode属性
-           // thanks jquery & mootools
-           (related && (related.prefix === 'xul' ||
-           //如果current包含related，说明没有经过current的边界
-           baidu.dom.contains(current, related)))
+        if (related === false
+            // 如果current和related都是body，contains函数会返回false
+            || current === related
+            // Firefox有时会把XUL元素作为relatedTarget
+            // 这些元素不能访问parentNode属性
+            // thanks jquery & mootools
+            || (related && (related.prefix === 'xul'
+            //如果current包含related，说明没有经过current的边界
+            || baidu.dom.contains(current, related)))
           ) {
             return;
         }
@@ -78,43 +77,59 @@ define(function () {
     };
 
 
-    T.fn.bind = T.fn.bind || function (func, scope) {
-        var xargs = arguments.length > 2 ? [].slice.call(arguments, 2) : null;
-        return function () {
-            var fn = baidu.lang.isString(func) ? scope[func] : func,
-                args = (xargs) 
-                ? xargs.concat([].slice.call(arguments, 0))
-                : arguments;
-            return fn.apply(scope || fn, args);
-        };
-    };
-
-
-
-    /**
-     * 用于为非IE浏览器添加mouseenter的支持;
-     * mouseenter事件仅在鼠标进入元素区域触发一次,
-     *    当鼠标在元素内部移动的时候不会多次触发.
+    /** 
+     * 为对象绑定方法和作用域
+     * 
+     * @name baidu.fn.bind
+     * @function
+     * @param {(Function | string)} handler 要绑定的函数，或者一个在作用域下可用的函数名
+     * @param {Object} obj 执行运行时this，如果不传入则运行时this为函数本身
+     * @param {...*} args 函数执行时附加到执行时函数前面的参数
+     * @version 1.3
+     *
+     * @returns {Function} 封装后的函数
      */
-    eventFilter.mouseenter = window.attachEvent 
-        ? null 
-        : eventFilter.mouseenter || function (element, type, listener) {
-            return {
-                type: 'mouseover',
-                listener: baidu.fn.bind(
-                    EVENT._eventFilter._crossElementBoundary,
-                    this,
-                    listener
-                )
+    T.fn.bind = T.fn.bind
+        || function (func, scope) {
+            var xargs = arguments.length > 2 
+                ? [].slice.call(arguments, 2) : null;
+
+            return function () {
+                var fn = baidu.lang.isString(func) ? scope[func] : func;
+                var args = (xargs) 
+                    ? xargs.concat([].slice.call(arguments, 0))
+                    : arguments;
+                return fn.apply(scope || fn, args);
             };
         };
 
 
 
     /**
+     * 用于为非IE浏览器添加mouseenter的支持;
+     * mouseenter事件仅在鼠标进入元素区域触发一次,
+     * 当鼠标在元素内部移动的时候不会多次触发.
+     */
+    eventFilter.mouseenter = window.attachEvent 
+        ? null 
+        : eventFilter.mouseenter
+            || function (element, type, listener) {
+                return {
+                    type: 'mouseover',
+                    listener: baidu.fn.bind(
+                        eventFilter._crossElementBoundary,
+                        this,
+                        listener
+                    )
+                };
+            };
+
+
+
+    /**
      * 用于为非IE浏览器添加mouseleave的支持;
      * mouseleave事件仅在鼠标移出元素区域触发一次,
-     *    当鼠标在元素区域内部移动的时候不会触发.
+     * 当鼠标在元素区域内部移动的时候不会触发.
      */
     eventFilter.mouseleave = window.attachEvent 
         ? null
@@ -145,9 +160,8 @@ define(function () {
      * 查询数组中指定元素的索引位置
      * 
      * @private
-     * @param {Array.<*>} source 需要查询的数组
+     * @param {Array} source 需要查询的数组
      * @param {*} match 查询项
-     * 
      * @returns {number} 指定元素的索引位置，查询不到时返回-1
      */
     var indexOf = function (source, target) {
@@ -201,6 +215,12 @@ define(function () {
 
         constructor: Control,
 
+        /**
+         * 控件类型标识
+         * 
+         * @private
+         * @type {string}
+         */
         type: 'Control',
 
         /**
@@ -256,6 +276,7 @@ define(function () {
         /**
          * 将实例方法绑定 this
          * 
+         * @protected
          * @param {Array.<string>} events 类方法名数组
          */
         bindEvents: function (events) {
@@ -283,6 +304,7 @@ define(function () {
         /**
          * 控件初始化
          * 
+         * @abstract
          * @protected
          */
         init: function () {
@@ -293,6 +315,8 @@ define(function () {
         /**
          * 渲染控件
          * 
+         * @abstract
+         * @protected
          * @return {module:Control} 当前实例
          */
         render: function () {
@@ -302,6 +326,7 @@ define(function () {
         /**
          * 将控件添加到页面的某个元素中
          * 
+         * @public
          * @param {HTMLElement} wrap 被添加到的页面元素
          */
         appendTo: function (wrap) {
@@ -312,22 +337,37 @@ define(function () {
         /**
          * 设置控件状态为禁用
          * 
+         * @public
+         * @fires module:Control#disable
          */
         disable: function () {
             this.disabled = true;
+
+            /**
+             * @event module:Control#disable
+             */
+            this.fireEvent('disable');
         },
 
         /**
          * 设置控件状态为启用
          * 
+         * @public
+         * @fires module:Control#enable
          */
         enable: function () {
             this.disabled = false;
+
+            /**
+             * @event module:Control#enable
+             */
+            this.fireEvent('enable');
         },
 
         /**
          * 获取控件可用状态
          * 
+         * @public
          * @return {boolean} 控件的可用状态值
          */
         isDisabled: function () {
@@ -338,7 +378,8 @@ define(function () {
         /**
          * 添加子控件
          * 
-         * @param {Control} control 控件实例
+         * @public
+         * @param {module:Control} control 控件实例
          * @param {string} name 子控件名
          */
         addChild: function (control, name) {
@@ -356,21 +397,26 @@ define(function () {
         /**
          * 移除子控件
          * 
-         * @param {Control} control 子控件实例
+         * @public
+         * @param {module:Control} control 子控件实例
          */
         removeChild: function (control) {
-            T.object.each(this.children, function (child, name) {
-                if (child === control) {
-                    delete this[name];
+            T.object.each(
+                this.children,
+                function (child, name) {
+                    if (child === control) {
+                        delete this[name];
+                    }
                 }
-            });
+            );
         },
 
         /**
          * 获取子控件
          * 
+         * @public
          * @param {string} name 子控件名
-         * @return {Control} 获取到的子控件
+         * @return {module:Control} 获取到的子控件
          */
         getChild: function (name) {
             return this.children[name];
@@ -379,8 +425,8 @@ define(function () {
         /**
          * 批量初始化子控件
          * 
+         * @public
          * @param {HTMLElement} wrap 容器DOM元素
-         * 
          */
         initChildren: function (/* wrap */) {
             throw new Error('not implement initChildren');
@@ -389,7 +435,8 @@ define(function () {
         /**
          * 添加事件绑定
          * 
-         * @param {?string} type 事件类型
+         * @public
+         * @param {string=} type 事件类型
          * @param {Function} listner 要添加绑定的监听器
          */
         on: function (type, listner) {
@@ -413,6 +460,7 @@ define(function () {
         /**
          * 解除事件绑定
          * 
+         * @public
          * @param {string=} type 事件类型
          * @param {Function=} listner 要解除绑定的监听器
          */
@@ -444,6 +492,7 @@ define(function () {
         /**
          * 触发指定事件
          * 
+         * @public
          * @param {string} type 事件类型
          * @param {Object} args 透传的事件数据对象
          */
@@ -451,14 +500,18 @@ define(function () {
             var listners = this._listners[type];
 
             if (listners) {
-                T.array.each(listners, function (listner) {
+                T.array.each(
+                    listners,
+                    function (listner) {
 
-                    args = args || {};
-                    args.type = type;
+                        args = args || {};
+                        args.type = type;
 
-                    listner.call(this, args);
+                        listner.call(this, args);
 
-                }, this);
+                    },
+                    this
+                );
             }
 
             if (type !== '*') {
@@ -471,6 +524,7 @@ define(function () {
         /**
          * 销毁控件
          * 
+         * @public
          * @fires module:Control#dispose
          */
         dispose: function () {

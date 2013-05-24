@@ -8,10 +8,10 @@
 
 ### 目前实现的组件
 
-- 日历控件 [Calendar](http://chriswong.github.io/zxui/examples/calendar.html)
-- 城市选择 [City](http://chriswong.github.io/zxui/examples/city.html)
-- 分页控件 [Pager](http://chriswong.github.io/zxui/examples/pager.html)
-- 浮层提示 [Tip](http://chriswong.github.io/zxui/examples/tip.html)
-- 点击统计 [Log](http://chriswong.github.io/zxui/examples/log.html)
-- 条件过滤 [Filter](http://chriswong.github.io/zxui/examples/filter.html)
-- 下拉选项 [Select](http://chriswong.github.io/zxui/examples/select.html)
+- 日历控件 [Calendar](http://chriswong.github.io/zxui/example/calendar.html)
+- 城市选择 [City](http://chriswong.github.io/zxui/example/city.html)
+- 分页控件 [Pager](http://chriswong.github.io/zxui/example/pager.html)
+- 浮层提示 [Tip](http://chriswong.github.io/zxui/example/tip.html)
+- 点击统计 [Log](http://chriswong.github.io/zxui/example/log.html)
+- 条件过滤 [Filter](http://chriswong.github.io/zxui/example/filter.html)
+- 下拉选项 [Select](http://chriswong.github.io/zxui/example/select.html)

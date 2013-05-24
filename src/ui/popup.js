@@ -1,5 +1,7 @@
 /**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
+ * 
  * @file  弹出层
  * @author  chris(wfsr@foxmail.com)
  */
@@ -25,22 +27,26 @@ define(function (require) {
     var Popup = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
-    T.inherits(Popup, Control);
 
-    T.extend(Popup.prototype,
-        
-    /** @lends module:Popup.prototype */ {
+    Popup.prototype = {
 
+        /**
+         * 控件类型标识
+         * 
+         * @private
+         * @type {string}
+         */
         type: 'Popup',
 
         /**
          * 控件配置项
          * 
+         * @private
          * @name module:Popup#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
-         * @property {string|HTMLElement} main 控件渲染容器
-         * @property {string|HTMLElement} target 计算弹出层相对位置的目标对象
+         * @property {(string | HTMLElement)} main 控件渲染容器
+         * @property {(string | HTMLElement)} target 计算弹出层相对位置的目标对象
          * @property {string} triggers 触发显示弹出层的节点
          * @property {string} content 提示的内容信息
          * @property {string} dir 弹出层相对 target 的位置，支持8个方向
@@ -65,14 +71,14 @@ define(function (require) {
             /**
              * 控件渲染主容器
              * 
-             * @type {string|HTMLElement}
+             * @type {(string | HTMLElement)}
              */
             main: '',
 
             /**
              * 计算弹出层相对位置的目标对象
              * 
-             * @type {string|HTMLElement}
+             * @type {(string | HTMLElement)}
              */
             target: '',
 
@@ -92,6 +98,7 @@ define(function (require) {
 
             /**
              * 弹出层显示在 trigger 的相对位置
+             * 
              * 可选值：tr | rt | rb | br | bl | lb | lt | tl | tc | rc | bc | lc
              * 也可通过在 triggers 上设置 data-popup来指定
              * 
@@ -137,6 +144,7 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
+         * @private
          * @type {string}
          */
         binds: 'onResize, onShow, onHide',
@@ -178,9 +186,12 @@ define(function (require) {
                 triggers = T.q(options.triggers);
             }
 
-            T.each(triggers, function (trigger) {
-                T.on(trigger, 'click', me.onShow);
-            });
+            T.each(
+                triggers,
+                function (trigger) {
+                    T.on(trigger, 'click', me.onShow);
+                }
+            );
 
             this.triggers = triggers;
         },
@@ -188,6 +199,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @public
          * @fires module:Popup#click 点击事件
          * @return {module:Popup} 当前实例
          */
@@ -200,15 +212,19 @@ define(function (require) {
 
                 var me = this;
 
-                T.on(main, 'click', function (e) {
+                T.on(
+                    main,
+                    'click',
+                    function (e) {
 
-                    /**
-                     * @event module:Popup#click
-                     * @type {Object}
-                     * @property {DOMEvent} event 事件源对象
-                     */
-                    me.fire('click', { event: e });
-                });
+                        /**
+                         * @event module:Popup#click
+                         * @type {Object}
+                         * @property {DOMEvent} event 事件源对象
+                         */
+                        me.fire('click', { event: e });
+                    }
+                );
 
             }
 
@@ -288,6 +304,7 @@ define(function (require) {
         /**
          * 显示浮层
          * 
+         * @public
          * @fires module:Popup#show 显示事件
          */
         show: function () {
@@ -302,6 +319,7 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
+         * @public
          * @fires module:Popup#hide 隐藏事件
          */
         hide: function () {
@@ -449,7 +467,8 @@ define(function (require) {
 
         }
 
-    });
+    };
+    T.inherits(Popup, Control);
 
     return Popup;
 });

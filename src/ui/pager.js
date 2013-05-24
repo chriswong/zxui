@@ -1,5 +1,7 @@
 /**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
+ * 
  * @file 分页控件
  * @author  chris(wfsr@foxmail.com)
  */
@@ -32,20 +34,24 @@ define(function (require) {
     var Pager = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
-    T.inherits(Pager, Control);
 
     /**
      * 当页数较多时，中间显示页码的个数
      * 
+     * @const
      * @type {number}
      */
     Pager.SHOW_COUNT = 5;
 
 
-    T.extend(Pager.prototype,
-        
-    /** @lends module:Pager.prototype */{
+    Pager.prototype = {
 
+        /**
+         * 控件类型标识
+         * 
+         * @private
+         * @type {string}
+         */
         type: 'Pager',
 
         /**
@@ -54,7 +60,7 @@ define(function (require) {
          * @name module:Pager#optioins
          * @type {Object}
          * @property {boolean} options.disabled 控件的不可用状态
-         * @property {string|HTMLElement} options.main 控件渲染容器
+         * @property {(string | HTMLElement)} options.main 控件渲染容器
          * @property {number} options.page 当前页，第一页从0开始
          * @property {number} options.padding 当页数较多时，首尾显示页码的个数
          * @property {boolean} options.showAlways 是否一直显示分页控件
@@ -113,6 +119,7 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
+         * @private
          * @type {string}
          */
         binds: 'onChange',
@@ -150,6 +157,7 @@ define(function (require) {
         /**
          * 设置页码
          * 
+         * @public
          * @param {number} page 新页码
          */
         setPage: function (page) {
@@ -163,6 +171,7 @@ define(function (require) {
         /**
          * 获取当前页码
          * 
+         * @public
          * @return {number} 控件当前页码
          */
         getPage: function () {
@@ -173,6 +182,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @public
          * @description 页数小于2页时可配置控件隐藏
          * @return {module:Pager} 当前实例
          */
@@ -315,8 +325,8 @@ define(function (require) {
          * 
          * @private
          * @param {DOMEvent} e 事件对象
-         * @fires module:Pager#click 点击事件
-         * @fires module:Pager#change 页码改变事件
+         * @fires module:Pager#click
+         * @fires module:Pager#change
          */
         onChange: function (e) {
             e && T.event.preventDefault(e);
@@ -333,12 +343,15 @@ define(function (require) {
             }
 
             if (target.tagName !== 'A') {
-                target = T.dom.getAncestorBy(target, function (el) {
+                target = T.dom.getAncestorBy(
+                    target,
+                    function (el) {
 
-                    // 最高访问到控件根容器, 避免到文档根节点
-                    return el.tagName === 'A' || el === main;
-                    
-                });
+                        // 最高访问到控件根容器, 避免到文档根节点
+                        return el.tagName === 'A' || el === main;
+                        
+                    }
+                );
                 
                 if (target === main) {
                     return;
@@ -359,6 +372,7 @@ define(function (require) {
                 && current < this.total
                 && current !== page
             ) {
+
                 /**
                  * @event module:Pager#change
                  * @type {Object}
@@ -367,7 +381,8 @@ define(function (require) {
                 this.fire('change', { page: current });
             }
         }
-    });
+    };
+    T.inherits(Pager, Control);
 
     return Pager;
 });

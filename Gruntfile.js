@@ -91,7 +91,7 @@ module.exports = function (grunt) {
                     styles: '<%= csslint.src %>',
                     specs: 'test/spec/*Spec.js',
                     helpers: 'test/spec/*Helper.js',
-                    vendor: ['./lib/vars.js', './lib/common-2.3.js'],
+                    vendor: ['./dep/vars.js', './dep/common-2.3.js'],
                     host: 'http://localhost:<%= connect.test.options.port %>',
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {

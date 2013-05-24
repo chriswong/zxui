@@ -1,7 +1,9 @@
 /**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
- * @file  条件过滤器
- * @author  chris(wfsr@foxmail.com)
+ * 
+ * @file 条件过滤器
+ * @author chris(wfsr@foxmail.com)
  */
 
 define(function (require) {
@@ -50,22 +52,27 @@ define(function (require) {
     var Filter = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
-    T.inherits(Filter, Control);
 
 
-    T.extend(Filter.prototype,
-        
-    /** @lends module:Filter.prototype */ {
+    Filter.prototype = {
 
+
+        /**
+         * 控件类型标识
+         * 
+         * @private
+         * @type {string}
+         */
         type: 'Filter',
 
         /**
          * 控件配置项
          * 
+         * @private
          * @name module:Filter#options
          * @type {Object}
          * @property {boolean} options.disabled 控件的不可用状态
-         * @property {string|HTMLElement} options.main 控件渲染容器
+         * @property {(string | HTMLElement)} options.main 控件渲染容器
          * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
          */
         options: {
@@ -90,6 +97,7 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
+         * @public
          * @type {string}
          */
         binds: 'onClick',
@@ -113,6 +121,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @public
          * @param {string=|HTMLElement=} wrapper 作为组件根元素的DOM节点
          * @throws 如果控件根元素不存在将抛出异常
          * @return {module:Filter} 当前实例
@@ -264,6 +273,7 @@ define(function (require) {
         /**
          * 获取指定键名的当前选中项数据
          * 
+         * @public
          * @param {string} key 选择项键名
          * @return {Object} 返回指定键名的选中项数据
          */
@@ -290,6 +300,7 @@ define(function (require) {
         /**
          * 禁止指定选项组中指定值的项
          * 
+         * @public
          * @param {string} key 选项组键名
          * @param {Array.<string>} values 要禁止的指定项的值
          */
@@ -317,6 +328,7 @@ define(function (require) {
         /**
          * 启用指定选项组
          * 
+         * @public
          * @param {string} key 选项组关键字
          */
         enableItems: function (key) {
@@ -329,7 +341,8 @@ define(function (require) {
         }
 
 
-    });
+    };
+    T.inherits(Filter, Control);
 
     return Filter;
 });

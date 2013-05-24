@@ -1,5 +1,7 @@
 /**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
+ * 
  * @file 下拉选择菜单
  * @author chris(wfsr@foxmail.com)
  */
@@ -80,25 +82,29 @@ define(function (require) {
     var Select = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
-    T.inherits(Select, Control);
 
 
-    T.extend(Select.prototype,
+    Select.prototype = {
 
-    /** @lends module:Select.prototype */ {
-
+        /**
+         * 控件类型标识
+         * 
+         * @private
+         * @type {string}
+         */
         type: 'Select',
 
         /**
          * 控件配置项
          * 
+         * @private
          * @name module:Select#options
          * @type {Object}
          * @property {boolean} options.disabled 控件的不可用状态
-         * @property {string|HTMLElement} options.main 控件渲染容器
+         * @property {(string | HTMLElement)} options.main 控件渲染容器
          * @property {number} options.maxLength 显示选中值时的限度字节长度
          * @property {string} options.ellipsis maxLength 限制后的附加的后缀字符
-         * @property {string|HTMLElement} options.target 计算选单显示时
+         * @property {(string | HTMLElement)} options.target 计算选单显示时
          * 相对位置的目标对象
          * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
          */
@@ -126,6 +132,7 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
+         * @private
          * @type {string}
          */
         binds: 'onClick,onBeforeShow,onHide',
@@ -151,6 +158,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @public
          * @return {module:Select} 当前实例
          */
         render: function () {
@@ -198,16 +206,16 @@ define(function (require) {
 
             switch (tag) {
 
-            case 'A':
-                T.event.preventDefault(e);
+                case 'A':
+                    T.event.preventDefault(e);
 
-                this.pick(el);
+                    this.pick(el);
 
-                break;
+                    break;
 
-            default:
+                default:
 
-                break;
+                    break;
 
             }
 
@@ -248,6 +256,7 @@ define(function (require) {
         /**
          * 显示浮层
          * 
+         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:Select#show 显示事件
          */
@@ -267,6 +276,7 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
+         * @public
          * @fires module:Select#hide 隐藏事件
          */
         hide: function () {
@@ -367,7 +377,8 @@ define(function (require) {
         reset: function () {
             this.pick(T.dom.first(this.main), true);
         }
-    });
+    };
+    T.inherits(Select, Control);
 
     return Select;
 });

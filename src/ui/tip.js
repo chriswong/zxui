@@ -1,5 +1,7 @@
 /**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
+ * 
  * @file  提示层控件
  * @author  chris(wfsr@foxmail.com)
  */
@@ -53,30 +55,35 @@ define(function (require) {
     var Tip = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
-    T.inherits(Tip, Control);
 
     /**
      * 提示框消失的延迟时间，单位毫秒
      * 
      * @public
+     * @const
      * @type {number}
      */
     Tip.HIDE_DELAY = 500;
 
 
-    T.extend(Tip.prototype,
-        
-    /** @lends module:Tip.prototype */ {
+    Tip.prototype = {
 
+        /**
+         * 控件类型标识
+         * 
+         * @private
+         * @type {string}
+         */
         type: 'Tip',
 
         /**
          * 控件配置项
          * 
+         * @private
          * @name module:Tip#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
-         * @property {string|HTMLElement} main 控件渲染容器
+         * @property {(string | HTMLElement)} main 控件渲染容器
          * @property {boolean|string=} arrow 提示框的箭头参数，默认为false，不带箭头
          * 可以初始化时通过指定arrow属性为“1”开启箭头模式，也可以手动指定箭头方向：
          * tr | rt | rb | br | bl | lb | lt | tl | tc | rc | bc | lc
@@ -121,7 +128,7 @@ define(function (require) {
             content: '',
 
             // 控件class前缀，同时将作为main的class之一
-            prefix: 'ecl-hotel-ui-tip',
+            prefix: 'ecl-ui-tip',
 
             // 自动绑定本控件功能的class
             triggers: 'tooltips',
@@ -152,6 +159,7 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
+         * @private
          * @type {string}
          */
         binds: 'onResize, onShow, onHide, hide',
@@ -194,6 +202,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @public
          * @fires module:Tip#click
          * @return {module:Tip} 当前实例
          */
@@ -209,31 +218,46 @@ define(function (require) {
 
                 document.body.appendChild(main);
 
-                T.on(main, 'click', function (e) {
+                T.on(
+                    main,
+                    'click',
+                    function (e) {
 
-                    /**
-                     * @event module:Tip#click
-                     * @type {Object}
-                     * @property {DOMEvent} event 事件源对象
-                     */
-                    me.fire('click', {event: e});
-                });
+                        /**
+                         * @event module:Tip#click
+                         * @type {Object}
+                         * @property {DOMEvent} event 事件源对象
+                         */
+                        me.fire('click', {event: e});
+                    }
+                );
 
-                T.on(main, 'mouseenter', function () {
-                    me.clear();
-                });
+                T.on(
+                    main,
+                    'mouseenter',
+                    function () {
+                        me.clear();
+                    }
+                );
 
-                T.on(main, 'mouseleave', function () {
-                    me.clear();
-                    me.timer = setTimeout(me.hide, options.hideDelay);
-                });
+                T.on(
+                    main,
+                    'mouseleave',
+                    function () {
+                        me.clear();
+                        me.timer = setTimeout(me.hide, options.hideDelay);
+                    }
+                );
 
                 var elements = this.elements = {};
                 var prefix = options.prefix + '-';
 
-                T.each('arrow,title,body'.split(','), function (name) {
-                    elements[name] = T.q(prefix + name, main)[0];
-                });
+                T.each(
+                    'arrow,title,body'.split(','),
+                    function (name) {
+                        elements[name] = T.q(prefix + name, main)[0];
+                    }
+                );
 
                 this.addTriggers(options.triggers);
 
@@ -249,6 +273,7 @@ define(function (require) {
         /**
          * 增加触发tips的DOM
          * 
+         * @public
          * @param {string|HTMLElement|HTMLCollection|Array} triggers 
          * className/dom节点/dom集合或dom节点数组
          */
@@ -258,23 +283,26 @@ define(function (require) {
             var events  = this.events;
             var flag    = options.flag;
 
-            this.triggers = 
-                typeof triggers === 'string'
+            this.triggers = typeof triggers === 'string'
                 ? T.q(options.triggers)
                 : (triggers.length ? triggers : [triggers]);
 
             if (events) {
-                T.each(this.triggers, function (trigger) {
-                    T.addClass(trigger, flag);
-                    T.on(trigger, events.on, me.onShow);
-                    T.on(trigger, events.un, me.onHide);
-                });
+                T.each(
+                    this.triggers,
+                    function (trigger) {
+                        T.addClass(trigger, flag);
+                        T.on(trigger, events.on, me.onShow);
+                        T.on(trigger, events.un, me.onHide);
+                    }
+                );
             }
         },
 
         /**
          * 清除各种定时器
          * 
+         * @private
          */
         clear: function () {
             clearTimeout(this.timer);
@@ -290,9 +318,12 @@ define(function (require) {
             clearTimeout(this.resizeTimer);
 
             var me = this;
-            this.resizeTimer = setTimeout(function () {
-                me.show(me.current);
-            }, 100);
+            this.resizeTimer = setTimeout(
+                function () {
+                    me.show(me.current);
+                },
+                100
+            );
         },
 
 
@@ -347,6 +378,7 @@ define(function (require) {
         /**
          * 显示浮层
          * 
+         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:Tip#show 显示事件
          */
@@ -388,6 +420,7 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
+         * @public
          * @fires module:Tip#hide 隐藏事件
          */
         hide: function () {
@@ -410,6 +443,7 @@ define(function (require) {
         /**
          * 判断提示层是否可见
          * 
+         * @public
          * @return {boolean} 可见的状态
          */
         isVisible: function () {
@@ -423,6 +457,7 @@ define(function (require) {
          * 
          * 如果参数为空，则隐藏提示层的标题部分
          * 
+         * @public
          * @param {string} html
          */
         setTitle: function (html) {
@@ -436,6 +471,7 @@ define(function (require) {
         /**
          * 设置提示层显示的内容
          * 
+         * @public
          * @param {string} html 要提示的内容的HTML
          */
         setContent: function (html) {
@@ -619,7 +655,8 @@ define(function (require) {
 
         }
 
-    });
+    };
+    T.inherits(Tip, Control);
 
     return Tip;
 });

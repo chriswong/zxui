@@ -1,7 +1,9 @@
 /**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
- * @file  国内城市选择提示层
- * @author  chris(wfsr@foxmail.com)
+ * 
+ * @file 国内城市选择提示层
+ * @author chris(wfsr@foxmail.com)
  */
 
 define(function (require) {
@@ -29,22 +31,27 @@ define(function (require) {
     var City = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
-    T.inherits(City, Control);
 
-    T.extend(City.prototype,
-        
-    /** @lends module:City.prototype */ {
+    City.prototype = {
 
+
+        /**
+         * 控件类型标识
+         * 
+         * @private
+         * @type {string}
+         */
         type: 'City',
 
         /**
          * 控件配置项
          * 
+         * @private
          * @name module:City#options
          * @see module:Popup#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
-         * @property {string|HTMLElement} main 控件渲染容器
+         * @property {(string | HTMLElement)} main 控件渲染容器
          * @property {string} prefix 控件class前缀，同时将作为main的class之一
          * @property {number} index 默认激活的标签索引
          * @property {string} activeClass 激活标签、内容的class
@@ -78,6 +85,7 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
+         * @private
          * @type {string}
          */
         binds: 'onClick,onBeforeShow',
@@ -87,7 +95,7 @@ define(function (require) {
          * 
          * @private
          * @param {Object} options 控件配置项
-         * @see City#options
+         * @see module:City#options
          */
         init: function (options) {
             options       = this.setOptions(options);
@@ -134,8 +142,8 @@ define(function (require) {
         /**
          * 填充城市标签数据
          * 
-         * @param {Array|string} tabs 城市数组，每项格式为"标签|城市A,城市B,城市C"
-         *                       当参数为字符类型时仅作为一个城市标签项
+         * @param {(Array | string)} tabs 城市数组，
+         * 每项格式为"标签|城市A,城市B,城市C"当参数为字符类型时仅作为一个城市标签项
          * @return {City} 当前City实例
          */
         fill: function (tabsOrItem) {
@@ -155,6 +163,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @public
          * @return {module:City} 当前实例
          */
         render: function () {
@@ -184,6 +193,7 @@ define(function (require) {
         /**
          * 构建选单HTML
          * 
+         * @private
          */
         build: function () {
             var options = this.options;
@@ -257,27 +267,27 @@ define(function (require) {
 
             switch (tag) {
 
-            case 'A':
-                T.event.preventDefault(e);
+                case 'A':
+                    T.event.preventDefault(e);
 
-                this[el.className ? 'hide': 'pick'](el);
+                    this[el.className ? 'hide': 'pick'](el);
 
-                break;
+                    break;
 
-            case 'LI':
+                case 'LI':
 
-                if (index) {
-                    this.change(index);
-                }
+                    if (index) {
+                        this.change(index);
+                    }
 
-                break;
+                    break;
 
-            default:
+                default:
 
-                if (target) {
-                    target.select();
-                }
-                break;
+                    if (target) {
+                        target.select();
+                    }
+                    break;
 
             }
 
@@ -320,6 +330,7 @@ define(function (require) {
         /**
          * 动态更新 target
          * 
+         * @public
          * @param {HTMLElement} target 新的 target 节点
          * @throws 如果 target 为非 Element 节点将抛出异常
          */
@@ -368,6 +379,7 @@ define(function (require) {
         /**
          * 切换标签
          * 
+         * @public
          * @param {number} i 要切换到的目标标签索引
          */
         change: function (i) {
@@ -394,6 +406,7 @@ define(function (require) {
         /**
          * 显示浮层
          * 
+         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:City#show 显示事件
          */
@@ -413,6 +426,7 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
+         * @public
          * @fires module:City#hide 隐藏事件
          */
         hide: function () {
@@ -425,7 +439,8 @@ define(function (require) {
             this.fire('hide');
         }
 
-    });
+    };
+    T.inherits(City, Control);
 
     return City;
 });

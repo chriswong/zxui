@@ -1,7 +1,8 @@
 /**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
+ * 
  * @file  知心中间页日志统计模块
- * {@link http://fe.baidu.com/doc/aladdin/#standard/aladdin_click.text|点击统计规范}
  * @author  chris(wfsr@foxmail.com)
  */
 
@@ -49,6 +50,7 @@ define(function (require) {
     /**
      * 填充数据
      * 根据当前点击对象，解释对象所处 XPath 及 url
+     * 
      * @inner
      * @param {Object} data待发送的数据对象
      * @param {HTMLElement} from 当前点击对象
@@ -197,6 +199,7 @@ define(function (require) {
 
     /**
      * 页面点击监听
+     * http://fe.baidu.com/doc/aladdin/#standard/aladdin_click.text
      * 
      * @inner
      * @param {?DOMEvent} e DOM 事件对象

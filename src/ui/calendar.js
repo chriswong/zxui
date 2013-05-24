@@ -1,7 +1,9 @@
 /**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
- * @file  比PC-UI WCal好用的日历控件
- * @author  chris(wfsr@foxmail.com)
+ * 
+ * @file 比 PC-UI WCal 好用的日历控件
+ * @author chris(wfsr@foxmail.com)
  */
 
 define(function (require) {
@@ -34,7 +36,7 @@ define(function (require) {
     /**
      * 补齐数字位数
      * 
-     * @param {number|string} n 需要补齐的数字
+     * @param {(number | string)} n 需要补齐的数字
      * @return {string} 补齐两位后的字符
      */
     function pad(n) {
@@ -61,11 +63,11 @@ define(function (require) {
     var Calendar = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
-    T.inherits(Calendar, Control);
 
     /**
      * 全局日期格式
      * 
+     * @const
      * @type {string}
      */
     Calendar.DATE_FORMAT = DATE_FORMAT;
@@ -73,6 +75,7 @@ define(function (require) {
     /**
      * 可选中的日期区间
      * 
+     * @const
      * @type {?Object}
      */
     Calendar.RANGE = null;
@@ -86,22 +89,27 @@ define(function (require) {
      */
     var cache = {};
 
-    T.extend(Calendar.prototype,
-        
-    /** @lends module:Calendar.prototype */ {
+    Calendar.prototype = {
 
+        /**
+         * 控件类型标识
+         * 
+         * @private
+         * @type {string}
+         */
         type: 'Calendar',
 
         /**
          * 控件配置项
          * 
+         * @private
          * @name module:Calendar#options
          * @see module:Popup#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
-         * @property {string|HTMLElement} main 控件渲染容器
+         * @property {(string | HTMLElement)} main 控件渲染容器
          * @property {string} prefix 控件class前缀，同时将作为main的class之一
-         * @property {string|HTMLElement} target 计算日历显示时相对位置的目标对象
+         * @property {(string | HTMLElement)} target 计算日历显示时相对位置的目标对象
          * @property {string} triggers 点击显示日历的节点
          * @property {string} dateFormat 日期显示的格式化方式
          * @property {?Object} range 可选中的日期区间
@@ -167,6 +175,7 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
+         * @private
          * @type {string}
          */
         binds: 'onClick,onBeforeShow',
@@ -196,7 +205,8 @@ define(function (require) {
         /**
          * 解释日期类型
          * 
-         * @param {string|Date} value 源日期字符串或对象
+         * @public
+         * @param {(string | Date)} value 源日期字符串或对象
          * @param {string} format 日期格式
          * @return {Date} 解释到的日期对象
          */
@@ -241,6 +251,7 @@ define(function (require) {
         /**
          * 格式化日期
          * 
+         * @public
          * @param {Date} date 源日期对象
          * @param {string=} format 日期格式，默认为当前实例的dateFormat
          * @return {string} 格式化后的日期字符串
@@ -278,9 +289,12 @@ define(function (require) {
                 ww: options.lang.week + week
             };
 
-            return format.replace(/y+|M+|d+|W+/gi, function ($0) {
-                return map[$0] || '';
-            });
+            return format.replace(
+                /y+|M+|d+|W+/gi,
+                function ($0) {
+                    return map[$0] || '';
+                }
+            );
         },
 
         /**
@@ -301,6 +315,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @public
          * @return {module:Calendar} 当前实例
          */
         render: function () {
@@ -547,37 +562,37 @@ define(function (require) {
 
             switch (tag) {
 
-            case 'A':
-                T.event.preventDefault(e);
+                case 'A':
+                    T.event.preventDefault(e);
 
-                var prefix    = this.options.prefix;
-                var preClass  = prefix + '-pre';
-                var nextClass = prefix + '-next';
-                var disClass  = prefix + '-disabled';
-                var hasClass  = T.dom.hasClass;
+                    var prefix    = this.options.prefix;
+                    var preClass  = prefix + '-pre';
+                    var nextClass = prefix + '-next';
+                    var disClass  = prefix + '-disabled';
+                    var hasClass  = T.dom.hasClass;
 
-                // 上月操作
-                if (hasClass(el, preClass)) {
-                    this.showPreMonth();
-                    stopPropagation(e);
-                }
-                // 下月操作
-                else if (hasClass(el, nextClass)) {
-                    this.showNextMonth();
-                    stopPropagation(e);
-                }
-                else if (!hasClass(el, disClass)) {
-                    this.pick(el);
-                }
+                    // 上月操作
+                    if (hasClass(el, preClass)) {
+                        this.showPreMonth();
+                        stopPropagation(e);
+                    }
+                    // 下月操作
+                    else if (hasClass(el, nextClass)) {
+                        this.showNextMonth();
+                        stopPropagation(e);
+                    }
+                    else if (!hasClass(el, disClass)) {
+                        this.pick(el);
+                    }
 
-                break;
+                    break;
 
-            default:
+                default:
 
-                if (target) {
-                    target.select();
-                }
-                break;
+                    if (target) {
+                        target.select();
+                    }
+                    break;
 
             }
 
@@ -756,6 +771,7 @@ define(function (require) {
         /**
          * 动态更新 target
          * 
+         * @public
          * @param {HTMLElement} target 新的 target 节点
          */
         setTarget: function (target) {
@@ -814,6 +830,7 @@ define(function (require) {
         /**
          * 显示浮层
          * 
+         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:Calendar#show 显示事件
          */
@@ -833,6 +850,7 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
+         * @public
          * @fires module:Calendar#hide 隐藏事件
          */
         hide: function () {
@@ -848,6 +866,7 @@ define(function (require) {
         /**
          * 验证控件输入状态
          * 
+         * @public
          * @return {boolean} 是否为指定格式的日期值
          */
         checkValidity: function () {
@@ -857,6 +876,7 @@ define(function (require) {
         /**
          * 获取当前选中的日期
          * 
+         * @public
          * @return {string} 当前日期格式化值
          */
         getValue: function () {
@@ -868,6 +888,7 @@ define(function (require) {
         /**
          * 获取当前选中的日期
          * 
+         * @public
          * @return {Date} 获取到的日期
          */
         getValueAsDate: function () {
@@ -877,6 +898,7 @@ define(function (require) {
         /**
          * 设置允许选中的日期区间
          * 
+         * @public
          * @param {Object} range 允许选择的日期区间
          */
         setRange: function (range) {
@@ -901,6 +923,7 @@ define(function (require) {
         /**
          * 设置当前选中的日期
          * 
+         * @public
          * @param {string} value 要设置的日期
          */
         setValue: function (value) {
@@ -912,6 +935,7 @@ define(function (require) {
         /**
          * 验证控件
          * 
+         * @public
          * @return {boolean} 验证结果
          */
         validate: function () {
@@ -945,7 +969,8 @@ define(function (require) {
         }
 
 
-    });
+    };
+    T.inherits(Calendar, Control);
 
     return Calendar;
 });
