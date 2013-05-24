@@ -1,6 +1,6 @@
 {
   "name": "zxui",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "知心UI组件组件库",
   "devDependencies": {
     "grunt": "~0.4.0",
