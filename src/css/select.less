@@ -29,6 +29,7 @@
         top: 50%;
         right: 10px;
         margin-top: -4px;
+        font-size:0;
     }
 }
 
@@ -67,9 +68,29 @@
         overflow: hidden;
         color: #333333;
         cursor: default;
+        background-color: #FFF;
 
         &:hover {
             background-color: #F5F5F5;
         }
+    }
+}
+
+
+// 有选中值时 target 的状态
+a.@{sel-prefix}-cur {
+    color: #000;
+}
+
+
+.@{sel-prefix}-cols3 {
+    width: 273px;
+    overflow: hidden;
+
+    a {
+        display: inline;
+        width: 71px;
+        float: left;
+        _zoom: 1;
     }
 }

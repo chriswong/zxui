@@ -10,18 +10,18 @@
 <link rel="stylesheet/less" type="text/css" href="../src/css/select.less" />
 </head>
 <body>
-<div id='content_left'><!--左侧最外层div-->
+<div id='content_left'>
   <div class="result-op" srcid="16873" id="1" mu="http://baike.baidu.com/view/1758.htm" data-op="{'y':'FD9FFD6B'}">
 
 <div>
   筛选： 
   <a href="#" class="ecl-ui-sel-target"><b>商圈</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>价格</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>星级</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>品牌</b><i></i></a>
-  <p class="ecl-ui-sel">
+  <p class="ecl-ui-sel c-clearfix">
     <a href="#" data-value="0">不限</a>
     <a href="#" data-value="1">中关村、上地</a>
-    <a href="#" data-value="2">亚运村</a>
     <a href="#" data-value="3">公主坟商圈</a>
     <a href="#" data-value="4">劲松潘家园</a>
+    <a href="#" data-value="2">亚运村</a>
     <a href="#" data-value="5">北京南站商圈超长</a>
   </p>
 
@@ -41,7 +41,7 @@
     <a href="#" data-value="2">二星级/普通</a>
     <a href="#" data-value="3">三星级/舒适</a>
     <a href="#" data-value="4">四星级/高档</a>
-    <a href="#" data-value="5">五星级/豪华</a>
+    <a href="#" data-value="5">五星级豪华</a>
   </p>
   
   
@@ -74,6 +74,7 @@ A.init(function () {
             main: mains[i],
             target: targets[i],
             maxLength: 8,
+            cols: i < 2 ? 3 : 1,
             offset: {
               y: -1
             },

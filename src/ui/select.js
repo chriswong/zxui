@@ -106,6 +106,7 @@ define(function (require) {
          * @property {string} options.ellipsis maxLength 限制后的附加的后缀字符
          * @property {(string | HTMLElement)} options.target 计算选单显示时
          * 相对位置的目标对象
+         * @property {number} options.cols 选项显示的列数，默认为 1 列
          * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
          */
         options: {
@@ -124,6 +125,11 @@ define(function (require) {
 
             // 计算选单显示时相对位置的目标对象
             target: '',
+
+            // 显示列数
+            cols: 1,
+
+            selectedClass: 'cur',
 
             // 控件class前缀，同时将作为main的class之一
             prefix: 'ecl-ui-sel'
@@ -182,6 +188,14 @@ define(function (require) {
                 popup.render();
 
                 this.main = popup.main;
+
+                if (options.cols > 1) {
+                    T.addClass(
+                        this.main,
+                        options.prefix + '-cols' + options.cols
+                    );
+                    //T.addClass(this.main, 'c-clearfix');
+                }
             }
 
             return this;
@@ -299,16 +313,33 @@ define(function (require) {
          * @fires module:Select#change
          */
         pick: function (el, isSilent) {
+
+            var lastItem = this.lastItem;
+            if (lastItem === el) {
+                return;
+            }
+
             var options = this.options;
             var target = this.target;
             var realTarget = this.realTarget;
             var lastValue = this.lastValue | 0;
+            var selectedClass = options.prefix + '-' + options.selectedClass;
 
             var value  = el.getAttribute('data-value') | 0;
             var text = value ? el.innerHTML : this.defaultValue;
             var shortText = value
                 ? textOverflow(text, options.maxLength, options.ellipsis)
                 : text;
+
+            if (lastItem) {
+                T.removeClass(lastItem, selectedClass);
+            }
+
+            if (value) {
+                T.addClass(el, selectedClass);
+            }
+
+            this.lastItem = el;
 
             this.hide();
 
