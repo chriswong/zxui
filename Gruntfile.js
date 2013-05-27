@@ -2,9 +2,16 @@ module.exports = function (grunt) {
     
     grunt.initConfig({
 
-        pkg: grunt.file.readJSON('package.json'),
+        meta: {
+            pkg: grunt.file.readJSON('package.json'),
+            src: {
+                main: 'src/ui',
+                test: 'test/spec'
+            }
+        },
 
-        clean: ['asset'],
+
+        clean: ['asset', 'bin'],
         
         jshint: {
             options: grunt.file.readJSON('src/ui/.jshintrc'),
@@ -88,6 +95,27 @@ module.exports = function (grunt) {
                         }
                     }
                 }
+            },
+            istanbul: {
+                src: './<%=meta.src.main%>/*.js',
+                options: {
+                    specs: ['test/spec/*Spec.js'],
+                    vendor: ['./dep/vars.js', './dep/common-2.3.js'],
+                    styles: '<%= csslint.src %>',
+                    template: require('grunt-template-jasmine-istanbul'),
+                    templateOptions: {
+                        coverage: 'test/coverage/coverage.json',
+                        report: 'test/coverage',
+                        helpers: 'test/spec/*Helper.js',
+                        host: 'http://localhost:<%= connect.test.options.port %>',
+                        template: require('grunt-template-jasmine-requirejs'),
+                        templateOptions: {
+                            requireConfig: {
+                                baseUrl: '.grunt/grunt-contrib-jasmine/<%= meta.src.main %>/'
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -106,7 +134,7 @@ module.exports = function (grunt) {
 
 
     grunt.registerTask('base', ['clean', 'jshint', 'less', 'csslint']);
-    grunt.registerTask('test', ['base', 'connect', 'jasmine']);
+    grunt.registerTask('test', ['base', 'connect', 'jasmine:istanbul']);
     grunt.registerTask('default', ['base']);
 
 }
