@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: filter.js</title>
+    <title>JSDoc: Source: Filter.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: filter.js</h1>
+    <h1 class="page-title">Source: Filter.js</h1>
     
     
 
@@ -26,9 +26,11 @@
     <section>
         <article>
             <pre class="prettyprint source"><code>/**
+ * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
- * @file  条件过滤器
- * @author  chris(wfsr@foxmail.com)
+ * 
+ * @file 条件过滤器
+ * @author chris(wfsr@foxmail.com)
  */
 
 define(function (require) {
@@ -77,22 +79,27 @@ define(function (require) {
     var Filter = function () {
         this.constructor.superClass.constructor.apply(this, arguments);
     };
-    T.inherits(Filter, Control);
 
 
-    T.extend(Filter.prototype,
-        
-    /** @lends module:Filter.prototype */ {
+    Filter.prototype = {
 
+
+        /**
+         * 控件类型标识
+         * 
+         * @private
+         * @type {string}
+         */
         type: 'Filter',
 
         /**
          * 控件配置项
          * 
+         * @private
          * @name module:Filter#options
          * @type {Object}
          * @property {boolean} options.disabled 控件的不可用状态
-         * @property {string|HTMLElement} options.main 控件渲染容器
+         * @property {(string | HTMLElement)} options.main 控件渲染容器
          * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
          */
         options: {
@@ -117,6 +124,7 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
+         * @public
          * @type {string}
          */
         binds: 'onClick',
@@ -140,6 +148,7 @@ define(function (require) {
         /**
          * 绘制控件
          * 
+         * @public
          * @param {string=|HTMLElement=} wrapper 作为组件根元素的DOM节点
          * @throws 如果控件根元素不存在将抛出异常
          * @return {module:Filter} 当前实例
@@ -246,12 +255,16 @@ define(function (require) {
                             return;
                         }
 
-                        T.each(checkedItems, function (item) {
-                            T.removeClass(item, checkedClass);
+                        T.each(
+                            checkedItems,
+                            function (item) {
+                                T.removeClass(item, checkedClass);
 
-                            var input = item.getElementsByTagName('input')[0];
-                            input.checked = false;
-                        });                        
+                                item.getElementsByTagName(
+                                    'input'
+                                )[0].input.checked = false;
+                            }
+                        );                        
                     }
                     else if (firstItem.checked) {
                         firstItem.checked = false;
@@ -274,8 +287,9 @@ define(function (require) {
 
                 // 比较状态变化
                 var newValue = checkedData.value.join(',');
-                if (group.getAttribute('data-value') !== newValue) {
-                    group.setAttribute('data-value', newValue);
+                var propertyName = 'data-value';
+                if (group.getAttribute(propertyName) !== newValue) {
+                    group.setAttribute(propertyName, newValue);
 
                     /**
                      * @event module:Filter#change
@@ -291,6 +305,7 @@ define(function (require) {
         /**
          * 获取指定键名的当前选中项数据
          * 
+         * @public
          * @param {string} key 选择项键名
          * @return {Object} 返回指定键名的选中项数据
          */
@@ -302,13 +317,16 @@ define(function (require) {
             if (group) {
 
                 var disabledClass = this.options.disabledClass;
-                T.each(group.getElementsByTagName('input'), function (input) {
-                    if (input.checked
-                        && !T.dom.hasClass(input.parentNode, disabledClass)
-                    ) {
-                        value.push(input.value);
+                T.each(
+                    group.getElementsByTagName('input'),
+                    function (input) {
+                        if (input.checked
+                            && !T.dom.hasClass(input.parentNode, disabledClass)
+                        ) {
+                            value.push(input.value);
+                        }
                     }
-                });
+                );
             }
 
             return data;
@@ -317,6 +335,7 @@ define(function (require) {
         /**
          * 禁止指定选项组中指定值的项
          * 
+         * @public
          * @param {string} key 选项组键名
          * @param {Array.&lt;string>} values 要禁止的指定项的值
          */
@@ -329,34 +348,43 @@ define(function (require) {
 
             values = comma + values.join(comma) + comma;
 
-            T.each(group.getElementsByTagName('input'), function (input) {
-                if (~values.indexOf(comma + input.value + comma)) {
-                    input.checked = false;
-                    T.removeClass(input.parentNode, checkedClass);
-                    T.addClass(input.parentNode, disabledClass);
+            T.each(
+                group.getElementsByTagName('input'),
+                function (input) {
+                    var parentNode = input.parentNode;
+                    if (~values.indexOf(comma + input.value + comma)) {
+                        input.checked = false;
+                        T.removeClass(parentNode, checkedClass);
+                        T.addClass(parentNode, disabledClass);
+                    }
+                    else {
+                        T.removeClass(parentNode, disabledClass);
+                    }
                 }
-                else {
-                    T.removeClass(input.parentNode, disabledClass);
-                }
-            });
+            );
         },
 
         /**
          * 启用指定选项组
          * 
+         * @public
          * @param {string} key 选项组关键字
          */
         enableItems: function (key) {
             var disabledClass = this.options.disabledClass;
             var group = this.groups[key];
 
-            T.each(T.q(disabledClass, group), function (label) {
-                T.removeClass(label, disabledClass);
-            });
+            T.each(
+                T.q(disabledClass, group),
+                function (label) {
+                    T.removeClass(label, disabledClass);
+                }
+            );
         }
 
 
-    });
+    };
+    T.inherits(Filter, Control);
 
     return Filter;
 });
@@ -370,15 +398,16 @@ define(function (require) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:beforeinit">beforeinit</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:beforeinit">beforeinit</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu May 23 2013 16:40:26 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon May 27 2013 15:00:44 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
 </body>
 </html>
