@@ -22,7 +22,7 @@
     <a href="#" data-value="2">亚运村</a>
     <a href="#" data-value="3">公主坟商圈</a>
     <a href="#" data-value="4">劲松潘家园</a>
-    <a href="#" data-value="5">北京南站商圈</a>
+    <a href="#" data-value="5">北京南站商圈超长</a>
   </p>
 
   
@@ -52,7 +52,7 @@
     <a href="#" data-value="3">汉庭酒店</a>
     <a href="#" data-value="4">99连锁</a>
   </p>
-  
+  <button class="reset">重置状态</button>
 </div>
   <script>
 
@@ -65,12 +65,15 @@ A.init(function () {
         var mains = me.q('ecl-ui-sel');
         var targets = me.q('ecl-ui-sel-target');
 
+        var selects = [];
+
         T.each(mains, function (main, i) {
 
-          new Select({
+          var select = new Select({
             prefix: 'ecl-ui-sel',
             main: mains[i],
             target: targets[i],
+            maxLength: 8,
             offset: {
               y: -1
             },
@@ -78,6 +81,16 @@ A.init(function () {
               window.console && console.log(arg);
             }
           }).render();
+
+          selects.push(select);
+
+        });
+
+        T.on(me.qq('reset'), 'click', function () {
+
+          T.each(selects, function (select) {
+            select.reset();
+          });
 
         });
 
