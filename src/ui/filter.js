@@ -228,12 +228,16 @@ define(function (require) {
                             return;
                         }
 
-                        T.each(checkedItems, function (item) {
-                            T.removeClass(item, checkedClass);
+                        T.each(
+                            checkedItems,
+                            function (item) {
+                                T.removeClass(item, checkedClass);
 
-                            var input = item.getElementsByTagName('input')[0];
-                            input.checked = false;
-                        });                        
+                                item.getElementsByTagName(
+                                    'input'
+                                )[0].input.checked = false;
+                            }
+                        );                        
                     }
                     else if (firstItem.checked) {
                         firstItem.checked = false;
@@ -256,8 +260,9 @@ define(function (require) {
 
                 // 比较状态变化
                 var newValue = checkedData.value.join(',');
-                if (group.getAttribute('data-value') !== newValue) {
-                    group.setAttribute('data-value', newValue);
+                var propertyName = 'data-value';
+                if (group.getAttribute(propertyName) !== newValue) {
+                    group.setAttribute(propertyName, newValue);
 
                     /**
                      * @event module:Filter#change
@@ -285,13 +290,16 @@ define(function (require) {
             if (group) {
 
                 var disabledClass = this.options.disabledClass;
-                T.each(group.getElementsByTagName('input'), function (input) {
-                    if (input.checked
-                        && !T.dom.hasClass(input.parentNode, disabledClass)
-                    ) {
-                        value.push(input.value);
+                T.each(
+                    group.getElementsByTagName('input'),
+                    function (input) {
+                        if (input.checked
+                            && !T.dom.hasClass(input.parentNode, disabledClass)
+                        ) {
+                            value.push(input.value);
+                        }
                     }
-                });
+                );
             }
 
             return data;
@@ -313,16 +321,20 @@ define(function (require) {
 
             values = comma + values.join(comma) + comma;
 
-            T.each(group.getElementsByTagName('input'), function (input) {
-                if (~values.indexOf(comma + input.value + comma)) {
-                    input.checked = false;
-                    T.removeClass(input.parentNode, checkedClass);
-                    T.addClass(input.parentNode, disabledClass);
+            T.each(
+                group.getElementsByTagName('input'),
+                function (input) {
+                    var parentNode = input.parentNode;
+                    if (~values.indexOf(comma + input.value + comma)) {
+                        input.checked = false;
+                        T.removeClass(parentNode, checkedClass);
+                        T.addClass(parentNode, disabledClass);
+                    }
+                    else {
+                        T.removeClass(parentNode, disabledClass);
+                    }
                 }
-                else {
-                    T.removeClass(input.parentNode, disabledClass);
-                }
-            });
+            );
         },
 
         /**
@@ -335,9 +347,12 @@ define(function (require) {
             var disabledClass = this.options.disabledClass;
             var group = this.groups[key];
 
-            T.each(T.q(disabledClass, group), function (label) {
-                T.removeClass(label, disabledClass);
-            });
+            T.each(
+                T.q(disabledClass, group),
+                function (label) {
+                    T.removeClass(label, disabledClass);
+                }
+            );
         }
 
 
