@@ -4,5 +4,6 @@
     "qualified-headings": false,
     "unique-headings": false,
     "outline-none": false,
-    "box-model": false
+    "box-model": false,
+    "display-property-grouping": false
 }

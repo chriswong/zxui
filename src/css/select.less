@@ -74,12 +74,13 @@
             background-color: #F5F5F5;
         }
     }
-}
 
 
-// 有选中值时 target 的状态
-a.@{sel-prefix}-cur {
-    color: #000;
+    // 有选中值时 target 的状态
+    .@{sel-prefix}-cur {
+        color: #000;
+    }
+
 }
 
 
@@ -88,7 +89,7 @@ a.@{sel-prefix}-cur {
     overflow: hidden;
 
     a {
-        display: inline;
+        _display: inline;
         width: 71px;
         float: left;
         _zoom: 1;
