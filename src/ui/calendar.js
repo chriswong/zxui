@@ -195,11 +195,11 @@ define(function (require) {
                 options.dateFormat
                 || Calendar.DATE_FORMAT
                 || DATE_FORMAT;
-            
-            this.setRange(options.range || Calendar.RANGE);
 
             this.days  = options.lang.days.split(',');
             this.value = this.format(this.from(options.value));
+            
+            this.setRange(options.range || Calendar.RANGE);
         },
 
         /**
