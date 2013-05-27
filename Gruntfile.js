@@ -23,18 +23,6 @@ module.exports = function (grunt) {
             }
         },
 
-        // stylus: {
-        //     compile: {
-        //         files: [{
-        //             expand: true,
-        //             cwd: 'src/css',
-        //             src: '*.styl',
-        //             dest: 'asset/css',
-        //             ext: '.css'
-        //         }]
-        //     }
-        // },
-
         csslint: {
             options: {
                 csslintrc: '.csslintrc'
@@ -55,7 +43,7 @@ module.exports = function (grunt) {
                   debounceDelay: 250
                 },
                 files: 'src/css/*.less',
-                tasks: ['clean', 'stylus:compile', 'csslint']
+                tasks: ['clean', 'csslint']
             }
         },
 
@@ -109,7 +97,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-less');
-    // grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');

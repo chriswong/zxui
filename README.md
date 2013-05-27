@@ -6,6 +6,25 @@
 [![Build Status](https://travis-ci.org/chriswong/zxui.png?branch=master)](https://travis-ci.org/chriswong/zxui)
 
 
+### 如何使用
+
+前期准备：
+
+git、nodejs、grunt-cli
+
+获取源码：
+
+	git clone git://github.com/chriswong/zxui.git
+
+安装依赖：
+
+	npm install
+
+查看可用任务：
+
+	grunt --help
+	
+
 ### 目前实现的组件
 
 - 日历控件 [Calendar](http://chriswong.github.io/zxui/example/calendar.html)

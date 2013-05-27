@@ -1,12 +1,11 @@
 {
   "name": "zxui",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "知心UI组件组件库",
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-clean": "~0.4.1",
     "grunt-contrib-jshint": "~0.4.3",
-    "grunt-contrib-stylus": "~0.5.0",
     "grunt-contrib-less": "~0.5.0",
     "grunt-contrib-csslint": "~0.1.2",
     "grunt-contrib-requirejs": "~0.4.0",
@@ -17,7 +16,9 @@
     "grunt-contrib-jasmine": "~0.4.2",
     "grunt-template-jasmine-requirejs": "~0.1.1",
     "grunt-contrib-connect": "~0.3.0",
-    "grunt-contrib-qunit": "~0.2.1"
+    "grunt-contrib-qunit": "~0.2.1",
+    "grunt-template-jasmine-istanbul": "~0.2.3",
+    "jsdoc": "git+https://github.com/jsdoc3/jsdoc"
   },
   "main": "Gruntfile.js",
   "directories": {
