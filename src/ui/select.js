@@ -314,6 +314,8 @@ define(function (require) {
          */
         pick: function (el, isSilent) {
 
+            this.hide();
+
             var lastItem = this.lastItem;
             if (lastItem === el) {
                 return;
@@ -340,8 +342,6 @@ define(function (require) {
             }
 
             this.lastItem = el;
-
-            this.hide();
 
             if (!isSilent) {
 

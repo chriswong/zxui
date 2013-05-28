@@ -6,8 +6,10 @@
     color: #333333;
     display: inline-block;
     padding: 3px 25px 3px 10px;
-    border: 1px solid #FFFFFF;
-    font-size: 12pt;
+    border: 1px solid transparent;
+    _border-color: #654321;
+    _filter: chroma(color=#654321);
+    font-size: 12px;
     position: relative;
     cursor: default;
     margin-left: 5px;
@@ -57,7 +59,7 @@
     z-index: 10;
     left: -1000em;
     line-height: 30px;
-    font-size: 12pt;
+    font-size: 12px;
 
     // 选项
     a {
@@ -85,12 +87,12 @@
 
 
 .@{sel-prefix}-cols3 {
-    width: 273px;
+    width: 276px;
     overflow: hidden;
 
     a {
         _display: inline;
-        width: 71px;
+        width: 72px;
         float: left;
         _zoom: 1;
     }
