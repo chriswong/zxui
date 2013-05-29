@@ -1,5 +1,5 @@
     define(function (require) {
-        var Select = require('select');
+        var Select = require('Select');
         
         var select;
 

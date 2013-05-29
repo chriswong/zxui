@@ -9,8 +9,8 @@
 define(function (require) {
 
     var T = baidu;
-    var Control = require('./control');
-    var Popup = require('./popup');
+    var Control = require('./Control');
+    var Popup = require('./Popup');
 
     /**
      * 取字符字节长度

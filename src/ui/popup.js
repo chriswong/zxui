@@ -12,7 +12,7 @@ define(function (require) {
     var T = baidu;
     var DOM = T.dom;
     var PAGE = T.page;
-    var Control = require('./control');
+    var Control = require('./Control');
 
     /**
      * 弹出层控件

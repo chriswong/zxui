@@ -9,7 +9,7 @@
 define(function (require) {
 
     var T = baidu;
-    var Control = require('./control');
+    var Control = require('./Control');
     
 
     /**

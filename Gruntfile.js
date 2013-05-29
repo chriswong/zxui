@@ -91,7 +91,8 @@ module.exports = function (grunt) {
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
                         requireConfig: {
-                            baseUrl: './src/ui/'
+                            baseUrl: './src/ui/',
+                            urlArgs: '?' + (+new Date).toString(36)
                         }
                     }
                 }
@@ -111,7 +112,8 @@ module.exports = function (grunt) {
                         template: require('grunt-template-jasmine-requirejs'),
                         templateOptions: {
                             requireConfig: {
-                                baseUrl: '.grunt/grunt-contrib-jasmine/<%= meta.src.main %>/'
+                                baseUrl: '.grunt/grunt-contrib-jasmine/<%= meta.src.main %>/',
+                                urlArgs: '?' + (+new Date).toString(36)
                             }
                         }
                     }
@@ -134,7 +136,8 @@ module.exports = function (grunt) {
 
 
     grunt.registerTask('base', ['clean', 'jshint', 'less', 'csslint']);
-    grunt.registerTask('test', ['base', 'connect', 'jasmine:istanbul']);
+    grunt.registerTask('test', ['base', 'connect', 'jasmine:requirejs']);
+    grunt.registerTask('cover', ['base', 'connect', 'jasmine:istanbul']);
     grunt.registerTask('default', ['base']);
 
 }

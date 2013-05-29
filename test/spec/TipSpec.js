@@ -1,5 +1,5 @@
     define(function (require) {
-        var Tip = require('tip');
+        var Tip = require('Tip');
         
         var tip;
 

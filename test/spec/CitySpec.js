@@ -1,5 +1,5 @@
     define(function (require) {
-        var City = require('city');
+        var City = require('City');
         
         var city;
 

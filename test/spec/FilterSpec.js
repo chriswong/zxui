@@ -1,5 +1,5 @@
     define(function (require) {
-        var Filter = require('filter');
+        var Filter = require('Filter');
         
         var filter;
 

@@ -1,5 +1,5 @@
     define(function (require) {
-        var Pager = require('pager');
+        var Pager = require('Pager');
         
         var pager;
 

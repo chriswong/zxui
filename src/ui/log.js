@@ -11,7 +11,7 @@ define(function (require) {
     var DOM = T.dom;
     var parseJson = T.json.parse;
 
-    require('./control');
+    require('./Control');
 
     /**
      * 发送日志请求
@@ -58,41 +58,59 @@ define(function (require) {
      * @return {Object} 合并所有HTML自定义属性和相关配置项后的数据对象
      */
     var fill = function (data, from, to) {
-        var type = 'other';
-        var tag = from.tagName.toLowerCase();
-        var path = [tag];
-        var i = 1;
+        var type;
         var url;
         var nolog = 0;
+        var el = from;
+        var path = [];
 
-        var walk = function (el) {
+        var i = 0;
+        var clickData;
+        while (el !== to) {
             if (el.getAttribute('data-nolog') === '1') {
                 nolog = 1;
-                return true;
+                break;
             }
-            var clickData = el.getAttribute('data-click');
+
+            clickData = el.getAttribute('data-click');
             if (clickData) {
                 data = T.extend(parseJson(clickData), data);
             }
 
-            if (el !== to) {
-                path[i ++] = el.tagName;
-
-                if (el.href) {
-                    url = el.href;
-                    type = 'link';
-                }
+            if (el.href) {
+                url = el.href;
+                type = 'link';
             }
-            else {
-                return true;
-            }
-        };
 
-        if (from === to) {
-            walk(from);
+            if (type === 'link' && el.tagName === 'H3') {
+                type = 'title';
+            }
+
+            var count = 1;
+            if (el.previousSibling) {
+                var sibling = el.previousSibling;
+
+                do {
+                    if (sibling.nodeType === 1
+                        && sibling.tagName === el.tagName
+                    ) {
+                        count++;
+                    }
+                    sibling = sibling.previousSibling;
+                } while (sibling);
+            }
+
+            path[i++] = el.tagName + (count > 1 ? count : '');
+
+            el = el.parentNode;
+
         }
-        else {
-            DOM.getAncestorBy(from, walk);
+
+        if (from !== to) {
+            clickData = to.getAttribute('data-click');
+            if (clickData) {
+                data = T.extend(parseJson(clickData), data);
+            }            
         }
 
         if (nolog) {
@@ -101,35 +119,106 @@ define(function (require) {
 
         // 反转 XPath 顺序
         path.reverse();
+        var tag = from.tagName.toLowerCase();
 
-        if (/\bOP_LOG_(TITLE|LINK|IMG|BTN|OTHERS)/i.test(from.className)) {
-            type = RegExp.$1.toLowerCase();
-        }
-        else if (/^a|img|input|button$/.test(tag)) {
-            type = {a: 'link', button: 'btn'}[tag] || tag;
+        if (!type) {
 
-            // 取type的前3位作判断，默认非输入框的点击都作为 btn 类型上报
-            if (from.type && /^(rad|che|but|sub|res|ima)/.test(from.type)) {
-                type = 'btn';
+            var typeReg = /\bOP_LOG_(TITLE|LINK|IMG|BTN|INPUT|OTHERS)\b/i;
+            if (typeReg.test(from.className)) {
+                type = RegExp.$1.toLowerCase();
+            }
+            else if (
+                /^a|img|input|button|select|datalist|textarea$/.test(tag)
+            ) {
+                type = {a: 'link', button: 'btn'}[tag] || 'input';
+
+                url = from.href || from.src || url;
+            }
+            else {
+                T.each(
+                    'title,link,img,btn,input,others'.split(','),
+                    function (key) {
+                        if (DOM.hasClass(from, options[key])) {
+                            type = key;
+                        }
+                    }
+                );
             }
 
-            url = from.href || from.src || url;
-            if (url) {
-                data.url = url;
+        }
+
+        if (!type) {
+            return false;
+        }
+
+        var mainUrl = to.getAttribute('mu') || '';
+        data.mu = mainUrl;
+        if (type === 'title') {
+            delete data.mu;
+        }
+
+        if (!url || url.slice(-1) === '#') {
+            url = mainUrl;
+        }
+
+        if (url) {
+            data.url = url;
+        }
+
+
+        var title = '';
+
+        // 如果是表单元素
+        if (type === 'input') {
+            if (/input|textarea/.test(tag)) {
+                title = from.value;
+                if (from.type && from.type.toLowerCase() === 'password') {
+                    title = '';
+                }
+            }
+            else if (/select|datalist/.test(tag)) {
+                if (from.children.length > 0) {
+                    var index = from.selectedIndex || 0;
+                    title = from.children[index > -1 ? index : 0].innerHTML;
+                }
+            }
+            else {
+                title = from.innerHTML || from.value || '';
             }
         }
         else {
-            T.each(
-                'title,link,img,btn,others'.split(','),
-                function (key) {
-                    if (DOM.hasClass(from, options[key])) {
-                        type = key;
+
+            // 如果是图片，先取其title
+            if (tag === 'img') {
+                title = from.title;
+            }
+
+            // title为空，遍历父节点
+            if (!title) {
+                while (i > 1) {
+                    i--;
+                    if (/^a\d*\b/.test(path[i])) {
+                        url = el.href;
+                        title = el.innerHTML;
+                        break;
+                    }
+                    else {
+                        if(el.className
+                            && (/\bOP_LOG_[A-Z]+\b/.test(el.className))
+                        ){
+                            title = el.innerHTML;   
+                            break;
+                        }
+                        el = el.parentNode;
                     }
                 }
-            );
+            }
         }
+        data.title = T.trim(title);
 
         data['rsv_xpath'] = path.join('-').toLowerCase() + '(' + type + ')';
+        data['rsv_height'] = to.offsetHeight;
+        data.path = location.href;
         return data;
     };
 
@@ -148,42 +237,49 @@ define(function (require) {
         action: 'http://sclick.baidu.com/w.gif?',
 
         /**
-         * 日志统计顶层容器className
+         * 日志统计顶层容器 className
          * 
          * @type {string}
          */ 
         main: 'result-op',
 
         /**
-         * xpath中title类型的className
+         * xpath 中 title 类型的 className
          * 
          * @type {string}
          */ 
         title: 'OP_LOG_TITLE',
 
         /**
-         * xpath中link类型的className
+         * xpath 中 link 类型的 className
          * 
          * @type {string}
          */ 
         link: 'OP_LOG_LINK',
 
         /**
-         * xpath中img类型的className
+         * xpath 中 img 类型的 className
          * 
          * @type {string}
          */ 
         img: 'OP_LOG_IMG',
 
         /**
-         * xpath中btn类型的className
+         * xpath 中 btn 类型的 className
          * 
          * @type {string}
          */ 
         btn: 'OP_LOG_BTN',
 
         /**
-         * xpath中others类型的className
+         * xpath 中 input  类型的 className
+         * 
+         * @type {string}
+         */ 
+        input: 'OP_LOG_INPUT',
+
+        /**
+         * xpath 中 others 类型的 className
          * 
          * @type {string}
          */ 
@@ -192,9 +288,32 @@ define(function (require) {
         /**
          * 统计公共数据部分
          * 
+         * 中间页 p1 永远为 1
          * @type {string}
          */ 
-        data: {}
+        data: {
+            p1: 1
+        }
+    };
+
+    /**
+     * 绑定 P5 参数索引值
+     * 
+     * @param {[type]} el [el description]
+     * @param {[type]} index [index description]
+     * @return {[type]} [return description]
+     */
+    var bindP5 = function (el, index) {
+        var data = el.getAttribute('data-click') || '{}';
+        try {
+            data = parseJson(data);
+        }
+        catch (e) {
+            data = {};
+        }
+
+        data.p5 = index;
+        el.setAttribute('data-click', T.json.stringify(data));
     };
 
     /**
@@ -214,7 +333,7 @@ define(function (require) {
             ? target
             : DOM.getAncestorByClass(target, klass);
 
-        if (nolog || !main) {
+        if (nolog || !main || main.getAttribute('data-nolog') === '1') {
             return;
         }
 
@@ -235,15 +354,33 @@ define(function (require) {
             data = T.extend(T.extend({}, options.data), data);
         }
 
+        // 仅当首次点击或有新加入节点时计算 p5 序号值
+        if (!('p5' in data)) {
+            T.each(
+                T.q(options.main),
+                function (el, i) {
+                    if (el === main) {
+                        data.p5 = i + 1;
+                    }
+                    bindP5(el, i + 1);
+                }
+            );
+        }
+
         data.t = (+new Date()).toString(36);
 
         /**
          * @event module:log#click
          * @type {Object}
-         * @property {string} rsv_xpath 事件源 DOM 节点的XPath(type)
-         * @property {string} t 时间截的 36 进制表示
+         * @property {Object} data 上报的公共数据
+         * @property {string} data.rsv_xpath 事件源 DOM 节点的XPath(type)
+         * @property {number} data.p5 当前统计区域（卡片）的索引值
+         * @property {string} data.type 统计类型
+         * @property {string} data.t 时间截的 36 进制表示
+         * @property {string} target 点击事件源对象
+         * @property {string} main 当前统计区域（卡片）主容器
          */
-        exports.fire('click', {data: data});
+        exports.fire('click', {data: data, target: target, main: main});
 
         send(data);
     };
@@ -264,12 +401,13 @@ define(function (require) {
          * @see options
          * @param {Object} ops 可配置项
          * @param {string=} ops.action 日志统计服务接口地址
-         * @param {string=} ops.main 日志统计顶层容器className
-         * @param {string=} ops.title xpath中title类型的className
-         * @param {string=} ops.link xpath中link类型的className
-         * @param {string=} ops.img xpath中img类型的className
-         * @param {string=} ops.btn xpath中btn类型的className
-         * @param {string=} ops.others xpath中others类型的className
+         * @param {string=} ops.main 日志统计顶层容器 className
+         * @param {string=} ops.title xpath 中 title 类型的 className
+         * @param {string=} ops.link xpath 中 link 类型的 className
+         * @param {string=} ops.img xpath 中 img 类型的 className
+         * @param {string=} ops.btn xpath 中 btn 类型的 className
+         * @param {string=} ops.input xpath 中 input 类型的 className
+         * @param {string=} ops.others xpath 中 others 类型的 className
          * @param {Object=} ops.data 统计公共数据部分
          */
         config: function (ops) {

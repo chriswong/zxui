@@ -1,5 +1,5 @@
     define(function (require) {
-        var Calendar = require('calendar');
+        var Calendar = require('Calendar');
         
         var calendar;
 
