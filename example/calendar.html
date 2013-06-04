@@ -70,7 +70,7 @@ A.init(function () {
           // 不指定 target 时，需要在本事件中动态指定
           onBeforeShow: function (arg) {
                 var e = arg.event;
-                var target = T.event.getTarget(e);
+                var target = baidu.event.getTarget(e);
 
                 // 更新定位及赋值关联的目标 target
                 target = target.tagName === 'INPUT' && target.type === 'text'

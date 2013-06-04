@@ -274,7 +274,7 @@ define(function (require) {
          * 增加触发tips的DOM
          * 
          * @public
-         * @param {string|HTMLElement|HTMLCollection|Array} triggers 
+         * @param {(string | HTMLElement | HTMLCollection | Array)} triggers 
          * className/dom节点/dom集合或dom节点数组
          */
         addTriggers: function (triggers) {

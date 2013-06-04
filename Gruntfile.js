@@ -64,8 +64,8 @@ module.exports = function (grunt) {
                     generateSourceMaps: true,
                     optimize: 'uglify2',
                     modules: [
-                        {name: 'calendar'},
-                        {name: 'city'}
+                        {name: 'Calendar'},
+                        {name: 'City'}
                     ]
                 }
             }

@@ -263,7 +263,7 @@ define(function () {
                 }
                 else if (name in thisOptions) {
 
-                    // 只处理一层，非递归处理
+                    // 考虑实际情况和性能，只处理一层，非递归处理
                     thisOptions[name] = TO.isPlain(val) 
                         ? extend(thisOptions[name] || {}, val)
                         : val;
@@ -277,7 +277,7 @@ define(function () {
          * 将实例方法绑定 this
          * 
          * @protected
-         * @param {Array.<string>} events 类方法名数组
+         * @param {(Array.<string> | string)} events 类方法名数组
          */
         bindEvents: function (events) {
             var me = this;
@@ -290,14 +290,17 @@ define(function () {
                 events = events.split(/\s*,\s*/);
             }
 
-            T.each(events, function (name, fn) {
-                fn = name && me[name];
-                if (fn) {
-                    me[name] = function () {
-                        return fn.apply(me, arguments);
-                    };
+            T.each(
+                events,
+                function (name, fn) {
+                    fn = name && me[name];
+                    if (fn) {
+                        me[name] = function () {
+                            return fn.apply(me, arguments);
+                        };
+                    }
                 }
-            });
+            );
         },
 
 

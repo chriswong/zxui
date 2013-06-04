@@ -15,10 +15,23 @@ git、nodejs、grunt-cli
 获取源码：
 
 	git clone git://github.com/chriswong/zxui.git
+	cd zxui
 
 安装依赖：
 
 	npm install
+
+生成文档：
+
+	grunt jsdoc
+
+单元测试：
+
+	grunt test
+
+代码覆盖率：
+
+	grunt cover
 
 查看可用任务：
 

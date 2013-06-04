@@ -67,7 +67,7 @@ A.init(function () {
 
         var selects = [];
 
-        T.each(mains, function (main, i) {
+        baidu.each(mains, function (main, i) {
 
           var select = new Select({
             prefix: 'ecl-ui-sel',
@@ -87,9 +87,9 @@ A.init(function () {
 
         });
 
-        T.on(me.qq('reset'), 'click', function () {
+        baidu.on(me.qq('reset'), 'click', function () {
 
-          T.each(selects, function (select) {
+          baidu.each(selects, function (select) {
             select.reset();
           });
 

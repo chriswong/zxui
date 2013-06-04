@@ -224,11 +224,9 @@ define(function (require) {
                 var map = {};
 
                 for (var i = 0, l = format.length; i < l; i++) {
-                    if (
-                        format[i]
+                    if (format[i]
                         && value[i]
-                        && (
-                            format[i].length > 1
+                        && (format[i].length > 1
                             && value[i].length === format[i].length
                             || format[i].length === 1
                            )
