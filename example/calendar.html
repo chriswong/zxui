@@ -7,7 +7,7 @@
 <script src="../dep/vars.js"></script>
 <script src="../dep/common-2.3.js"></script>
 <script src="../dep/esl.js"></script>
-<link rel="stylesheet/less" type="text/css" href="../src/css/calendar.less" />
+<link rel="stylesheet/less" type="text/css" href="../src/css/Calendar.less" />
 </head>
 <body>
 <div id='content_left'><!--左侧最外层div-->
@@ -24,7 +24,7 @@ A.init(function () {
 
     var me = this;
 
-    require(['../src/ui/calendar'], function (Calendar) {
+    require(['../src/ui/Calendar'], function (Calendar) {
 
         var addDays = function (date, days) {
             return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
