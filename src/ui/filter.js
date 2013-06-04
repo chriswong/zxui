@@ -207,7 +207,7 @@ define(function (require) {
 
                 T.event.preventDefault(e);
 
-                var group = target.parentNode;
+                var group = this.groups[input.name];
                 var checkedItems = T.q(checkedClass, group);
                 if (isRadio) {
                     var lastChecked = T.q(checkedClass, group)[0];
