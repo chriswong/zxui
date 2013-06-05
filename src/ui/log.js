@@ -14,14 +14,10 @@ define(function (require) {
 
     /**
      * 将字符串解析成json对象
-     * 
      * baidu.json.parse 的包装，增加容错处理
      * 
      * @param {string} data 需要解析的字符串
-     * @remark
-     * 该方法的实现与ecma-262第五版中规定的JSON.parse不同，暂时只支持传入一个参数。后续会进行功能丰富。
-     * @see baidu.json.stringify,baidu.json.decode
-     *             
+     * @see baidu.json.parse
      * @returns {Object} 解析结果json对象
      */
     var parseJson = function (data) {
