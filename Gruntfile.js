@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         clean: ['asset', 'bin'],
         
         jshint: {
-            options: grunt.file.readJSON('src/ui/.jshintrc'),
+            options: grunt.file.readJSON('.jshintrc'),
             files: ['src/ui/*.js', 'test/spec/*.js']
         },
 
@@ -40,6 +40,7 @@ module.exports = function (grunt) {
         jsdoc : {
             files: ['src/ui/*.js'], 
             options: {
+                configure: '.jsdocrc',
                 destination: 'doc'
             }
         },
