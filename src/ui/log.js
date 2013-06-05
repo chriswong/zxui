@@ -9,9 +9,29 @@
 define(function (require) {
     var T = baidu;
     var DOM = T.dom;
-    var parseJson = T.json.parse;
 
     require('./Control');
+
+    /**
+     * 将字符串解析成json对象
+     * 
+     * baidu.json.parse 的包装，增加容错处理
+     * 
+     * @param {string} data 需要解析的字符串
+     * @remark
+     * 该方法的实现与ecma-262第五版中规定的JSON.parse不同，暂时只支持传入一个参数。后续会进行功能丰富。
+     * @see baidu.json.stringify,baidu.json.decode
+     *             
+     * @returns {Object} 解析结果json对象
+     */
+    var parseJson = function (data) {
+        try {
+            return T.json.parse(data || '{}');
+        }
+        catch (e) {
+            return {};
+        }
+    };
 
     /**
      * 发送日志请求
@@ -66,6 +86,7 @@ define(function (require) {
 
         var i = 0;
         var clickData;
+        var typeReg = /\bOP_LOG_(TITLE|LINK|IMG|BTN|INPUT|OTHERS)\b/i;
         while (el !== to) {
             if (el.getAttribute('data-nolog') === '1') {
                 nolog = 1;
@@ -84,6 +105,10 @@ define(function (require) {
 
             if (type === 'link' && el.tagName === 'H3') {
                 type = 'title';
+            }
+
+            if (typeReg.test(el.className)) {
+                type = RegExp.$1.toLowerCase();
             }
 
             var count = 1;
@@ -121,30 +146,12 @@ define(function (require) {
         path.reverse();
         var tag = from.tagName.toLowerCase();
 
-        if (!type) {
-
-            var typeReg = /\bOP_LOG_(TITLE|LINK|IMG|BTN|INPUT|OTHERS)\b/i;
-            if (typeReg.test(from.className)) {
-                type = RegExp.$1.toLowerCase();
-            }
-            else if (
-                /^a|img|input|button|select|datalist|textarea$/.test(tag)
+        if (!type
+                && /^a|img|input|button|select|datalist|textarea$/.test(tag)
             ) {
-                type = {a: 'link', button: 'btn'}[tag] || 'input';
+            type = {a: 'link'}[tag] || 'input';
 
-                url = from.href || from.src || url;
-            }
-            else {
-                T.each(
-                    'title,link,img,btn,input,others'.split(','),
-                    function (key) {
-                        if (DOM.hasClass(from, options[key])) {
-                            type = key;
-                        }
-                    }
-                );
-            }
-
+            url = from.href || from.src || url;
         }
 
         if (!type) {
@@ -195,9 +202,10 @@ define(function (require) {
 
             // title为空，遍历父节点
             if (!title) {
-                while (i > 1) {
+                el = from;
+                while (i > 0) {
                     i--;
-                    if (/^a\d*\b/.test(path[i])) {
+                    if (/^a\d*\b/i.test(path[i])) {
                         url = el.href;
                         title = el.innerHTML;
                         break;
@@ -304,13 +312,7 @@ define(function (require) {
      * @return {[type]} [return description]
      */
     var bindP5 = function (el, index) {
-        var data = el.getAttribute('data-click') || '{}';
-        try {
-            data = parseJson(data);
-        }
-        catch (e) {
-            data = {};
-        }
+        var data = parseJson(el.getAttribute('data-click'));
 
         data.p5 = index;
         el.setAttribute('data-click', T.json.stringify(data));
@@ -328,12 +330,11 @@ define(function (require) {
     var onClick = function (e, el) {
         var target = el || T.event.getTarget(e);
         var klass = options.main;
-        var nolog = target.getAttribute('data-nolog') === '1';
         var main = DOM.hasClass(target, klass)
             ? target
             : DOM.getAncestorByClass(target, klass);
 
-        if (nolog || !main || main.getAttribute('data-nolog') === '1') {
+        if (!main || main.getAttribute('data-nolog') === '1') {
             return;
         }
 
