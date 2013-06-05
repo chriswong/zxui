@@ -3,11 +3,11 @@ define(function (require) {
 
     var log = require('log');
     
-	log.start();
 
     var container;
 
     beforeEach(function () {
+        log.start();
         document.body.insertAdjacentHTML(
             'beforeEnd', ''
                 + '<div id="logContainer" class="result-op"'
@@ -29,18 +29,33 @@ define(function (require) {
                 +   '</div>'
                 +   '<a href="http://www.baidu.com/?a=b&amp;c=d" '
                 +       'target="_blank" data-click="{x:3, y: 2}">'
-                +       'baidu - 配置x=3, y=2'
+                +       '<img width="270" height="129" title="baidu"'
+                +           ' src="http://www.baidu.com/img/bdlogo.gif">'
                 +   '</a>'
                 +   '<a href="http://www.baidu.com/?a=b&amp;c=d" '
                 +       'target="_blank" data-click="{x:4, y: 3}">'
                 +       'baidu - 配置x=4, y=3'
                 +   '</a>'
+                +   '<span class="OP_LOG_OTHERS"><em>other</em></span>'
+                +   '<span class="OP_LOG_BTN">N/A'
+                +       '<input type="password" value="password">'
+                +   '</span>'
+                +   '<span>N/A'
+                +       '<input type="password" value="password">'
+                +   '</span>'
+                +   '<span data-click="">abc'
+                +       '<button class="OP_LOG_OTHERS">button</button>'
+                +   '</span>'
+                +   '<button>button</button>'
+                +   '<select><option value="1" selected>1</option></select>'
+                +   '<p data-click="abc"></p>'
                 + '</div>'
         );
         container = T.g('logContainer');
     });
 
     afterEach(function () {
+        log.stop();
         T.dom.remove(container);
     });
 
@@ -101,6 +116,16 @@ define(function (require) {
             log.config({data: {foo: 'bar'}});
             log.on('click', onClick);
             log.click(container.getElementsByTagName('div')[0]);
+            log.un('click', onClick);
+        });
+
+        it('非法的data-click', function () {
+            var onClick = function (json) {
+                var data = json.data;
+                expect(data.abc).toBe('');
+            };
+            log.on('click', onClick);
+            log.click(container.getElementsByTagName('p')[0]);
             log.un('click', onClick);
         });
     });
@@ -182,12 +207,95 @@ define(function (require) {
             log.un('click', onClick);
         });
 
+        it('title - from img[title]', function () {
+            var onClick = function (json) {
+                expect(json.data.title).toBe(json.target.title);
+                expect(json.data['rsv_xpath']).toBe('a-img(link)');
+            };
+            log.on('click', onClick);
+            log.click(container.getElementsByTagName('img')[0]);
+            log.un('click', onClick);
+        });
+
+        it('title - from a.innerHTML with img', function () {
+            var target = container.getElementsByTagName('img')[0];
+            var title = target.title;
+            var onClick = function (json) {
+                expect(json.data.title).not.toBe(title);
+                expect(json.data['rsv_xpath']).toBe('a-img(link)');
+            };
+            log.on('click', onClick);
+            target.title = '';
+            log.click(target);
+            log.un('click', onClick);
+            target.title = title;
+        });
+
+        it('title - select', function () {
+            var onClick = function (json) {
+                expect(json.data.title).toBe(json.target.value);
+                expect(json.data['rsv_xpath']).toMatch(/\(input\)/);
+            };
+            log.on('click', onClick);
+            log.click(container.getElementsByTagName('select')[0]);
+            log.un('click', onClick);
+        });
+
+        it('title - password(btn)', function () {
+            var onClick = function (json) {
+                expect(json.data.title).toBe(json.target.parentNode.innerHTML);
+                expect(json.data['rsv_xpath']).toMatch(/\(btn\)/);
+            };
+            log.on('click', onClick);
+            log.click(container.getElementsByTagName('input')[3]);
+            log.un('click', onClick);
+        });
+
+        it('title - password(input)', function () {
+            var onClick = function (json) {
+                expect(json.data.title).toBe('');
+                expect(json.data['rsv_xpath']).toMatch(/\(input\)/);
+            };
+            log.on('click', onClick);
+            log.click(container.getElementsByTagName('input')[4]);
+            log.un('click', onClick);
+        });
+
+        it('title - button', function () {
+            var onClick = function (json) {
+                expect(json.data.title).toBe(json.target.innerHTML);
+                expect(json.data['rsv_xpath']).toMatch(/\(input\)/);
+            };
+            log.on('click', onClick);
+            log.click(container.getElementsByTagName('button')[1]);
+            log.un('click', onClick);
+        });
+
+        it('title - span-button', function () {
+            var onClick = function (json) {
+                expect(json.data.title).toBe(json.target.innerHTML);
+                expect(json.data['rsv_xpath']).toMatch(/\(others\)/);
+            };
+            log.on('click', onClick);
+            log.click(container.getElementsByTagName('button')[0]);
+            log.un('click', onClick);
+        });
+
         it('type - btn for default', function () {
             var onClick = function (json) {
                 expect(json.data['rsv_xpath']).toMatch(/\(input\)/);
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('input')[2]);
+            log.un('click', onClick);
+        });
+
+        it('type - other with OP_LOG_OTHERS class', function () {
+            var onClick = function (json) {
+                expect(json.data['rsv_xpath']).toMatch(/\(others\)/);
+            };
+            log.on('click', onClick);
+            log.click(container.getElementsByTagName('em')[0]);
             log.un('click', onClick);
         });
 
