@@ -115,12 +115,102 @@
 
             });
 
-            it('disableItems', function () {
+            it('disable & enable Items', function () {
                 
                 filter.disableItems('type', ['1', '2']);
                 var inputs = filter.groups.type.getElementsByTagName('input');
 
                 expect(inputs[1].checked).toBeFalsy();
+
+                filter.enableItems('type');
+                expect(inputs[2].parentNode.className)
+                    .not
+                    .toMatch(/\bdisabled\b/);
+
+            });
+
+            it('onClick - radio', function () {
+                var firedClick = false;
+                var firedChange = false;
+                var inputs = filter.groups.type.getElementsByTagName('input');
+                var target = inputs[3];
+                var event = {target: target};
+
+                var onClick = function (json) {
+                    firedClick = !firedClick;
+                    expect(json.event).toEqual(event);
+                };
+
+                var onChange = function (json) {
+                    firedChange = true;
+
+                    expect(json.key).toBe(target.name);
+                    expect(json.value[0]).toBe(target.value);
+                };
+
+
+                filter.on('click', onClick);
+                filter.on('change', onChange);
+
+                filter.onClick(event);
+                filter.onClick(event);
+
+                expect(firedClick).toBeFalsy();
+                expect(firedChange).toBeTruthy();
+
+                target = inputs[0];
+                event.target = target.parentNode;
+                filter.onClick(event);
+                filter.onClick(event);
+
+                filter.un('click', onClick);
+                filter.un('change', onChange);
+
+                expect(T.q('checked', target.parentNode.parentNode).length)
+                    .toBe(1);
+            });
+
+            it('onClick - checkbox', function () {
+                var inputs = filter.groups.special
+                    .getElementsByTagName('input');
+                var target = inputs[3];
+                var event = {target: target};
+                var changeCount = 0;
+
+                var onChange = function (json) {
+                    changeCount++;
+
+                    expect(json.key).toBe(target.name);
+
+                    T.each(json.value, function (v) {
+                        v && expect(inputs[v].checked).toBe(true);
+                    });
+                };
+
+
+                filter.on('change', onChange);
+                filter.onClick(event);
+                expect(changeCount).toBe(1);
+
+                target = inputs[0];
+                event.target = target.parentNode;
+
+                filter.onClick(event);
+                expect(changeCount).toBe(2);
+
+                filter.onClick(event);
+                expect(changeCount).toBe(2);
+
+                expect(T.q('checked', target.parentNode.parentNode).length)
+                    .toBe(1);
+
+                target = inputs[1];
+                event.target = target;
+                filter.onClick(event);
+
+                expect(changeCount).toBe(3);
+
+                filter.un('change', onChange);
 
             });
 

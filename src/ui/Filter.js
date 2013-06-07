@@ -235,7 +235,7 @@ define(function (require) {
 
                                 item.getElementsByTagName(
                                     'input'
-                                )[0].input.checked = false;
+                                )[0].checked = false;
                             }
                         );                        
                     }
