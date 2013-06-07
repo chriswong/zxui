@@ -178,17 +178,38 @@ define(function (require) {
             return this.page;
         },
 
+        /**
+         * 设置总页数
+         * 
+         * @public
+         * @param {number} total 要设置的总页数
+         */
+        setTotal: function (total) {
+            this.total = (total | 0) || 1;
+            this.setPage(0);
+        },
+
+        /**
+         * 获取总页数
+         * 
+         * @public
+         * @return {number} 控件总页数
+         */
+        getTotal: function () {
+            return this.total;
+        },
+
 
         /**
          * 绘制控件
+         * 页数小于2页时可配置控件隐藏
          * 
          * @public
-         * @description 页数小于2页时可配置控件隐藏
          * @return {module:Pager} 当前实例
          */
         render: function () {
             if (!this.main) {
-                return;
+                throw new Error('invalid main');
             }
 
             var main = this.main;
@@ -328,9 +349,9 @@ define(function (require) {
          * @fires module:Pager#click
          * @fires module:Pager#change
          */
-        onChange: function (e) {
+        onChange: function (e, target) {
             e && T.event.preventDefault(e);
-            var target = T.event.getTarget(e);
+            target = target || T.event.getTarget(e);
 
             /**
              * @event module:Pager#click
