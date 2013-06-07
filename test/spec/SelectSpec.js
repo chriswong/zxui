@@ -28,6 +28,7 @@
                 main: T.q('ecl-ui-sel')[0],
                 target: T.q('ecl-ui-sel-target')[0],
                 maxLength: 8,
+                cols: 2,
                 offset: {
                   y: -1
                 }
@@ -68,6 +69,113 @@
                 select.hide();
 
                 expect(isHide).toBeTruthy();
+            });
+
+            it('选择：无事件', function () {
+                var isFired = false;
+                var onPick = function () {
+                    isFired = true;
+                };
+                select.on('pick', onPick);
+                select.pick(select.main.getElementsByTagName('a')[1], true);
+                select.un('pick', onPick);
+                select.reset();
+                expect(isFired).toBeFalsy();
+            });
+
+            it('beforeShow', function () {
+                var isFired = false;
+                var onBeforeShow = function () {
+                    isFired = true;
+                };
+                select.on('beforeShow', onBeforeShow);
+                select.onBeforeShow({event: {target: select.target}});
+                select.un('beforeShow', onBeforeShow);
+                expect(isFired).toBeTruthy();
+            });
+
+            it('选择：有事件', function () {
+                var isFired = false;
+                var target = select.main.getElementsByTagName('a')[1];
+                var onPick = function (json) {
+                    isFired = true;
+                    expect(json.value)
+                        .toBe(target.getAttribute('data-value') | 0);
+                    expect(json.text).toBe(target.innerHTML);
+                    expect(json.shortText).toBe('中关...');
+               };
+                select.on('pick', onPick);
+                select.pick(target);
+                select.un('pick', onPick);
+                select.reset();
+                expect(isFired).toBeTruthy();
+            });
+
+            it('模拟点击', function () {
+                var isFired = false;
+                var target = select.main.getElementsByTagName('a')[2];
+                var onPick = function (json) {
+                    isFired = true;
+                    expect(json.value)
+                        .toBe(target.getAttribute('data-value') | 0);
+                    expect(json.text).toBe(target.innerHTML);
+                    expect(json.shortText).toBe(json.text);
+                };
+                select.on('pick', onPick);
+                select.onClick({});
+                expect(isFired).toBeFalsy();
+                select.onClick({event: {target: target}});
+                select.un('pick', onPick);
+                select.reset();
+                expect(isFired).toBeTruthy();
+            });
+
+            it('模拟重复点击', function () {
+                var count = 0;
+                var target = select.main.getElementsByTagName('a')[2];
+                var onPick = function () {
+                    count++;
+                };
+                select.on('pick', onPick);
+                select.onClick({event: {target: target}});
+                expect(count).toBe(1);
+                select.onClick({event: {target: target}});
+                expect(count).toBe(1);
+                select.onClick({event: {target: target}});
+                expect(count).toBe(1);
+                select.un('pick', onPick);
+                select.reset();
+            });
+
+            it('模拟点击不触发onChange', function () {
+                var count = 0;
+                var onChangeCount = 0;
+                var options = select.main.getElementsByTagName('a');
+                var oldValue = options[3].getAttribute('data-value');
+
+                var onPick = function () {
+                    count++;
+                };
+                var onChange = function () {
+                    onChangeCount++;
+                };
+
+                select.on('pick', onPick);
+                select.on('change', onChange);
+                select.onClick({event: {target: options[2]}});
+                expect(count).toBe(1);
+                expect(onChangeCount).toBe(1);
+                options[3].setAttribute(
+                    'data-value',
+                    options[2].getAttribute('data-value')
+                );
+                select.onClick({event: {target: options[3]}});
+                expect(count).toBe(2);
+                expect(onChangeCount).toBe(1);
+                select.un('pick', onPick);
+                select.un('change', onChange);
+                options[3].setAttribute('data-value', oldValue);
+                select.reset();
             });
 
         });
