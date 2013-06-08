@@ -130,6 +130,32 @@
                 expect(isFired).toBeTruthy();
             });
 
+            it('disable && enable', function () {
+                var count = 0;
+                var target = select.main.getElementsByTagName('a')[2];
+                var onPick = function () {
+                    count++;
+                };
+
+                select.disable();
+                expect(select.isDisabled()).toBeTruthy();
+
+                select.on('pick', onPick);
+                select.onClick({event: {target: target}});
+                expect(count).toBe(0);
+
+                select.enable();
+                expect(select.isDisabled()).toBeFalsy();
+
+                select.onClick({event: {target: target}});
+                expect(count).toBe(1);
+                select.onClick({event: {target: target}});
+                expect(count).toBe(1);
+                select.un('pick', onPick);
+                select.reset();
+            });
+
+
             it('模拟重复点击', function () {
                 var count = 0;
                 var target = select.main.getElementsByTagName('a')[2];

@@ -268,6 +268,10 @@ define(function (require) {
              */
             this.fire('beforeShow', { event: e });
 
+            if (this.disabled) {
+                return;
+            }
+
             if (oldTarget !== this.target) {
                 this.hide();
             }

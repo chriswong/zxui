@@ -141,7 +141,7 @@ define(function (require) {
          * @private
          * @type {string}
          */
-        binds: 'onClick,onBeforeShow,onHide',
+        binds: 'onClick,onBeforeShow,onHide,onDisable,onEnable',
 
         /**
          * 控件初始化
@@ -187,6 +187,8 @@ define(function (require) {
 
                 popup.render();
 
+                this.on('disable', this.onDisable);
+                this.on('enable', this.onEnable);
                 this.main = popup.main;
 
                 if (options.cols > 1) {
@@ -201,6 +203,29 @@ define(function (require) {
             return this;
         },
 
+        /**
+         * 处理 disable 事件
+         * 监听自身的 disable 事件，增加 disabled class 标记，使控件忽略交互响应
+         * 
+         * @private
+         */
+        onDisable: function () {
+            this.popup.disabled = this.disabled;
+            T.addClass(this.target, this.options.prefix + '-disabled');
+        },
+
+
+        /**
+         * 处理 enable 事件
+         * 监听自身的 enable 事件，移除 disabled class 标记，使控件可接受交互响应
+         * 
+         * @private
+         */
+        onEnable: function () {
+            this.popup.disabled = this.disabled;
+            T.removeClass(this.target, this.options.prefix + '-disabled');
+        },
+
 
         /**
          * 处理选单点击事件
@@ -211,12 +236,12 @@ define(function (require) {
         onClick: function (args) {
             var e = args.event;
 
-            if (!e) {
+            if (!e || this.disabled) {
                 return;
             }
 
-            var el     = T.event.getTarget(e);
-            var tag    = el.tagName;
+            var el = T.event.getTarget(e);
+            var tag = el.tagName;
 
             switch (tag) {
 
@@ -245,6 +270,12 @@ define(function (require) {
          */
         onBeforeShow: function (arg) {
 
+            T.event.preventDefault(arg.event);
+
+            if (this.disabled) {
+                return;
+            }
+
             /**
              * @event module:Select#beforeShow
              * @type {Object}
@@ -253,8 +284,6 @@ define(function (require) {
             this.fire('beforeShow', arg);
 
             T.addClass(this.target, this.options.prefix + '-hl');
-
-            T.event.preventDefault(arg.event);
         },
 
         /**

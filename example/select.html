@@ -52,7 +52,9 @@
     <a href="#" data-value="3">汉庭酒店</a>
     <a href="#" data-value="4">99连锁</a>
   </p>
-  <button class="reset">重置状态</button>
+  <button class="reset">reset</button>
+  <button class="disable">disable</button>
+  <button class="enable">enable</button>
 </div>
   <script>
 
@@ -91,6 +93,22 @@ A.init(function () {
 
           baidu.each(selects, function (select) {
             select.reset();
+          });
+
+        });
+
+        baidu.on(me.qq('disable'), 'click', function () {
+
+          baidu.each(selects, function (select) {
+            select.disable();
+          });
+
+        });
+
+        baidu.on(me.qq('enable'), 'click', function () {
+
+          baidu.each(selects, function (select) {
+            select.enable();
           });
 
         });
