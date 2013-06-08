@@ -32,6 +32,7 @@ git、nodejs、grunt-cli
 代码覆盖率：
 
 	grunt cover
+	open test/coverage/ui/index.html
 
 查看可用任务：
 
