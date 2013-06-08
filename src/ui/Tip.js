@@ -173,7 +173,8 @@ define(function (require) {
          */
         init: function (options) {
             options = this.setOptions(options);
-            options.hideDelay = options.hideDelay || Tip.HIDE_DELAY;
+            options.hideDelay = options.hideDelay < 0
+                ? Tip.HIDE_DELAY : options.hideDelay;
 
             this.disabled  = options.disabled;
             this.title     = options.title;
