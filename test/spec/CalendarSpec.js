@@ -17,7 +17,6 @@
 
             var triggers = T.q('calendar-trigger');
             calendar = new Calendar({
-                prefix: 'ecl-hotel-ui-cal',
                 triggers: triggers,
                 target: triggers[0]
             });
@@ -79,6 +78,55 @@
 
                 expect(formatted).toBe('周三');
             });
+        });
+
+        describe('显示隐藏', function () {
+
+            it('onBeforeShow', function () {
+                var fired = false;
+                var date = new Date(new Date() - 3600 * 24);
+                var onBeforeShow = function () {
+                    fired = true;
+                };
+                var onShow = function (arg) {
+                    var target = arg.target;
+                    expect(target).toBe(calendar.target);
+
+                    var checked = calendar.query('ecl-ui-cal-checked')[0];
+                    expect(checked.getAttribute('data-date')).toBe(
+                        calendar.format(date, 'yyyy-MM-dd')
+                    );
+
+                    var el = T.dom.next(checked)
+                        || dom._matchNode(
+                            target,
+                            'previousSibling',
+                            'previousSibling'
+                        );
+
+                    calendar.onClick({event: {target: el}});
+
+                    var pickDate = calendar.from(
+                        el.getAttribute('data-date'),
+                        'yyyy-MM-dd'
+                    );
+
+                    expect(target.value).toBe(calendar.format(pickDate));
+
+                };
+                calendar.on('beforeShow', onBeforeShow);
+                calendar.on('show', onShow);
+
+                calendar.target.value = calendar.format(date);
+                calendar.onBeforeShow();
+                calendar.show(calendar.target);
+
+                calendar.un('beforeShow', onBeforeShow);
+                calendar.on('show', onShow);
+
+                expect(fired).toBe(true);
+            });
+            
         });
 
         
