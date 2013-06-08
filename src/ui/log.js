@@ -303,9 +303,8 @@ define(function (require) {
     /**
      * 绑定 P5 参数索引值
      * 
-     * @param {[type]} el [el description]
-     * @param {[type]} index [index description]
-     * @return {[type]} [return description]
+     * @param {HTMLElement } el 点击统计的容器
+     * @param {number} index 点击统计容器的序号
      */
     var bindP5 = function (el, index) {
         var data = parseJson(el.getAttribute('data-click'));
