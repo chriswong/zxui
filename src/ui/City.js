@@ -52,6 +52,7 @@ define(function (require) {
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
          * @property {(string | HTMLElement)} main 控件渲染容器
+         * @property {(string | HTMLElement)} target 计算弹出层相对位置的目标对象
          * @property {string} prefix 控件class前缀，同时将作为main的class之一
          * @property {number} index 默认激活的标签索引
          * @property {string} activeClass 激活标签、内容的class
@@ -65,6 +66,10 @@ define(function (require) {
 
             // 控件渲染主容器
             main: '',
+
+
+            // 计算弹出层相对位置的目标对象
+            target: '',
 
             // 控件class前缀，同时将作为main的class之一
             prefix: 'ecl-hotel-ui-city',
