@@ -1,9 +1,8 @@
 {
     "tags": {
-        "allowUnknownTags": false
+        "allowUnknownTags": true
     },
     "source": {
-        "includePattern": ".+?\\\\ui\\\\.+\\.js(doc)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "plugins": [],
