@@ -338,6 +338,20 @@ define(function () {
         },
 
         /**
+         * 通过 className 查找控件容器内的元素
+         * 
+         * @public
+         * @see baidu.dom.q
+         * @param {string} className 元素的class，只能指定单一的class，
+         * 如果为空字符串或者纯空白的字符串，返回空数组。
+         * @param {?string=} tagName 要限制的标签名，默认不限制
+         * @return {Array} 获取的元素集合，查找不到或className参数错误时返回空数组
+         */
+        query: function (className, tagName) {
+            return T.q(className, this.main, tagName);
+        },
+
+        /**
          * 设置控件状态为禁用
          * 
          * @public
