@@ -349,7 +349,7 @@ define(function () {
             /**
              * @event module:Control#disable
              */
-            this.fireEvent('disable');
+            this.fire('disable');
         },
 
         /**
@@ -364,7 +364,7 @@ define(function () {
             /**
              * @event module:Control#enable
              */
-            this.fireEvent('enable');
+            this.fire('enable');
         },
 
         /**
