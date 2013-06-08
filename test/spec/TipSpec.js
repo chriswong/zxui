@@ -31,6 +31,7 @@
         afterEach(function () {
             T.dom.remove(T.g('tipContainer'));
             tip.dispose();
+            T.dom.remove(tip.main);
         });
       
         describe('基本接口', function () {
