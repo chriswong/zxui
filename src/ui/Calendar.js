@@ -441,7 +441,7 @@ define(function (require) {
             var days = this.days;
             html.push('<ul class="c-clearfix">');
 
-            for (i = 0, l = days.length; i < len; i++) {
+            for (i = 0, len = days.length; i < len; i++) {
                 klass = i === weeks - 1 
                     || firstDay && i === weeks - 2
                     || !firstDay && i === firstDay
