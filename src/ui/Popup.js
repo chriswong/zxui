@@ -47,7 +47,9 @@ define(function (require) {
          * @property {boolean} disabled 控件的不可用状态
          * @property {(string | HTMLElement)} main 控件渲染容器
          * @property {(string | HTMLElement)} target 计算弹出层相对位置的目标对象
-         * @property {string} triggers 触发显示弹出层的节点
+         * @property {string | Array.<HTMLElement>} triggers 触发显示弹出层的节点
+         * @property {string | HTMLElement} liveTriggers 动态 triggers 的父元素节点
+         * 当指定了 liveTriggers 时只能用 string 类型指定 class
          * @property {string} content 提示的内容信息
          * @property {string} dir 弹出层相对 target 的位置，支持8个方向
          * 可选值（默认为 bl）：
@@ -85,9 +87,18 @@ define(function (require) {
             /**
              * 触发显示弹出层的节点class
              * 
-             * @type {string}
+             * 当指定了 liveTriggers 时只能用 string 类型指定 class
+             * 
+             * @type {string | Array.<HTMLElement>}
              */
             triggers: '',
+
+            /**
+             * 动态 triggers 的父元素节点
+             * 
+             * @type {string | HTMLElement}
+             */
+            liveTriggers: '',
 
             /**
              * 显示的内容
@@ -181,19 +192,28 @@ define(function (require) {
 
             var me       = this;
             var triggers = options.triggers;
+            var liveTriggers = options.liveTriggers;
 
-            if (T.isString(triggers)) {
-                triggers = T.q(options.triggers);
+            if (liveTriggers) {
+
+                this.liveTriggers = T.on(T.g(liveTriggers), 'click', me.onShow);
             }
+            else {
 
-            T.each(
-                triggers,
-                function (trigger) {
-                    T.on(trigger, 'click', me.onShow);
+                if (T.isString(triggers)) {
+                    triggers = T.q(options.triggers);
                 }
-            );
 
-            this.triggers = triggers;
+                T.each(
+                    triggers,
+                    function (trigger) {
+                        T.on(trigger, 'click', me.onShow);
+                    }
+                );
+
+                this.triggers = triggers;
+
+            }
         },
 
         /**
@@ -276,10 +296,25 @@ define(function (require) {
                 this.hide();
             }
 
+            var me = this;
+            var trigger = T.event.getTarget(e);
+            var liveTriggers = this.liveTriggers;
+
+            if (liveTriggers) {
+                var cls = this.options.triggers;
+                var hasClass = T.dom.hasClass;
+                while (!hasClass(trigger, cls) && trigger !== liveTriggers) {
+                    trigger = trigger.parentNode;
+                }
+
+                if (!hasClass(trigger, cls)) {
+                    return;
+                }
+            }
+
             this.show();
 
-            var me = this;
-            this.trigger = T.event.getTarget(e);
+            this.trigger = trigger;
 
             this.timer = setTimeout(function () {
                 T.on(document, 'click', me.onHide);

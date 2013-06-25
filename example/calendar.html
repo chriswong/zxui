@@ -16,7 +16,10 @@
 <input type="text" class="calendar-trigger" /><input type="button" value="click" class="calendar-trigger" />
 <input type="text" class="calendar-trigger" /><input type="button" value="click" class="calendar-trigger" />
 
+<div class="live-holder">
 <input type="text" class="calendar-target calendar-trigger1" /><input type="button" value="click" class="calendar-trigger1" />
+</div>
+<input type="button" class="create-button" value="create button" />
 <div class="embed-calendar-holder"></div>
 <script>
 
@@ -109,12 +112,20 @@ A.init(function () {
         new Calendar({
           prefix: 'ecl-ui-cal',
           main: me.qq('embed-calendar-holder'),
-          triggers: me.q('calendar-trigger1'),
+          triggers: 'calendar-trigger1',
+          liveTriggers: me.qq('live-holder'),
           target: me.qq('calendar-target'),
           onHide: function () {
             console.log('hided');
           }
         }).render();
+
+        T.on(me.qq('create-button'), 'click', function () {
+          var btn = document.createElement('button')
+          btn.className = 'calendar-trigger1';
+          btn.innerHTML = 'new btn';
+          T.q('live-holder')[0].appendChild(btn);
+        });
 
 
     });
