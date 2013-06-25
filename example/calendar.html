@@ -111,6 +111,9 @@ A.init(function () {
           main: me.qq('embed-calendar-holder'),
           triggers: me.q('calendar-trigger1'),
           target: me.qq('calendar-target'),
+          onHide: function () {
+            console.log('hided');
+          }
         }).render();
 
 

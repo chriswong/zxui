@@ -178,7 +178,7 @@ define(function (require) {
          * @private
          * @type {string}
          */
-        binds: 'onClick,onBeforeShow',
+        binds: 'onClick,onBeforeShow,onHide',
 
         /**
          * 控件初始化
@@ -326,6 +326,7 @@ define(function (require) {
                 this.addChild(popup);
 
                 popup.on('click', this.onClick);
+                popup.on('hide', this.onHide);
                 popup.on('beforeShow', this.onBeforeShow);
                 
                 this.main = popup.main;
@@ -846,19 +847,25 @@ define(function (require) {
         },
 
         /**
-         * 隐藏浮层
+         * 监听 module:Popup 的隐藏事件
          * 
-         * @public
          * @fires module:Calendar#hide 隐藏事件
          */
-        hide: function () {
-            
-            this.popup.hide();
+        onHide: function () {
 
             /**
              * @event module:Calendar#hide
              */
             this.fire('hide');
+        },
+
+        /**
+         * 隐藏浮层
+         * 
+         * @public
+         */
+        hide: function () {
+            this.popup.hide();
         },
 
         /**
