@@ -705,11 +705,11 @@ define(function (require) {
                         if (inRange && value === checkedValue) {
                             klass.push(checkedClass);
                         }
-
-                        if (process) {
-                            process.call(this, day, klass, value, inRange);
-                        }
                         
+                    }
+
+                    if (process) {
+                        process.call(this, day, klass, value, inRange);
                     }
 
                     day.className = klass.join(' ');
