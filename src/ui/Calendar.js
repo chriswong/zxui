@@ -559,6 +559,11 @@ define(function (require) {
             var tag    = el.tagName;
             var target = this.target;
 
+            while (tag !== 'A' &&　el !== this.main) {
+                el = el.parentNode;
+                tag = el.tagName;
+            }
+
             switch (tag) {
 
                 case 'A':
