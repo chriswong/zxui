@@ -415,7 +415,7 @@ define(function (require) {
          * 
          */
         start: function () {
-            T.on(document, 'click', onClick);
+            T.on(document, 'mousedown', onClick);
         },
 
         /**
@@ -423,7 +423,7 @@ define(function (require) {
          * 
          */
         stop: function () {
-            T.un(document, 'click', onClick);
+            T.un(document, 'mousedown', onClick);
         },
 
         /**
