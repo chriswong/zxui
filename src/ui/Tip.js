@@ -162,7 +162,7 @@ define(function (require) {
          * @private
          * @type {string}
          */
-        binds: 'onResize, onShow, onHide, hide',
+        binds: 'onResize, onDocClick, onShow, onHide, hide',
 
         /**
          * 控件初始化
@@ -233,22 +233,24 @@ define(function (require) {
                     }
                 );
 
-                T.on(
-                    main,
-                    'mouseenter',
-                    function () {
-                        me.clear();
-                    }
-                );
+                if (this.options.mode === 'over') {
+                    T.on(
+                        main,
+                        'mouseenter',
+                        function () {
+                            me.clear();
+                        }
+                    );
 
-                T.on(
-                    main,
-                    'mouseleave',
-                    function () {
-                        me.clear();
-                        me.timer = setTimeout(me.hide, options.hideDelay);
-                    }
-                );
+                    T.on(
+                        main,
+                        'mouseleave',
+                        function () {
+                            me.clear();
+                            me.timer = setTimeout(me.hide, options.hideDelay);
+                        }
+                    );
+                }
 
                 var elements = this.elements = {};
                 var prefix = options.prefix + '-';
@@ -294,10 +296,14 @@ define(function (require) {
                     function (trigger) {
                         T.addClass(trigger, flag);
                         T.on(trigger, events.on, me.onShow);
-                        T.on(trigger, events.un, me.onHide);
+                        // T.on(trigger, events.un, me.onHide);
                     }
                 );
             }
+        },
+
+        refresh: function () {
+            
         },
 
         /**
@@ -327,6 +333,22 @@ define(function (require) {
             );
         },
 
+        onDocClick: function (e) {
+            var main = this.main;
+            var target = T.event.getTarget(e);
+
+            if (
+                main === target
+                    || ~T.array.indexOf(this.triggers, target)
+                    || DOM.contains(main, target)
+            ) {
+                return;
+            }
+
+            this.hide();
+
+        },
+
 
         /**
          * 显示浮层前处理
@@ -342,6 +364,21 @@ define(function (require) {
 
             if (!target || this.current === target) {
                 return;
+            }
+
+            var events = this.events;
+            if (events) {
+                T.on(target, events.un, this.onHide);
+                T.un(target, events.on, this.onShow);
+
+                if (this.current) {
+                    T.on(this.current, events.on, this.onShow);
+                    T.un(this.current, events.un, this.onHide);
+                }
+
+                if (this.options.mode === 'click') {
+                    T.on(document, 'click', this.onDocClick);
+                }
             }
 
             this.current = target;
@@ -392,9 +429,9 @@ define(function (require) {
            
             this.current = target;
 
-            if (events && target) {
-                T.on(target, events.un, this.onHide);
-            }
+            // if (events && target) {
+            //     T.on(target, events.un, this.onHide);
+            // }
 
             T.on(window, 'resize', this.onResize);
 
@@ -426,6 +463,17 @@ define(function (require) {
          */
         hide: function () {
             var main    = this.main;
+
+            var events = this.events;
+            var target = this.current;
+            if (events && target) {
+                T.on(target, events.on, this.onShow);
+                T.un(target, events.un, this.onHide);
+
+                if (this.options.mode === 'click') {
+                    T.un(document, 'click', this.onDocClick);
+                }
+            }
 
             this.clear();
 
