@@ -48,8 +48,8 @@ define(function (require) {
          * @property {(string | HTMLElement)} main 控件渲染容器
          * @property {(string | HTMLElement)} target 计算弹出层相对位置的目标对象
          * @property {string | Array.<HTMLElement>} triggers 触发显示弹出层的节点
-         * @property {string | HTMLElement} liveTriggers 动态 triggers 的父元素节点
          * 当指定了 liveTriggers 时只能用 string 类型指定 class
+         * @property {string | HTMLElement} liveTriggers 动态 triggers 的父元素节点
          * @property {string} content 提示的内容信息
          * @property {string} dir 弹出层相对 target 的位置，支持8个方向
          * 可选值（默认为 bl）：
