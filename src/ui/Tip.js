@@ -274,7 +274,7 @@ define(function (require) {
         },
 
         /**
-         * 增加触发tips的DOM
+         * 增加触发 tips 的 DOM
          * 
          * @public
          * @param {(string | HTMLElement | HTMLCollection | Array)} triggers 
@@ -296,14 +296,46 @@ define(function (require) {
                     function (trigger) {
                         T.addClass(trigger, flag);
                         T.on(trigger, events.on, me.onShow);
-                        // T.on(trigger, events.un, me.onHide);
                     }
                 );
             }
         },
 
-        refresh: function () {
-            
+        /**
+         * 刷新触发器
+         * 
+         * 用于经常更新的内容，在更新内容后调用此方法会
+         * 解除旧 DOM 节点的绑定，再重新查找绑定新节点
+         * 
+         * @public
+         * @param {string} triggers 触发器的 class
+         * @param {HTMLElement=} parentNode 指定触发器的共同容器
+         */
+        refresh: function (triggers, parentNode) {
+            var me      = this;
+            var options = this.options;
+            var events  = this.events;
+
+            triggers = typeof triggers === 'string'
+                ? T.q(triggers, parentNode)
+                : (triggers.length ? triggers : [triggers]);
+
+            if (events) {
+                if (this.triggers) {
+                    T.each(
+                        triggers,
+                        function (trigger) {
+                            if (!triggers.parentElement) {
+                                T.un(trigger, events.on, me.onShow);
+                                T.un(trigger, events.un, me.onHide);
+                            }
+                        }
+                    );
+
+                }
+
+                this.addTriggers(triggers);
+            }
         },
 
         /**
@@ -333,6 +365,12 @@ define(function (require) {
             );
         },
 
+        /**
+         * 处理文档中的单击事件
+         * 
+         * @private
+         * @param {DOMEvent} e 原生事件对象
+         */
         onDocClick: function (e) {
             var main = this.main;
             var target = T.event.getTarget(e);
@@ -348,7 +386,6 @@ define(function (require) {
             this.hide();
 
         },
-
 
         /**
          * 显示浮层前处理
