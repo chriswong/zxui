@@ -313,7 +313,6 @@ define(function (require) {
          */
         refresh: function (triggers, parentNode) {
             var me      = this;
-            var options = this.options;
             var events  = this.events;
 
             triggers = typeof triggers === 'string'
@@ -459,16 +458,11 @@ define(function (require) {
          */
         show: function (target) {
             var options  = this.options;
-            var events   = this.events;
             var elements = this.elements;
  
             this.clear();
            
             this.current = target;
-
-            // if (events && target) {
-            //     T.on(target, events.un, this.onHide);
-            // }
 
             T.on(window, 'resize', this.onResize);
 
