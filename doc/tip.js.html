@@ -189,7 +189,7 @@ define(function (require) {
          * @private
          * @type {string}
          */
-        binds: 'onResize, onShow, onHide, hide',
+        binds: 'onResize, onDocClick, onShow, onHide, hide',
 
         /**
          * 控件初始化
@@ -260,22 +260,24 @@ define(function (require) {
                     }
                 );
 
-                T.on(
-                    main,
-                    'mouseenter',
-                    function () {
-                        me.clear();
-                    }
-                );
+                if (this.options.mode === 'over') {
+                    T.on(
+                        main,
+                        'mouseenter',
+                        function () {
+                            me.clear();
+                        }
+                    );
 
-                T.on(
-                    main,
-                    'mouseleave',
-                    function () {
-                        me.clear();
-                        me.timer = setTimeout(me.hide, options.hideDelay);
-                    }
-                );
+                    T.on(
+                        main,
+                        'mouseleave',
+                        function () {
+                            me.clear();
+                            me.timer = setTimeout(me.hide, options.hideDelay);
+                        }
+                    );
+                }
 
                 var elements = this.elements = {};
                 var prefix = options.prefix + '-';
@@ -299,7 +301,7 @@ define(function (require) {
         },
 
         /**
-         * 增加触发tips的DOM
+         * 增加触发 tips 的 DOM
          * 
          * @public
          * @param {(string | HTMLElement | HTMLCollection | Array)} triggers 
@@ -321,9 +323,44 @@ define(function (require) {
                     function (trigger) {
                         T.addClass(trigger, flag);
                         T.on(trigger, events.on, me.onShow);
-                        T.on(trigger, events.un, me.onHide);
                     }
                 );
+            }
+        },
+
+        /**
+         * 刷新触发器
+         * 
+         * 用于经常更新的内容，在更新内容后调用此方法会
+         * 解除旧 DOM 节点的绑定，再重新查找绑定新节点
+         * 
+         * @public
+         * @param {string} triggers 触发器的 class
+         * @param {HTMLElement=} parentNode 指定触发器的共同容器
+         */
+        refresh: function (triggers, parentNode) {
+            var me      = this;
+            var events  = this.events;
+
+            triggers = typeof triggers === 'string'
+                ? T.q(triggers, parentNode)
+                : (triggers.length ? triggers : [triggers]);
+
+            if (events) {
+                if (this.triggers) {
+                    T.each(
+                        triggers,
+                        function (trigger) {
+                            if (!triggers.parentElement) {
+                                T.un(trigger, events.on, me.onShow);
+                                T.un(trigger, events.un, me.onHide);
+                            }
+                        }
+                    );
+
+                }
+
+                this.addTriggers(triggers);
             }
         },
 
@@ -354,6 +391,27 @@ define(function (require) {
             );
         },
 
+        /**
+         * 处理文档中的单击事件
+         * 
+         * @private
+         * @param {DOMEvent} e 原生事件对象
+         */
+        onDocClick: function (e) {
+            var main = this.main;
+            var target = T.event.getTarget(e);
+
+            if (
+                main === target
+                    || ~T.array.indexOf(this.triggers, target)
+                    || DOM.contains(main, target)
+            ) {
+                return;
+            }
+
+            this.hide();
+
+        },
 
         /**
          * 显示浮层前处理
@@ -369,6 +427,21 @@ define(function (require) {
 
             if (!target || this.current === target) {
                 return;
+            }
+
+            var events = this.events;
+            if (events) {
+                T.on(target, events.un, this.onHide);
+                T.un(target, events.on, this.onShow);
+
+                if (this.current) {
+                    T.on(this.current, events.on, this.onShow);
+                    T.un(this.current, events.un, this.onHide);
+                }
+
+                if (this.options.mode === 'click') {
+                    T.on(document, 'click', this.onDocClick);
+                }
             }
 
             this.current = target;
@@ -412,16 +485,11 @@ define(function (require) {
          */
         show: function (target) {
             var options  = this.options;
-            var events   = this.events;
             var elements = this.elements;
  
             this.clear();
            
             this.current = target;
-
-            if (events && target) {
-                T.on(target, events.un, this.onHide);
-            }
 
             T.on(window, 'resize', this.onResize);
 
@@ -453,6 +521,17 @@ define(function (require) {
          */
         hide: function () {
             var main    = this.main;
+
+            var events = this.events;
+            var target = this.current;
+            if (events && target) {
+                T.on(target, events.on, this.onShow);
+                T.un(target, events.un, this.onHide);
+
+                if (this.options.mode === 'click') {
+                    T.un(document, 'click', this.onDocClick);
+                }
+            }
 
             this.clear();
 
@@ -704,7 +783,7 @@ define(function (require) {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Jun 08 2013 23:48:09 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jul 04 2013 17:23:03 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
