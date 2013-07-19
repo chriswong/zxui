@@ -1,6 +1,6 @@
 define(function (require) {
 
-
+    var lib = require('lib');
     var log = require('log');
     
 
@@ -91,7 +91,7 @@ define(function (require) {
                 expect(data.y).toBe(3);
             };
             log.on('click', onClick);
-            log.click(container.getElementsByTagName('input')[1]);
+            lib.fire(container.getElementsByTagName('input')[1], 'click');
             log.un('click', onClick);
         });
 
@@ -104,7 +104,7 @@ define(function (require) {
                 expect(data.y).toBe(5);
             };
             log.on('click', onClick);
-            log.click(container.getElementsByTagName('input')[2]);
+            lib.fire(container.getElementsByTagName('input')[2], 'click');
             log.un('click', onClick);
         });
 
@@ -115,7 +115,7 @@ define(function (require) {
             };
             log.config({data: {foo: 'bar'}});
             log.on('click', onClick);
-            log.click(container.getElementsByTagName('div')[0]);
+            lib.fire(container.getElementsByTagName('div')[0], 'click');
             log.un('click', onClick);
         });
 
@@ -125,7 +125,7 @@ define(function (require) {
                 expect(data.abc).toBe('');
             };
             log.on('click', onClick);
-            log.click(container.getElementsByTagName('p')[0]);
+            lib.fire(container.getElementsByTagName('p')[0], 'click');
             log.un('click', onClick);
         });
     });

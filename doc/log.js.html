@@ -34,11 +34,9 @@
  */
 
 define(function (require) {
-    var T = baidu;
-    var DOM = T.dom;
 
-    require('./Control');
-
+    var lib = require('./lib');
+    
     /**
      * 将字符串解析成json对象
      * baidu.json.parse 的包装，增加容错处理
@@ -49,7 +47,7 @@ define(function (require) {
      */
     var parseJson = function (data) {
         try {
-            return T.json.parse(data || '{}');
+            return lib.parse(data || '{}');
         }
         catch (e) {
             return {};
@@ -65,9 +63,6 @@ define(function (require) {
      */
     var send = (function () {
         var list = [];
-        var encode = function (value) {
-            return encodeURIComponent(value);
-        };
 
         return function (data) {
             var index = list.push(new Image()) - 1;
@@ -77,7 +72,7 @@ define(function (require) {
                 delete list[index];
             };
 
-            var url = options.action + T.url.jsonToQuery(data, encode);
+            var url = options.action + lib.toQueryString(data);
 
             list[index].src = url;
 
@@ -118,7 +113,7 @@ define(function (require) {
 
             clickData = el.getAttribute('data-click');
             if (clickData) {
-                data = T.extend(parseJson(clickData), data);
+                data = lib.extend(parseJson(clickData), data);
             }
 
             if (el.href) {
@@ -157,7 +152,7 @@ define(function (require) {
         if (from !== to) {
             clickData = to.getAttribute('data-click');
             if (clickData) {
-                data = T.extend(parseJson(clickData), data);
+                data = lib.extend(parseJson(clickData), data);
             }            
         }
 
@@ -245,7 +240,7 @@ define(function (require) {
                 }
             }
         }
-        data.title = T.trim(title);
+        data.title = lib.trim(title);
 
         data['rsv_xpath'] = path.join('-').toLowerCase() + '(' + type + ')';
         data['rsv_height'] = to.offsetHeight;
@@ -337,7 +332,7 @@ define(function (require) {
         var data = parseJson(el.getAttribute('data-click'));
 
         data.p5 = index;
-        el.setAttribute('data-click', T.json.stringify(data));
+        el.setAttribute('data-click', lib.stringify(data));
     };
 
     /**
@@ -345,16 +340,16 @@ define(function (require) {
      * http://fe.baidu.com/doc/aladdin/#standard/aladdin_click.text
      * 
      * @inner
-     * @param {?DOMEvent} e DOM 事件对象
+     * @param {?Event} e DOM 事件对象
      * @param {HTMLElement=} el 指定触发统计的 HTMLElement
      * @fires module:log#click
      */
     var onClick = function (e, el) {
-        var target = el || T.event.getTarget(e);
+        var target = el || lib.getTarget(e);
         var klass = options.main;
-        var main = DOM.hasClass(target, klass)
+        var main = lib.hasClass(target, klass)
             ? target
-            : DOM.getAncestorByClass(target, klass);
+            : lib.getAncestorByClass(target, klass);
 
         if (!main || main.getAttribute('data-nolog') === '1') {
             return;
@@ -374,13 +369,13 @@ define(function (require) {
         }
 
         if (options.data) {
-            data = T.extend(T.extend({}, options.data), data);
+            data = lib.extend(lib.extend({}, options.data), data);
         }
 
         // 仅当首次点击或有新加入节点时计算 p5 序号值
         if (!('p5' in data)) {
-            T.each(
-                T.q(options.main),
+            lib.each(
+                lib.q(options.main),
                 function (el, i) {
                     if (el === main) {
                         data.p5 = i + 1;
@@ -434,7 +429,7 @@ define(function (require) {
          * @param {Object=} ops.data 统计公共数据部分
          */
         config: function (ops) {
-            T.extend(options, ops);
+            lib.extend(options, ops);
         },
 
         /**
@@ -442,7 +437,7 @@ define(function (require) {
          * 
          */
         start: function () {
-            T.on(document, 'mousedown', onClick);
+            lib.on(document, 'mousedown', onClick);
         },
 
         /**
@@ -450,7 +445,7 @@ define(function (require) {
          * 
          */
         stop: function () {
-            T.un(document, 'mousedown', onClick);
+            lib.un(document, 'mousedown', onClick);
         },
 
         /**
@@ -470,8 +465,8 @@ define(function (require) {
         send: send
     };
 
-    var observe = T.lang.Class.prototype;
-    T.extend(exports, {
+    var observable = lib.observable;
+    lib.extend(exports, {
 
         /**
          * 添加事件绑定
@@ -481,7 +476,7 @@ define(function (require) {
          * @param {?string} type 事件类型
          * @param {Function} listner 要添加绑定的监听器
          */
-        on: observe.addEventListener,
+        on: observable.on,
 
         /**
          * 解除事件绑定
@@ -491,7 +486,7 @@ define(function (require) {
          * @param {string=} type 事件类型
          * @param {Function=} listner 要解除绑定的监听器
          */
-        un: observe.removeEventListener,
+        un: observable.un,
 
         /**
          * 触发指定事件
@@ -501,7 +496,7 @@ define(function (require) {
          * @param {string} type 事件类型
          * @param {Object} args 透传的事件数据对象
          */
-        fire: observe.dispatchEvent
+        fire: observable.fire
     });
 
     return exports;
@@ -516,13 +511,13 @@ define(function (require) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:beforeinit">beforeinit</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-log.html">log</a></li></ul><h3>Events</h3><ul><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jul 04 2013 17:23:03 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Jul 10 2013 14:36:39 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

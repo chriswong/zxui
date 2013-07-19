@@ -1,4 +1,6 @@
     define(function (require) {
+        var lib = require('lib');
+        
         var City = require('City');
         
         var city;
@@ -117,11 +119,11 @@
                 city.on('pick', onPick);
                 city.on('click', onClick);
 
-                city.onClick({event: event});
+                lib.fire(target, 'click');
 
                 target = city.panels[1].getElementsByTagName('a')[1];
                 event.target = target;
-                city.onClick({event: event});
+                lib.fire(target, 'click');
 
                 city.un('hide', onHide);
                 city.un('click', onClick);

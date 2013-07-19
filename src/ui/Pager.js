@@ -8,7 +8,7 @@
 
 define(function (require) {
 
-    var T = baidu;
+    var lib = require('./lib');
     var Control = require('./Control');
 
     /**
@@ -22,7 +22,7 @@ define(function (require) {
      * @example
      * &lt;div class="pager-container"&gt;&lt;/div&gt;
      * new Pager({
-     *     main: T.qq('pager-container'),
+     *     main: lib.q('pager-container')[0],
      *     total: 10,
      *     onChange: function (e) {
      *         // load new date
@@ -31,20 +31,7 @@ define(function (require) {
      *     }
      *  }).render();
      */
-    var Pager = function () {
-        this.constructor.superClass.constructor.apply(this, arguments);
-    };
-
-    /**
-     * 当页数较多时，中间显示页码的个数
-     * 
-     * @const
-     * @type {number}
-     */
-    Pager.SHOW_COUNT = 5;
-
-
-    Pager.prototype = {
+    var Pager = Control.extend({
 
         /**
          * 控件类型标识
@@ -97,7 +84,7 @@ define(function (require) {
             total: 0,
 
             // 控件class前缀，同时将作为main的class之一
-            prefix: 'ecl-left_hotel-ui-pager',
+            prefix: 'ecl-ui-pager',
 
             // 分页项不用可时的class定义
             disabledClass: 'disabled',
@@ -132,7 +119,6 @@ define(function (require) {
          * @see module:Pager#options
          */
         init: function (options) {
-            options = this.setOptions(options);
 
             this.disabled  = options.disabled;
             this.showCount = options.showCount || Pager.SHOW_COUNT;
@@ -147,9 +133,9 @@ define(function (require) {
             lang.next.replace(/\{prefix\}/gi, options.prefix);
 
             if (options.main) {
-                this.main = T.g(options.main);
-                T.addClass(this.main, options.prefix);
-                T.on(this.main, 'click', this.onChange);
+                this.main = lib.g(options.main);
+                lib.addClass(this.main, options.prefix);
+                lib.on(this.main, 'click', this.onChange);
             }
 
         },
@@ -216,10 +202,10 @@ define(function (require) {
 
             if (this.total > 1 || this.options.showAlways) {
                 main.innerHTML = this.build();
-                T.show(main);
+                lib.show(main);
             }
             else {
-                T.hide(main);
+                lib.hide(main);
             }
 
             return this;
@@ -350,8 +336,8 @@ define(function (require) {
          * @fires module:Pager#change
          */
         onChange: function (e, target) {
-            e && T.event.preventDefault(e);
-            target = target || T.event.getTarget(e);
+            e && lib.preventDefault(e);
+            target = target || lib.getTarget(e);
 
             /**
              * @event module:Pager#click
@@ -364,7 +350,7 @@ define(function (require) {
             }
 
             if (target.tagName !== 'A') {
-                target = T.dom.getAncestorBy(
+                target = lib.getAncestorBy(
                     target,
                     function (el) {
 
@@ -402,8 +388,15 @@ define(function (require) {
                 this.fire('change', { page: current });
             }
         }
-    };
-    T.inherits(Pager, Control);
+    });
+
+    /**
+     * 当页数较多时，中间显示页码的个数
+     * 
+     * @const
+     * @type {number}
+     */
+    Pager.SHOW_COUNT = 5;
 
     return Pager;
 });

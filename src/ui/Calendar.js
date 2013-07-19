@@ -8,7 +8,7 @@
 
 define(function (require) {
 
-    var T = baidu;
+    var lib = require('./lib');
     var Control = require('./Control');
     var Popup = require('./Popup');
 
@@ -43,6 +43,15 @@ define(function (require) {
         return (n > 9 ? '' : '0') + n;
     }
 
+
+    /**
+     * 每个月的HTML缓存
+     * 
+     * @private
+     * @type {Object}
+     */
+    var cache = {};
+
     /**
      * 比PC-UI WCal好用的日历控件
      * 
@@ -60,36 +69,7 @@ define(function (require) {
      *     target: '.input'
      *  }).render();
      */
-    var Calendar = function () {
-        this.constructor.superClass.constructor.apply(this, arguments);
-    };
-
-    /**
-     * 全局日期格式
-     * 
-     * @const
-     * @type {string}
-     */
-    Calendar.DATE_FORMAT = DATE_FORMAT;
-
-    /**
-     * 可选中的日期区间
-     * 
-     * @const
-     * @type {?Object}
-     */
-    Calendar.RANGE = null;
-
-
-    /**
-     * 每个月的HTML缓存
-     * 
-     * @private
-     * @type {Object}
-     */
-    var cache = {};
-
-    Calendar.prototype = {
+    var Calendar = Control.extend({
 
         /**
          * 控件类型标识
@@ -188,8 +168,6 @@ define(function (require) {
          * @see module:Calendar#options
          */
         init: function (options) {
-            options = this.setOptions(options);
-
             this.disabled   = options.disabled;
             this.dateFormat = 
                 options.dateFormat
@@ -212,7 +190,7 @@ define(function (require) {
          */
         from: function (value, format) {
             format = format || this.dateFormat;
-            if (T.isString(value)) {
+            if (lib.isString(value)) {
 
                 if (!value) {
                     return new Date();
@@ -258,7 +236,7 @@ define(function (require) {
             // 控件不包含时间，所以不存在大小写区别
             format = (format || this.dateFormat).toLowerCase();
 
-            if (T.isString(date)) {
+            if (lib.isString(date)) {
                 date = this.from(date);
             }
 
@@ -330,10 +308,10 @@ define(function (require) {
                 popup.on('beforeShow', this.onBeforeShow);
                 
                 this.main = popup.main;
-                T.addClass(this.main, 'c-clearfix');
+                lib.addClass(this.main, 'c-clearfix');
 
                 if (options.target) {
-                    this.setTarget(T.g(options.target));
+                    this.setTarget(lib.g(options.target));
                 }
             }
 
@@ -382,8 +360,8 @@ define(function (require) {
             var options = this.options;
             var prefix = options.prefix;
             var range  = this.range;
-            var prev = T.q(prefix + '-pre', this.main)[0];
-            var next = T.q(prefix + '-next', this.main)[0];
+            var prev = lib.q(prefix + '-pre', this.main)[0];
+            var next = lib.q(prefix + '-next', this.main)[0];
 
             date = date || this.date || this.from(this.value);
 
@@ -555,7 +533,7 @@ define(function (require) {
                 return;
             }
 
-            var el     = T.event.getTarget(e);
+            var el     = lib.getTarget(e);
             var tag    = el.tagName;
             var target = this.target;
 
@@ -567,13 +545,13 @@ define(function (require) {
             switch (tag) {
 
                 case 'A':
-                    T.event.preventDefault(e);
+                    lib.preventDefault(e);
 
                     var prefix    = this.options.prefix;
                     var preClass  = prefix + '-pre';
                     var nextClass = prefix + '-next';
                     var disClass  = prefix + '-disabled';
-                    var hasClass  = T.dom.hasClass;
+                    var hasClass  = lib.hasClass;
 
                     // 上月操作
                     if (hasClass(el, preClass)) {
@@ -919,11 +897,11 @@ define(function (require) {
             var begin = range.begin;
             var end   = range.end;
 
-            if (begin && T.isString(begin)) {
+            if (begin && lib.isString(begin)) {
                 range.begin = this.from(begin);
             }
 
-            if (end && T.isString(end)) {
+            if (end && lib.isString(end)) {
                 range.end = this.from(end);
             }
             this.range = range;
@@ -979,8 +957,23 @@ define(function (require) {
         }
 
 
-    };
-    T.inherits(Calendar, Control);
+    });
+
+    /**
+     * 全局日期格式
+     * 
+     * @const
+     * @type {string}
+     */
+    Calendar.DATE_FORMAT = DATE_FORMAT;
+
+    /**
+     * 可选中的日期区间
+     * 
+     * @const
+     * @type {?Object}
+     */
+    Calendar.RANGE = null;
 
     return Calendar;
 });

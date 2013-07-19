@@ -7,22 +7,20 @@
  */
 
 define(function (require) {
-    var T = baidu;
-    var DOM = T.dom;
 
-    require('./Control');
-
+    var lib = require('./lib');
+    
     /**
      * 将字符串解析成json对象
      * baidu.json.parse 的包装，增加容错处理
      * 
      * @param {string} data 需要解析的字符串
      * @see baidu.json.parse
-     * @returns {Object} 解析结果json对象
+     * @return {Object} 解析结果json对象
      */
     var parseJson = function (data) {
         try {
-            return T.json.parse(data || '{}');
+            return lib.parse(data || '{}');
         }
         catch (e) {
             return {};
@@ -38,19 +36,16 @@ define(function (require) {
      */
     var send = (function () {
         var list = [];
-        var encode = function (value) {
-            return encodeURIComponent(value);
-        };
 
         return function (data) {
-            var index = list.push(new Image()) - 1;
+            var index = list.push(document.createElement('img')) - 1;
 
             list[index].onload = list[index].onerror = function () {
                 list[index] = list[index].onload = list[index].onerror = null;
                 delete list[index];
             };
 
-            var url = options.action + T.url.jsonToQuery(data, encode);
+            var url = options.action + lib.toQueryString(data);
 
             list[index].src = url;
 
@@ -91,7 +86,7 @@ define(function (require) {
 
             clickData = el.getAttribute('data-click');
             if (clickData) {
-                data = T.extend(parseJson(clickData), data);
+                data = lib.extend(parseJson(clickData), data);
             }
 
             if (el.href) {
@@ -130,7 +125,7 @@ define(function (require) {
         if (from !== to) {
             clickData = to.getAttribute('data-click');
             if (clickData) {
-                data = T.extend(parseJson(clickData), data);
+                data = lib.extend(parseJson(clickData), data);
             }            
         }
 
@@ -218,7 +213,7 @@ define(function (require) {
                 }
             }
         }
-        data.title = T.trim(title);
+        data.title = lib.trim(title);
 
         data['rsv_xpath'] = path.join('-').toLowerCase() + '(' + type + ')';
         data['rsv_height'] = to.offsetHeight;
@@ -310,7 +305,7 @@ define(function (require) {
         var data = parseJson(el.getAttribute('data-click'));
 
         data.p5 = index;
-        el.setAttribute('data-click', T.json.stringify(data));
+        el.setAttribute('data-click', lib.stringify(data));
     };
 
     /**
@@ -318,16 +313,16 @@ define(function (require) {
      * http://fe.baidu.com/doc/aladdin/#standard/aladdin_click.text
      * 
      * @inner
-     * @param {?DOMEvent} e DOM 事件对象
+     * @param {?Event} e DOM 事件对象
      * @param {HTMLElement=} el 指定触发统计的 HTMLElement
      * @fires module:log#click
      */
     var onClick = function (e, el) {
-        var target = el || T.event.getTarget(e);
+        var target = el || lib.getTarget(e);
         var klass = options.main;
-        var main = DOM.hasClass(target, klass)
+        var main = lib.hasClass(target, klass)
             ? target
-            : DOM.getAncestorByClass(target, klass);
+            : lib.getAncestorByClass(target, klass);
 
         if (!main || main.getAttribute('data-nolog') === '1') {
             return;
@@ -347,13 +342,13 @@ define(function (require) {
         }
 
         if (options.data) {
-            data = T.extend(T.extend({}, options.data), data);
+            data = lib.extend(lib.extend({}, options.data), data);
         }
 
         // 仅当首次点击或有新加入节点时计算 p5 序号值
         if (!('p5' in data)) {
-            T.each(
-                T.q(options.main),
+            lib.each(
+                lib.q(options.main),
                 function (el, i) {
                     if (el === main) {
                         data.p5 = i + 1;
@@ -407,7 +402,7 @@ define(function (require) {
          * @param {Object=} ops.data 统计公共数据部分
          */
         config: function (ops) {
-            T.extend(options, ops);
+            lib.extend(options, ops);
         },
 
         /**
@@ -415,7 +410,7 @@ define(function (require) {
          * 
          */
         start: function () {
-            T.on(document, 'mousedown', onClick);
+            lib.on(document, 'mousedown', onClick);
         },
 
         /**
@@ -423,7 +418,7 @@ define(function (require) {
          * 
          */
         stop: function () {
-            T.un(document, 'mousedown', onClick);
+            lib.un(document, 'mousedown', onClick);
         },
 
         /**
@@ -443,8 +438,8 @@ define(function (require) {
         send: send
     };
 
-    var observe = T.lang.Class.prototype;
-    T.extend(exports, {
+    var observable = lib.observable;
+    lib.extend(exports, {
 
         /**
          * 添加事件绑定
@@ -454,7 +449,7 @@ define(function (require) {
          * @param {?string} type 事件类型
          * @param {Function} listner 要添加绑定的监听器
          */
-        on: observe.addEventListener,
+        on: observable.on,
 
         /**
          * 解除事件绑定
@@ -464,7 +459,7 @@ define(function (require) {
          * @param {string=} type 事件类型
          * @param {Function=} listner 要解除绑定的监听器
          */
-        un: observe.removeEventListener,
+        un: observable.un,
 
         /**
          * 触发指定事件
@@ -474,7 +469,7 @@ define(function (require) {
          * @param {string} type 事件类型
          * @param {Object} args 透传的事件数据对象
          */
-        fire: observe.dispatchEvent
+        fire: observable.fire
     });
 
     return exports;

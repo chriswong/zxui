@@ -8,7 +8,7 @@
 
 define(function (require) {
 
-    var T = baidu;
+    var lib = require('./lib');
     var Control = require('./Control');
     
 
@@ -49,12 +49,7 @@ define(function (require) {
      *
      * }).render();
      */
-    var Filter = function () {
-        this.constructor.superClass.constructor.apply(this, arguments);
-    };
-
-
-    Filter.prototype = {
+    var Filter = Control.extend({
 
 
         /**
@@ -110,11 +105,9 @@ define(function (require) {
          * @see module:Filter#options
          */
         init: function (options) {
-            options = this.setOptions(options);
-
             this.disabled  = options.disabled;
 
-            this.main = options.main && T.g(options.main);
+            this.main = options.main && lib.g(options.main);
         },
 
 
@@ -127,7 +120,7 @@ define(function (require) {
          * @return {module:Filter} 当前实例
          */
         render: function (wrapper) {
-            var main    = wrapper && T.g(wrapper) || this.main;
+            var main    = wrapper && lib.g(wrapper) || this.main;
             var options = this.options;
 
             if (!main) {
@@ -139,7 +132,7 @@ define(function (require) {
 
                 var groups = this.groups = {};
 
-                T.each(
+                lib.each(
                     main.getElementsByTagName(options.groups),
                     function (group) {
 
@@ -149,7 +142,7 @@ define(function (require) {
                     }
                 );
 
-                T.on(main, 'click', this.onClick);
+                lib.on(main, 'click', this.onClick);
             }
 
             return this;
@@ -172,7 +165,7 @@ define(function (require) {
              */
             this.fire('click', {event: e});
 
-            var target = T.event.getTarget(e);
+            var target = lib.getTarget(e);
             if (target.type) {
 
                 // HACK: 如果点击的是 单选按钮，先置为非选中状态
@@ -189,7 +182,7 @@ define(function (require) {
 
             var input = target.getElementsByTagName('input')[0];
             var isRadio = input && input.type === 'radio';
-            var hasClass = T.dom.hasClass;
+            var hasClass = lib.hasClass;
             if (target.tagName === 'LABEL'
 
                 // 忽略禁止状态的选项
@@ -205,15 +198,15 @@ define(function (require) {
                     ? true
                     : !hasClass(target, checkedClass);
 
-                T.event.preventDefault(e);
+                lib.preventDefault(e);
 
                 var group = this.groups[input.name];
-                var checkedItems = T.q(checkedClass, group);
+                var checkedItems = lib.q(checkedClass, group);
                 if (isRadio) {
-                    var lastChecked = T.q(checkedClass, group)[0];
+                    var lastChecked = lib.q(checkedClass, group)[0];
 
                     if (lastChecked) {
-                        T.removeClass(lastChecked, checkedClass);
+                        lib.removeClass(lastChecked, checkedClass);
                     }
                 }
                 else {
@@ -228,10 +221,10 @@ define(function (require) {
                             return;
                         }
 
-                        T.each(
+                        lib.each(
                             checkedItems,
                             function (item) {
-                                T.removeClass(item, checkedClass);
+                                lib.removeClass(item, checkedClass);
 
                                 item.getElementsByTagName(
                                     'input'
@@ -241,7 +234,7 @@ define(function (require) {
                     }
                     else if (firstItem.checked) {
                         firstItem.checked = false;
-                        T.removeClass(firstItem.parentNode, checkedClass);
+                        lib.removeClass(firstItem.parentNode, checkedClass);
                     }
                 }
 
@@ -290,11 +283,11 @@ define(function (require) {
             if (group) {
 
                 var disabledClass = this.options.disabledClass;
-                T.each(
+                lib.each(
                     group.getElementsByTagName('input'),
                     function (input) {
                         if (input.checked
-                            && !T.dom.hasClass(input.parentNode, disabledClass)
+                            && !lib.hasClass(input.parentNode, disabledClass)
                         ) {
                             value.push(input.value);
                         }
@@ -321,17 +314,17 @@ define(function (require) {
 
             values = comma + values.join(comma) + comma;
 
-            T.each(
+            lib.each(
                 group.getElementsByTagName('input'),
                 function (input) {
                     var parentNode = input.parentNode;
                     if (~values.indexOf(comma + input.value + comma)) {
                         input.checked = false;
-                        T.removeClass(parentNode, checkedClass);
-                        T.addClass(parentNode, disabledClass);
+                        lib.removeClass(parentNode, checkedClass);
+                        lib.addClass(parentNode, disabledClass);
                     }
                     else {
-                        T.removeClass(parentNode, disabledClass);
+                        lib.removeClass(parentNode, disabledClass);
                     }
                 }
             );
@@ -347,17 +340,16 @@ define(function (require) {
             var disabledClass = this.options.disabledClass;
             var group = this.groups[key];
 
-            T.each(
-                T.q(disabledClass, group),
+            lib.each(
+                lib.q(disabledClass, group),
                 function (label) {
-                    T.removeClass(label, disabledClass);
+                    lib.removeClass(label, disabledClass);
                 }
             );
         }
 
 
-    };
-    T.inherits(Filter, Control);
+    });
 
     return Filter;
 });

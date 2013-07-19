@@ -9,10 +9,11 @@
 
 define(function (require) {
 
-    var T = baidu;
-    var DOM = T.dom;
-    var PAGE = T.page;
+    var lib = require('./lib');
     var Control = require('./Control');
+
+    var DOM = lib.dom;
+    var PAGE = lib.page;
 
     /**
      * 弹出层控件
@@ -24,11 +25,7 @@ define(function (require) {
      * @see module:City
      * @see module:Calendar
      */
-    var Popup = function () {
-        this.constructor.superClass.constructor.apply(this, arguments);
-    };
-
-    Popup.prototype = {
+    var Popup = Control.extend({
 
         /**
          * 控件类型标识
@@ -168,22 +165,20 @@ define(function (require) {
          * @see module:Popup#options
          */
         init: function (options) {
-            options = this.setOptions(options);
-
             this.disabled  = options.disabled;
             this.content   = options.content;
 
             if (options.target) {
-                this.target = T.g(options.target);                
+                this.target = lib.g(options.target);                
             }
 
             var prefix = options.prefix;
             var main   = this.main = options.main 
-                && T.g(options.main)
+                && lib.g(options.main)
                 || document.createElement('div');
 
             if (options.main) {
-                T.addClass(main, prefix);
+                lib.addClass(main, prefix);
             }
             else {
                 main.className  = prefix;
@@ -196,15 +191,19 @@ define(function (require) {
 
             if (liveTriggers) {
 
-                this.liveTriggers = T.on(T.g(liveTriggers), 'click', me.onShow);
+                this.liveTriggers = lib.on(
+                    lib.g(liveTriggers),
+                    'click',
+                    me.onShow
+                );
             }
             else {
 
-                if (T.isString(triggers)) {
-                    triggers = T.q(options.triggers);
+                if (lib.isString(triggers)) {
+                    triggers = lib.q(options.triggers);
                 }
 
-                T.each(
+                lib.each(
                     triggers,
                     function (trigger) {
                         T.on(trigger, 'click', me.onShow);
@@ -232,7 +231,7 @@ define(function (require) {
 
                 var me = this;
 
-                T.on(
+                lib.on(
                     main,
                     'click',
                     function (e) {
@@ -240,7 +239,7 @@ define(function (require) {
                         /**
                          * @event module:Popup#click
                          * @type {Object}
-                         * @property {DOMEvent} event 事件源对象
+                         * @property {Event} event 事件源对象
                          */
                         me.fire('click', { event: e });
                     }
@@ -274,7 +273,7 @@ define(function (require) {
          * 显示浮层前处理
          * 
          * @private
-         * @param {DOMEvent} e DOM 事件对象
+         * @param {Event} e DOM 事件对象
          * @fires module:Popup#beforeShow 显示前事件
          */
         onShow: function (e) {
@@ -284,7 +283,7 @@ define(function (require) {
             /**
              * @event module:Popup#beforeShow
              * @type {Object}
-             * @property {DOMEvent} event 事件源对象
+             * @property {Event} event 事件源对象
              */
             this.fire('beforeShow', { event: e });
 
@@ -297,12 +296,12 @@ define(function (require) {
             }
 
             var me = this;
-            var trigger = T.event.getTarget(e);
+            var trigger = lib.getTarget(e);
             var liveTriggers = this.liveTriggers;
 
             if (liveTriggers) {
                 var cls = this.options.triggers;
-                var hasClass = T.dom.hasClass;
+                var hasClass = lib.hasClass;
                 while (!hasClass(trigger, cls) && trigger !== liveTriggers) {
                     trigger = trigger.parentNode;
                 }
@@ -317,8 +316,8 @@ define(function (require) {
             this.trigger = trigger;
 
             this.timer = setTimeout(function () {
-                T.on(document, 'click', me.onHide);
-                T.on(window, 'resize', me.onResize);
+                lib.on(document, 'click', me.onHide);
+                lib.on(window, 'resize', me.onResize);
             }, 0);
         },
 
@@ -328,7 +327,7 @@ define(function (require) {
          * @private
          */
         onHide: function (e) {
-            var target = T.event.getTarget(e);
+            var target = lib.getTarget(e);
             var main   = this.main;
 
             if (main === target || DOM.contains(main, target)) {
@@ -369,8 +368,8 @@ define(function (require) {
              */
             this.fire('hide');
 
-            T.un(document, 'click', this.onHide);
-            T.un(window, 'resize', this.onResize);
+            lib.un(document, 'click', this.onHide);
+            lib.un(window, 'resize', this.onResize);
 
             clearTimeout(this.timer);
             clearTimeout(this.resizeTimer);
@@ -502,12 +501,17 @@ define(function (require) {
 
             }
 
-            DOM.setStyles(main, {left: left + offset.x, top: top + offset.y});
+            DOM.setStyles(
+                main, 
+                {
+                    left: left + offset.x + 'px',
+                    top: top + offset.y + 'px'
+                }
+            );
 
         }
 
-    };
-    T.inherits(Popup, Control);
+    });
 
     return Popup;
 });

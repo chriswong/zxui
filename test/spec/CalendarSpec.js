@@ -1,4 +1,6 @@
     define(function (require) {
+        var lib = require('lib');
+        
         var Calendar = require('Calendar');
         
         var calendar;
@@ -104,7 +106,7 @@
                             'previousSibling'
                         );
 
-                    calendar.onClick({event: {target: el}});
+                    lib.fire(el, 'click');
 
                     var pickDate = calendar.from(
                         el.getAttribute('data-date'),

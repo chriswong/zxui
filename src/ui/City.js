@@ -8,7 +8,7 @@
 
 define(function (require) {
 
-    var T = baidu;
+    var lib = require('./lib');
     var Control = require('./Control');
     var Popup = require('./Popup');
     
@@ -28,11 +28,7 @@ define(function (require) {
      *     target: '.input'
      *  }).render();
      */
-    var City = function () {
-        this.constructor.superClass.constructor.apply(this, arguments);
-    };
-
-    City.prototype = {
+    var City = Control.extend({
 
 
         /**
@@ -103,7 +99,6 @@ define(function (require) {
          * @see module:City#options
          */
         init: function (options) {
-            options       = this.setOptions(options);
             this.disabled = options.disabled;
             this.index    = options.index;
 
@@ -154,7 +149,7 @@ define(function (require) {
         fill: function (tabsOrItem) {
             var tabs = this.tabs;
 
-            if (T.isString(tabsOrItem)) {
+            if (lib.isString(tabsOrItem)) {
                 tabs.push(tabsOrItem);
             }
             else {
@@ -186,7 +181,7 @@ define(function (require) {
                 this.main = popup.main;
 
                 if (options.target) {
-                    this.setTarget(T.g(options.target));
+                    this.setTarget(lib.g(options.target));
                 }
             }
 
@@ -220,7 +215,7 @@ define(function (require) {
             var makeLinks = function (cities) {
                 var links = [];
 
-                T.each(cities.split(comma), function (city) {
+                lib.each(cities.split(comma), function (city) {
                     if (
                         !hideCities
                         || !~hideCities.indexOf(comma + city + comma)
@@ -236,7 +231,7 @@ define(function (require) {
                 return links.join('');
             };
 
-            T.each(this.tabs, function (tab, i, start) {
+            lib.each(this.tabs, function (tab, i, start) {
                 tab = tab.split('|');
                 start = '<li data-idx="'
                     + i
@@ -265,7 +260,7 @@ define(function (require) {
             if (!e) {
                 return;
             }
-            var el     = T.event.getTarget(e);
+            var el     = lib.getTarget(e);
             var tag    = el.tagName;
             var target = this.target;
             var index  = el.getAttribute('data-idx');
@@ -273,7 +268,7 @@ define(function (require) {
             switch (tag) {
 
                 case 'A':
-                    T.event.preventDefault(e);
+                    lib.preventDefault(e);
 
                     this[el.className ? 'hide': 'pick'](el);
 
@@ -398,13 +393,13 @@ define(function (require) {
 
             if (i !== index) {
 
-                T.removeClass(labels[index], activeClass);
-                T.removeClass(panels[index], activeClass);
+                lib.removeClass(labels[index], activeClass);
+                lib.removeClass(panels[index], activeClass);
 
                 index = this.index = i;
 
-                T.addClass(labels[index], activeClass);
-                T.addClass(panels[index], activeClass);
+                lib.addClass(labels[index], activeClass);
+                lib.addClass(panels[index], activeClass);
             }
         },
 
@@ -444,8 +439,7 @@ define(function (require) {
             this.fire('hide');
         }
 
-    };
-    T.inherits(City, Control);
+    });
 
     return City;
 });

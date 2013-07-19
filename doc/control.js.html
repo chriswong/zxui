@@ -33,8 +33,10 @@
  * @author chris(wfsr@foxmail.com)
  */
 
-define(function () {
+define(function (require) {
 
+    var lib = require('./lib');
+    
     var T = baidu;
     var EVENT = T.event;
 
@@ -217,30 +219,7 @@ define(function () {
      * @fires module:Control#beforeinit
      * @fires module:Control#afterinit
      */
-    var Control = function () {
-
-        this.children = [];
-        this._listners = {};
-
-        /**
-         * @event module:Control#beforeinit
-         */
-        this.fire('beforeinit');
-
-        this.bindEvents(this.binds);
-        this.init.apply(this, arguments);
-
-        /**
-         * @event module:Control#beforeinit
-         */
-        this.fire('afterinit');
-
-    };
-
-
-    Control.prototype = {
-
-        constructor: Control,
+    var Control = lib.newClass({
 
         /**
          * 控件类型标识
@@ -256,49 +235,6 @@ define(function () {
          * @type {boolean}
          */
         disabled: false,
-
-        /**
-         * 设置可配置项
-         * 
-         * @protected
-         * @param {Object} options 配置项
-         * @return {Object} 合并更新后的配置项
-         */
-        setOptions: function (options) {
-            if (!options) {
-                return this.options;
-            }
-
-            var TO           = T.object;
-            var thisOptions  = this.options = TO.clone(this.options);
-            var eventNameReg = /^on[A-Z]/;
-            var me           = this;
-            var extend       = TO.extend;
-
-            this.srcOptions = options;
-
-            TO.each(options, function (val, name) {
-
-                // 处理配置项中的事件
-                if (eventNameReg.test(name) && typeof val === 'function') {
-
-                    // 移除on前缀，并转换第3个字符为小写，得到事件类型
-                    var type = name.charAt(2).toLowerCase() + name.substr(3);
-                    me.on(type, val);
-
-                    delete options[name];
-                }
-                else if (name in thisOptions) {
-
-                    // 考虑实际情况和性能，只处理一层，非递归处理
-                    thisOptions[name] = TO.isPlain(val) 
-                        ? extend(thisOptions[name] || {}, val)
-                        : val;
-                }
-            });
-
-            return thisOptions;
-        },
 
         /**
          * 将实例方法绑定 this
@@ -477,95 +413,6 @@ define(function () {
         },
 
         /**
-         * 添加事件绑定
-         * 
-         * @public
-         * @param {string=} type 事件类型
-         * @param {Function} listner 要添加绑定的监听器
-         */
-        on: function (type, listner) {
-            if (!T.isString(type)) {
-                listner = type;
-                type = '*';
-            }
-
-            var listners = this._listners[type] || [];
-
-            if (indexOf(listners, listner) &lt; 0) {
-                listner.$type = type;
-                listners.push(listner);
-            }
-
-            this._listners[type] = listners;
-
-            return this;
-        },
-
-        /**
-         * 解除事件绑定
-         * 
-         * @public
-         * @param {string=} type 事件类型
-         * @param {Function=} listner 要解除绑定的监听器
-         */
-        un: function (type, listner) {
-            if (!T.isString(type)) {
-                listner = type;
-                type = '*';
-            }
-
-            var listners = this._listners[type];
-
-            if (listners) {
-                if (listner) {
-                    var index = indexOf(listners, listner);
-
-                    if (~index) {
-                        delete listners[index];
-                    }
-                }
-                else {
-                    listners.length = 0;
-                    delete this._listners[type];
-                }
-            }
-
-            return this;
-        },
-
-        /**
-         * 触发指定事件
-         * 
-         * @public
-         * @param {string} type 事件类型
-         * @param {Object} args 透传的事件数据对象
-         */
-        fire: function (type, args) {
-            var listners = this._listners[type];
-
-            if (listners) {
-                T.array.each(
-                    listners,
-                    function (listner) {
-
-                        args = args || {};
-                        args.type = type;
-
-                        listner.call(this, args);
-
-                    },
-                    this
-                );
-            }
-
-            if (type !== '*') {
-                this.fire('*', args);
-            }
-
-            return this;
-        },
-
-        /**
          * 销毁控件
          * 
          * @public
@@ -588,7 +435,7 @@ define(function () {
             }
         }
 
-    };
+    }).implement(lib.observable).implement(lib.configurable);
 
     return Control;
 });
@@ -602,13 +449,13 @@ define(function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:beforeinit">beforeinit</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#type">type</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jul 04 2013 17:23:03 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Jul 10 2013 14:32:18 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

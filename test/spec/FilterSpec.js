@@ -1,5 +1,7 @@
     define(function (require) {
+        var lib = require('lib');
         var Filter = require('Filter');
+        
         
         var filter;
 
@@ -136,9 +138,8 @@
                 var target = inputs[3];
                 var event = {target: target};
 
-                var onClick = function (json) {
+                var onClick = function () {
                     firedClick = !firedClick;
-                    expect(json.event).toEqual(event);
                 };
 
                 var onChange = function (json) {
@@ -152,16 +153,16 @@
                 filter.on('click', onClick);
                 filter.on('change', onChange);
 
-                filter.onClick(event);
-                filter.onClick(event);
+                lib.fire(event.target, 'click');
+                lib.fire(event.target, 'click');
 
                 expect(firedClick).toBeFalsy();
                 expect(firedChange).toBeTruthy();
 
                 target = inputs[0];
                 event.target = target.parentNode;
-                filter.onClick(event);
-                filter.onClick(event);
+                lib.fire(event.target, 'click');
+                lib.fire(event.target, 'click');
 
                 filter.un('click', onClick);
                 filter.un('change', onChange);
@@ -189,16 +190,16 @@
 
 
                 filter.on('change', onChange);
-                filter.onClick(event);
+                lib.fire(event.target, 'click');
                 expect(changeCount).toBe(1);
 
                 target = inputs[0];
                 event.target = target.parentNode;
 
-                filter.onClick(event);
+                lib.fire(event.target, 'click');
                 expect(changeCount).toBe(2);
 
-                filter.onClick(event);
+                lib.fire(event.target, 'click');
                 expect(changeCount).toBe(2);
 
                 expect(T.q('checked', target.parentNode.parentNode).length)
@@ -206,7 +207,7 @@
 
                 target = inputs[1];
                 event.target = target;
-                filter.onClick(event);
+                lib.fire(event.target, 'click');
 
                 expect(changeCount).toBe(3);
 

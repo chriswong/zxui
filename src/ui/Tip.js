@@ -8,23 +8,23 @@
 
 define(function (require) {
 
-    var T = baidu;
-    var DOM = T.dom;
-    var PAGE = T.page;
+    var lib = require('./lib');
+    var DOM = lib.dom;
+    var PAGE = lib.page;
     var Control = require('./Control');
 
     /**
      * 从事件源查找目标DOM节点
      * 
-     * @param {DOMEvent} e DOM事件对象
+     * @param {Event} e DOM事件对象
      * @param {string} className 目标的className
      * @return {?HTMLElement} 找到的目标对象
      */
     var getTarget = function (e, className) {
-        var target = T.event.getTarget(e);
+        var target = lib.getTarget(e);
 
-        if (!DOM.hasClass(target, className)) {
-            target = DOM.getAncestorByClass(target, className);
+        if (!lib.hasClass(target, className)) {
+            target = lib.getAncestorByClass(target, className);
 
             if (!target) {
                 return null;
@@ -52,21 +52,7 @@ define(function (require) {
      * }).render();
      * 
      */
-    var Tip = function () {
-        this.constructor.superClass.constructor.apply(this, arguments);
-    };
-
-    /**
-     * 提示框消失的延迟时间，单位毫秒
-     * 
-     * @public
-     * @const
-     * @type {number}
-     */
-    Tip.HIDE_DELAY = 500;
-
-
-    Tip.prototype = {
+    var Tip = Control.extend({
 
         /**
          * 控件类型标识
@@ -172,7 +158,6 @@ define(function (require) {
          * @see module:Tip#options
          */
         init: function (options) {
-            options = this.setOptions(options);
             options.hideDelay = options.hideDelay < 0
                 ? Tip.HIDE_DELAY : options.hideDelay;
 
@@ -219,7 +204,7 @@ define(function (require) {
 
                 document.body.appendChild(main);
 
-                T.on(
+                lib.on(
                     main,
                     'click',
                     function (e) {
@@ -227,14 +212,14 @@ define(function (require) {
                         /**
                          * @event module:Tip#click
                          * @type {Object}
-                         * @property {DOMEvent} event 事件源对象
+                         * @property {Event} event 事件源对象
                          */
                         me.fire('click', {event: e});
                     }
                 );
 
                 if (this.options.mode === 'over') {
-                    T.on(
+                    lib.on(
                         main,
                         'mouseenter',
                         function () {
@@ -242,7 +227,7 @@ define(function (require) {
                         }
                     );
 
-                    T.on(
+                    lib.on(
                         main,
                         'mouseleave',
                         function () {
@@ -255,10 +240,10 @@ define(function (require) {
                 var elements = this.elements = {};
                 var prefix = options.prefix + '-';
 
-                T.each(
+                lib.each(
                     'arrow,title,body'.split(','),
                     function (name) {
-                        elements[name] = T.q(prefix + name, main)[0];
+                        elements[name] = lib.q(prefix + name, main)[0];
                     }
                 );
 
@@ -287,15 +272,15 @@ define(function (require) {
             var flag    = options.flag;
 
             this.triggers = typeof triggers === 'string'
-                ? T.q(options.triggers)
+                ? lib.q(options.triggers)
                 : (triggers.length ? triggers : [triggers]);
 
             if (events) {
-                T.each(
+                lib.each(
                     this.triggers,
                     function (trigger) {
-                        T.addClass(trigger, flag);
-                        T.on(trigger, events.on, me.onShow);
+                        lib.addClass(trigger, flag);
+                        lib.on(trigger, events.on, me.onShow);
                     }
                 );
             }
@@ -316,17 +301,17 @@ define(function (require) {
             var events  = this.events;
 
             triggers = typeof triggers === 'string'
-                ? T.q(triggers, parentNode)
+                ? lib.q(triggers, parentNode)
                 : (triggers.length ? triggers : [triggers]);
 
             if (events) {
                 if (this.triggers) {
-                    T.each(
+                    lib.each(
                         triggers,
                         function (trigger) {
                             if (!triggers.parentElement) {
-                                T.un(trigger, events.on, me.onShow);
-                                T.un(trigger, events.un, me.onHide);
+                                lib.un(trigger, events.on, me.onShow);
+                                lib.un(trigger, events.un, me.onHide);
                             }
                         }
                     );
@@ -368,15 +353,15 @@ define(function (require) {
          * 处理文档中的单击事件
          * 
          * @private
-         * @param {DOMEvent} e 原生事件对象
+         * @param {Event} e 原生事件对象
          */
         onDocClick: function (e) {
             var main = this.main;
-            var target = T.event.getTarget(e);
+            var target = lib.getTarget(e);
 
             if (
                 main === target
-                    || ~T.array.indexOf(this.triggers, target)
+                    || ~lib.array.indexOf(this.triggers, target)
                     || DOM.contains(main, target)
             ) {
                 return;
@@ -390,7 +375,7 @@ define(function (require) {
          * 显示浮层前处理
          * 
          * @private
-         * @param {DOMEvent} e DOM 事件对象
+         * @param {Event} e DOM 事件对象
          * @fires module:Tip#beforeShow 显示前事件
          */
         onShow: function (e) {
@@ -404,16 +389,16 @@ define(function (require) {
 
             var events = this.events;
             if (events) {
-                T.on(target, events.un, this.onHide);
-                T.un(target, events.on, this.onShow);
+                lib.on(target, events.un, this.onHide);
+                lib.un(target, events.on, this.onShow);
 
                 if (this.current) {
-                    T.on(this.current, events.on, this.onShow);
-                    T.un(this.current, events.un, this.onHide);
+                    lib.on(this.current, events.on, this.onShow);
+                    lib.un(this.current, events.un, this.onHide);
                 }
 
                 if (this.options.mode === 'click') {
-                    T.on(document, 'click', this.onDocClick);
+                    lib.on(document, 'click', this.onDocClick);
                 }
             }
 
@@ -423,7 +408,7 @@ define(function (require) {
              * @event module:Tip#beforeShow
              * @type {Object}
              * @property {HTMLElement} target 事件源 DOM 对象
-             * @property {DOMEvent} e 事件源对象
+             * @property {Event} e 事件源对象
              */
             this.fire('beforeShow', { target: target, event: e});
 
@@ -464,7 +449,7 @@ define(function (require) {
            
             this.current = target;
 
-            T.on(window, 'resize', this.onResize);
+            lib.on(window, 'resize', this.onResize);
 
             elements.title.innerHTML = this.title || '';
             elements.body.innerHTML  = this.content;
@@ -472,7 +457,7 @@ define(function (require) {
             T[this.title ? 'show' : 'hide'](elements.title);
 
             if (!options.arrow) {
-                T.hide(elements.arrow);
+                lib.hide(elements.arrow);
             }
 
             this.computePosition();
@@ -498,21 +483,21 @@ define(function (require) {
             var events = this.events;
             var target = this.current;
             if (events && target) {
-                T.on(target, events.on, this.onShow);
-                T.un(target, events.un, this.onHide);
+                lib.on(target, events.on, this.onShow);
+                lib.un(target, events.un, this.onHide);
 
                 if (this.options.mode === 'click') {
-                    T.un(document, 'click', this.onDocClick);
+                    lib.un(document, 'click', this.onDocClick);
                 }
             }
 
             this.clear();
 
             var arrow = this.elements.arrow;
-            DOM.setStyle(main, 'left', - main.offsetWidth - arrow.offsetWidth);
+            main.style.left = - main.offsetWidth - arrow.offsetWidth + 'px';
 
             this.current = null;
-            T.un(window, 'resize', this.onResize);
+            lib.un(window, 'resize', this.onResize);
 
             /**
              * @event module:Tip#hide
@@ -688,18 +673,13 @@ define(function (require) {
                     b: bottom + arrowHeight + offset.y
                 }[first];
 
-                DOM.setStyle(
-                    arrow,
-                    'left',
-
-                    // 在目标宽于提示层或 dir 为 tc 或 bc 时，箭头相对提示层水平居中
-                    {
-                        c: middleLeft,
-                        l: (width - arrowWidth) / 2,
-                        r: (mainWidth - (width - arrowWidth) / 2)
-                    }[width > mainWidth ? 'c' : second]
-                );
-                DOM.setStyle(arrow, 'top', '');
+                // 在目标宽于提示层或 dir 为 tc 或 bc 时，箭头相对提示层水平居中
+                arrow.style.left = {
+                    c: middleLeft,
+                    l: (width - arrowWidth) / 2,
+                    r: (mainWidth - (width - arrowWidth) / 2)
+                }[width > mainWidth ? 'c' : second] + 'px';
+                arrow.style.top = '';
 
             }
 
@@ -716,27 +696,31 @@ define(function (require) {
                     r: right + arrowWidth + offset.x
                 }[first];
 
-                DOM.setStyle(
-                    arrow,
-                    'top',
-
-                    // 在目标高于提示层或 dir 为 lc 或 rc 时，箭头相对提示层垂直居中
-                    {
-                        c: middleTop,
-                        t: (height - arrowHeight) / 2,
-                        b: (mainHeight - (height - arrowHeight) / 2)
-                    }[height > mainHeight ? 'c' : second]
-                );
-                DOM.setStyle(arrow, 'left', '');
+                // 在目标高于提示层或 dir 为 lc 或 rc 时，箭头相对提示层垂直居中
+                arrow.style.top = {
+                    c: middleTop,
+                    t: (height - arrowHeight) / 2,
+                    b: (mainHeight - (height - arrowHeight) / 2)
+                }[height > mainHeight ? 'c' : second] + 'px';
+                arrow.style.left = '';
 
             }
 
-            DOM.setStyles(main, {left: left, top: top});
+            DOM.setStyles(main, {left: left + 'px', top: top + 'px'});
 
         }
 
-    };
-    T.inherits(Tip, Control);
+    });
+
+    /**
+     * 提示框消失的延迟时间，单位毫秒
+     * 
+     * @public
+     * @const
+     * @type {number}
+     */
+    Tip.HIDE_DELAY = 500;
+
 
     return Tip;
 });

@@ -1,4 +1,5 @@
     define(function (require) {
+        var lib = require('lib');        
         var Select = require('Select');
         
         var select;
@@ -89,7 +90,8 @@
                     isFired = true;
                 };
                 select.on('beforeShow', onBeforeShow);
-                select.onBeforeShow({event: {target: select.target}});
+                lib.fire(select.target, 'click');
+                //select.onBeforeShow({event: {target: select.target}});
                 select.un('beforeShow', onBeforeShow);
                 expect(isFired).toBeTruthy();
             });
@@ -124,7 +126,7 @@
                 select.on('pick', onPick);
                 select.onClick({});
                 expect(isFired).toBeFalsy();
-                select.onClick({event: {target: target}});
+                lib.fire(target, 'click');
                 select.un('pick', onPick);
                 select.reset();
                 expect(isFired).toBeTruthy();
@@ -141,15 +143,16 @@
                 expect(select.isDisabled()).toBeTruthy();
 
                 select.on('pick', onPick);
-                select.onClick({event: {target: target}});
+                lib.fire(target, 'click');
+                lib.fire(target, 'click');
                 expect(count).toBe(0);
 
                 select.enable();
                 expect(select.isDisabled()).toBeFalsy();
 
-                select.onClick({event: {target: target}});
+                lib.fire(target, 'click');
                 expect(count).toBe(1);
-                select.onClick({event: {target: target}});
+                lib.fire(target, 'click');
                 expect(count).toBe(1);
                 select.un('pick', onPick);
                 select.reset();
@@ -163,11 +166,11 @@
                     count++;
                 };
                 select.on('pick', onPick);
-                select.onClick({event: {target: target}});
+                lib.fire(target, 'click');
                 expect(count).toBe(1);
-                select.onClick({event: {target: target}});
+                lib.fire(target, 'click');
                 expect(count).toBe(1);
-                select.onClick({event: {target: target}});
+                lib.fire(target, 'click');
                 expect(count).toBe(1);
                 select.un('pick', onPick);
                 select.reset();
@@ -188,14 +191,14 @@
 
                 select.on('pick', onPick);
                 select.on('change', onChange);
-                select.onClick({event: {target: options[2]}});
+                lib.fire(options[2], 'click');
                 expect(count).toBe(1);
                 expect(onChangeCount).toBe(1);
                 options[3].setAttribute(
                     'data-value',
                     options[2].getAttribute('data-value')
                 );
-                select.onClick({event: {target: options[3]}});
+                lib.fire(options[3], 'click');
                 expect(count).toBe(2);
                 expect(onChangeCount).toBe(1);
                 select.un('pick', onPick);

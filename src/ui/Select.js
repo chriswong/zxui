@@ -8,7 +8,7 @@
  
 define(function (require) {
 
-    var T = baidu;
+    var lib = require('./lib');
     var Control = require('./Control');
     var Popup = require('./Popup');
 
@@ -79,12 +79,7 @@ define(function (require) {
      *     }
      *   }).render();
      */
-    var Select = function () {
-        this.constructor.superClass.constructor.apply(this, arguments);
-    };
-
-
-    Select.prototype = {
+    var Select = Control.extend({
 
         /**
          * 控件类型标识
@@ -151,7 +146,6 @@ define(function (require) {
          * @see module:Select#options
          */
         init: function (options) {
-            options = this.setOptions(options);
 
             if (!options.target) {
                 throw new Error('invalid target');
@@ -173,8 +167,8 @@ define(function (require) {
             if (!this.rendered) {
                 this.rendered = true;
 
-                this.target = T.g(options.target);
-                this.realTarget = T.dom.first(this.target);
+                this.target = lib.g(options.target);
+                this.realTarget = lib.dom.first(this.target);
                 this.defaultValue = this.realTarget.innerHTML;
                 this.srcOptions.triggers = [this.target];
 
@@ -192,11 +186,11 @@ define(function (require) {
                 this.main = popup.main;
 
                 if (options.cols > 1) {
-                    T.addClass(
+                    lib.addClass(
                         this.main,
                         options.prefix + '-cols' + options.cols
                     );
-                    //T.addClass(this.main, 'c-clearfix');
+                    //lib.addClass(this.main, 'c-clearfix');
                 }
             }
 
@@ -211,7 +205,7 @@ define(function (require) {
          */
         onDisable: function () {
             this.popup.disabled = this.disabled;
-            T.addClass(this.target, this.options.prefix + '-disabled');
+            lib.addClass(this.target, this.options.prefix + '-disabled');
         },
 
 
@@ -223,7 +217,7 @@ define(function (require) {
          */
         onEnable: function () {
             this.popup.disabled = this.disabled;
-            T.removeClass(this.target, this.options.prefix + '-disabled');
+            lib.removeClass(this.target, this.options.prefix + '-disabled');
         },
 
 
@@ -240,13 +234,13 @@ define(function (require) {
                 return;
             }
 
-            var el = T.event.getTarget(e);
+            var el = lib.getTarget(e);
             var tag = el.tagName;
 
             switch (tag) {
 
                 case 'A':
-                    T.event.preventDefault(e);
+                    lib.preventDefault(e);
 
                     this.pick(el);
 
@@ -270,7 +264,7 @@ define(function (require) {
          */
         onBeforeShow: function (arg) {
 
-            T.event.preventDefault(arg.event);
+            lib.preventDefault(arg.event);
 
             if (this.disabled) {
                 return;
@@ -283,7 +277,7 @@ define(function (require) {
              */
             this.fire('beforeShow', arg);
 
-            T.addClass(this.target, this.options.prefix + '-hl');
+            lib.addClass(this.target, this.options.prefix + '-hl');
         },
 
         /**
@@ -292,7 +286,7 @@ define(function (require) {
          * @private
          */
         onHide: function () {
-            T.removeClass(this.target, this.options.prefix + '-hl');
+            lib.removeClass(this.target, this.options.prefix + '-hl');
         },
 
 
@@ -363,11 +357,11 @@ define(function (require) {
                 : text;
 
             if (lastItem) {
-                T.removeClass(lastItem, selectedClass);
+                lib.removeClass(lastItem, selectedClass);
             }
 
             if (value) {
-                T.addClass(el, selectedClass);
+                lib.addClass(el, selectedClass);
             }
 
             this.lastItem = el;
@@ -435,10 +429,9 @@ define(function (require) {
          * 将选项恢复到初始值，依赖于第一个选项，其值为 0 或空
          */
         reset: function () {
-            this.pick(T.dom.first(this.main), true);
+            this.pick(lib.dom.first(this.main), true);
         }
-    };
-    T.inherits(Select, Control);
+    });
 
     return Select;
 });
