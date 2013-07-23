@@ -58,7 +58,9 @@ define(function () {
      */
     var typeOf = lib.typeOf = function (obj) {
         var type = toString.call(obj).slice(8, -1).toLowerCase();
-        return type === 'object' && 'nodeType' in obj ? 'dom' : type;
+        return type === 'object' && 'nodeType' in obj
+            ? 'dom'
+            : (obj == null ? null : type);
     };
 
     /* ========================== lib.array ========================== */
@@ -140,7 +142,7 @@ define(function () {
          * @return {boolean} 类型判断结果
          */
         lib['is' + type] = function (obj) {
-            return toString.call(obj).slice(8, -1) === type;
+            return obj != null && toString.call(obj).slice(8, -1) === type;
         };
     });
 
