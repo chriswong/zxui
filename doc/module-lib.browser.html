@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Control</title>
+    <title>JSDoc: Namespace: browser</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Module: Control</h1>
+    <h1 class="page-title">Namespace: browser</h1>
     
     
 
@@ -27,7 +27,9 @@
     
 <header>
     <h2>
-    Control
+        <span class="ancestors"><a href="module-lib.html">lib</a>.</span>
+    
+    browser
     </h2>
     
 </header>  
@@ -38,13 +40,134 @@
     
     
         
-            <div class="description">控件基类
-
-只可继承，不可实例化</div>
+            <div class="description">浏览器信息</div>
         
         
         
 <dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">浏览器名称，
+如 ( opera | ie | firefox | chrome | safari )</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>version</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">浏览器版本</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>(browser.name)</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">是否指定浏览器，
+如 ie 6 时为 lib.browser.ie = 6</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>(browser.name+browser.version)</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">是否指定浏览器及版本，
+如 ie 6 时为 lib.browser.ie6 = true</td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
     
         
     
@@ -66,7 +189,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Control.js.html">Control.js</a>, <a href="Control.js.html#line22">line 22</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line1170">line 1170</a>
     </li></ul></dd>
     
     
@@ -99,205 +222,6 @@
     
     
     
-        <h3 class="subsection-title">Events</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="event:disable">disable</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Control.js.html">Control.js</a>, <a href="Control.js.html#line126">line 126</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="event:dispose">dispose</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Control.js.html">Control.js</a>, <a href="Control.js.html#line223">line 223</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="event:enable">enable</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Control.js.html">Control.js</a>, <a href="Control.js.html#line141">line 141</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        </dl>
-    
 </article>
 
 </section>  
@@ -314,7 +238,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:52 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

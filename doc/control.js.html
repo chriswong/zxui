@@ -36,179 +36,6 @@
 define(function (require) {
 
     var lib = require('./lib');
-    
-    var T = baidu;
-    var EVENT = T.event;
-
-    /**
-     * 获取目标元素指定元素className最近的祖先元素
-     * @name baidu.dom.getAncestorByClass
-     * @function
-     * @grammar baidu.dom.getAncestorByClass(element, className)
-     * @param {(HTMLElement | string)} element 目标元素或目标元素的id
-     * @param {string} className 祖先元素的class，只支持单个class
-     * @remark 使用者应保证提供的className合法性，不应包含不合法字符，
-     * className合法字符参考：http://www.w3.org/TR/CSS2/syndata.html。
-     * @see baidu.dom.getAncestorBy,baidu.dom.getAncestorByTag
-     *             
-     * @returns {(HTMLElement | null)} 指定元素className最近的祖先元素，
-     * 查找不到时返回null
-     */
-    T.dom.getAncestorByClass = T.dom.getAncestorByClass
-        || function (element, className) {
-        // from Tangram 1.5.2.2
-        element = baidu.dom.g(element);
-        className = new RegExp(
-                        '(^|\\s)'
-                        + baidu.string.trim(className)
-                        + '(\\s|\x24)'
-                    );
-
-        while ((element = element.parentNode) && element.nodeType === 1) {
-            if (className.test(element.className)) {
-                return element;
-            }
-        }
-
-        return null;
-    };
-
-    var eventFilter = EVENT._eventFilter = EVENT._eventFilter || {};
-
-
-
-    /**
-     * 事件仅在鼠标进入/离开元素区域触发一次，当鼠标在元素区域内部移动的时候不会触发，
-     * 用于为非IE浏览器添加mouseleave/mouseenter支持。
-     * 
-     * @name baidu.event._eventFilter._crossElementBoundary
-     * @function
-     * @param {Function} listener   要触发的函数
-     * @param {DOMEvent} e          DOM事件
-     */
-    eventFilter._crossElementBoundary = eventFilter._crossElementBoundary
-        || function (listener, e) {
-        var related = e.relatedTarget,
-            current = e.currentTarget;
-        if (related === false
-            // 如果current和related都是body，contains函数会返回false
-            || current === related
-            // Firefox有时会把XUL元素作为relatedTarget
-            // 这些元素不能访问parentNode属性
-            // thanks jquery & mootools
-            || (related && (related.prefix === 'xul'
-            //如果current包含related，说明没有经过current的边界
-            || baidu.dom.contains(current, related)))
-          ) {
-            return;
-        }
-        return listener.call(current, e);
-    };
-
-
-    /** 
-     * 为对象绑定方法和作用域
-     * 
-     * @name baidu.fn.bind
-     * @function
-     * @param {(Function | string)} handler 要绑定的函数，或者一个在作用域下可用的函数名
-     * @param {Object} obj 执行运行时this，如果不传入则运行时this为函数本身
-     * @param {...*} args 函数执行时附加到执行时函数前面的参数
-     * @version 1.3
-     *
-     * @returns {Function} 封装后的函数
-     */
-    T.fn.bind = T.fn.bind
-        || function (func, scope) {
-            var xargs = arguments.length > 2 
-                ? [].slice.call(arguments, 2) : null;
-
-            return function () {
-                var fn = baidu.lang.isString(func) ? scope[func] : func;
-                var args = (xargs) 
-                    ? xargs.concat([].slice.call(arguments, 0))
-                    : arguments;
-                return fn.apply(scope || fn, args);
-            };
-        };
-
-
-
-    /**
-     * 用于为非IE浏览器添加mouseenter的支持;
-     * mouseenter事件仅在鼠标进入元素区域触发一次,
-     * 当鼠标在元素内部移动的时候不会多次触发.
-     */
-    eventFilter.mouseenter = window.attachEvent 
-        ? null 
-        : eventFilter.mouseenter
-            || function (element, type, listener) {
-                return {
-                    type: 'mouseover',
-                    listener: baidu.fn.bind(
-                        eventFilter._crossElementBoundary,
-                        this,
-                        listener
-                    )
-                };
-            };
-
-
-
-    /**
-     * 用于为非IE浏览器添加mouseleave的支持;
-     * mouseleave事件仅在鼠标移出元素区域触发一次,
-     * 当鼠标在元素区域内部移动的时候不会触发.
-     */
-    eventFilter.mouseleave = window.attachEvent 
-        ? null
-        : eventFilter.mouseleave || function (element, type, listener) {
-            return {
-                type: 'mouseout',
-                listener: baidu.fn.bind(
-                    EVENT._eventFilter._crossElementBoundary,
-                    this,
-                    listener
-                )
-            };
-        };
-
-
-    /**
-     * 获取横向滚动量
-     * 
-     * @return {number} 横向滚动量
-     */
-    T.page.getScrollLeft = T.page.getScrollLeft || function () {
-        var d = document;
-        return (window.pageXOffset
-                || d.documentElement.scrollLeft
-                || d.body.scrollLeft);
-    };
-    /**
-     * 查询数组中指定元素的索引位置
-     * 
-     * @private
-     * @param {Array} source 需要查询的数组
-     * @param {*} match 查询项
-     * @returns {number} 指定元素的索引位置，查询不到时返回-1
-     */
-    var indexOf = function (source, target) {
-        var index = -1;
-
-        for (var i = 0, l = source.length; i &lt; l; i++) {
-            if (source[i] === target) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
-    };
-
-    if (!T.array.indexOf) {
-        T.array.indexOf = indexOf;
-    }
 
     /**
      * 控件基类
@@ -253,14 +80,12 @@ define(function (require) {
                 events = events.split(/\s*,\s*/);
             }
 
-            T.each(
+            lib.each(
                 events,
                 function (name, fn) {
                     fn = name && me[name];
                     if (fn) {
-                        me[name] = function () {
-                            return fn.apply(me, arguments);
-                        };
+                        me[name] = lib.bind(fn, me);
                     }
                 }
             );
@@ -270,11 +95,14 @@ define(function (require) {
         /**
          * 控件初始化
          * 
-         * @abstract
          * @protected
+         * @param {Object} options 配置参数
          */
-        init: function () {
-            throw new Error('not implement init');
+        initialize: function (options) {
+            options = this.setOptions(options);
+            this.binds && this.bindEvents(this.binds);
+            this.init && this.init(options);
+            this.children = [];
         },
 
 
@@ -307,11 +135,10 @@ define(function (require) {
          * @see baidu.dom.q
          * @param {string} className 元素的class，只能指定单一的class，
          * 如果为空字符串或者纯空白的字符串，返回空数组。
-         * @param {?string=} tagName 要限制的标签名，默认不限制
          * @return {Array} 获取的元素集合，查找不到或className参数错误时返回空数组
          */
-        query: function (className, tagName) {
-            return T.q(className, this.main, tagName);
+        query: function (className) {
+            return lib.q(className, this.main);
         },
 
         /**
@@ -381,14 +208,14 @@ define(function (require) {
          * @param {module:Control} control 子控件实例
          */
         removeChild: function (control) {
-            T.object.each(
-                this.children,
-                function (child, name) {
-                    if (child === control) {
+            var children = this.children;
+            for (var name in children) {
+                if (children.hasOwnProperty(name)) {
+                    if (children[name] === control) {
                         delete this[name];
                     }
                 }
-            );
+            }
         },
 
         /**
@@ -449,13 +276,13 @@ define(function (require) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#type">type</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#addTriggers">addTriggers</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#binds">binds</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#buildMonth">buildMonth</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#checkValidity">checkValidity</a></li><li><a href="global.html#clear">clear</a></li><li><a href="global.html#computePosition">computePosition</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#disableItems">disableItems</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#enableItems">enableItems</a></li><li><a href="global.html#fill">fill</a></li><li><a href="global.html#format">format</a></li><li><a href="global.html#from">from</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getPage">getPage</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#getValueAsDate">getValueAsDate</a></li><li><a href="global.html#getYYYYMM">getYYYYMM</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#isVisible">isVisible</a></li><li><a href="global.html#onBeforeShow">onBeforeShow</a></li><li><a href="global.html#onChange">onChange</a></li><li><a href="global.html#onClick">onClick</a></li><li><a href="global.html#onDisable">onDisable</a></li><li><a href="global.html#onDocClick">onDocClick</a></li><li><a href="global.html#onEnable">onEnable</a></li><li><a href="global.html#onHide">onHide</a></li><li><a href="global.html#onResize">onResize</a></li><li><a href="global.html#onShow">onShow</a></li><li><a href="global.html#pick">pick</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#refresh">refresh</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#setContent">setContent</a></li><li><a href="global.html#setPage">setPage</a></li><li><a href="global.html#setRange">setRange</a></li><li><a href="global.html#setTarget">setTarget</a></li><li><a href="global.html#setTitle">setTitle</a></li><li><a href="global.html#setTotal">setTotal</a></li><li><a href="global.html#setValue">setValue</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showNextMonth">showNextMonth</a></li><li><a href="global.html#showPreMonth">showPreMonth</a></li><li><a href="global.html#type">type</a></li><li><a href="global.html#updatePrevNextStatus">updatePrevNextStatus</a></li><li><a href="global.html#updateStatus">updateStatus</a></li><li><a href="global.html#validate">validate</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Jul 10 2013 14:32:18 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

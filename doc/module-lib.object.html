@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: City</title>
+    <title>JSDoc: Namespace: object</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Module: City</h1>
+    <h1 class="page-title">Namespace: object</h1>
     
     
 
@@ -27,7 +27,9 @@
     
 <header>
     <h2>
-    City
+        <span class="ancestors"><a href="module-lib.html">lib</a>.</span>
+    
+    object
     </h2>
     
 </header>  
@@ -38,8 +40,6 @@
     
     
         
-            <div class="description">国内城市选择控件</div>
-        
         
         
 <dl class="details">
@@ -64,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line31">line 31</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line93">line 93</a>
     </li></ul></dd>
     
     
@@ -77,37 +77,10 @@
 
         
         
-            <h3>Example</h3>
-            
-    <pre class="prettyprint"><code>&lt;input type="text" class="input triggers" /&gt;
-&lt;input type="button" value="click" class="triggers" /&gt;
-new City({
-    triggers: '.triggers',
-    target: '.input'
- }).render();</code></pre>
-
-        
     
     </div>
     
     
-        <h3 class="subsection-title">Extends</h3>
-        
-        <ul>
-            <li><a href="module-Control.html">module:Control</a></li>
-        </ul>
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Requires</h3>
-        
-        <ul>
-            <li><a href="module-Control.html">module:Control</a></li>
-        
-            <li><a href="module-Popup.html">module:Popup</a></li>
-        </ul>
     
     
     
@@ -115,43 +88,37 @@ new City({
     
     
     
-        <h3 class="subsection-title">Members</h3>
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
         
         <dl>
             
 <dt>
-    <h4 class="name" id="options"><span class="type-signature">&lt;private> </span>options<span class="type-signature"> :Object</span></h4>
+    <h4 class="name" id="clone"><span class="type-signature">&lt;static> </span>clone<span class="signature">(source)</span><span class="type-signature"> &rarr; {*}</span></h4>
     
     
 </dt>
 <dd>
     
+    
     <div class="description">
-        控件配置项
+        深层复制
     </div>
     
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
 
     
-<dl class="details">
     
+    
+    
+    
+        <h5>Parameters:</h5>
         
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
 
-<table class="props">
+<table class="params">
     <thead>
 	<tr>
 		
@@ -160,8 +127,6 @@ new City({
 		
 		<th>Type</th>
 		
-		
-		<th>Argument</th>
 		
 		
 		
@@ -175,63 +140,141 @@ new City({
 	
         <tr>
             
-                <td class="name"><code>disabled</code></td>
+                <td class="name"><code>source</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">*</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">控件的不可用状态</td>
+            <td class="description last">被复制的源</td>
         </tr>
 	
 	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line317">line 317</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    复制后的新对象
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">*</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="extend"><span class="type-signature">&lt;static> </span>extend<span class="signature">(target, source)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        扩展对象
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
 	
-        <tr>
-            
-                <td class="name"><code>main</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-|
-
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">控件渲染容器</td>
-        </tr>
-	
+	<tbody>
 	
 	
         <tr>
@@ -242,179 +285,49 @@ new City({
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">HTMLElement</span>
+<span class="param-type">Object</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">计算弹出层相对位置的目标对象</td>
+            <td class="description last">被扩展的目标对象</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>prefix</code></td>
+                <td class="name"><code>source</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">控件class前缀，同时将作为main的class之一</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>index</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">默认激活的标签索引</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>activeClass</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">激活标签、内容的class</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>autoFill</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">是否自动填充默认城市数据(机票可用城市数据)</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>hideCities</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">需要隐藏的城市</td>
+            <td class="description last">扩展的源对象</td>
         </tr>
 	
 	
 	</tbody>
-</table></dl>
-        
+</table>
+    
+    
+    
+<dl class="details">
     
         
     
@@ -436,19 +349,12 @@ new City({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line42">line 42</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line285">line 285</a>
     </li></ul></dd>
     
     
     
     
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="module-Popup.html#options">module:Popup#options</a></li>
-        </ul>
-    </dd>
     
     
     
@@ -456,54 +362,64 @@ new City({
 
     
     
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    被扩展后的 `target` 对象
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
 </dd>
 
-        </dl>
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Events</h3>
         
-        <dl>
             
 <dt>
-    <h4 class="name" id="event:beforeShow">beforeShow</h4>
+    <h4 class="name" id="parse"><span class="type-signature">&lt;static> </span>parse<span class="signature">(source)</span><span class="type-signature"> &rarr; {JSON}</span></h4>
     
     
 </dt>
 <dd>
     
     
+    <div class="description">
+        将字符串解析成json对象。
+    </div>
+    
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
     
     
     
     
-    
-    
-    
-<dl class="details">
-    
+        <h5>Parameters:</h5>
         
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
 
-<table class="props">
+<table class="params">
     <thead>
 	<tr>
 		
@@ -525,13 +441,13 @@ new City({
 	
         <tr>
             
-                <td class="name"><code>event</code></td>
+                <td class="name"><code>source</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">DOMEvent</span>
+<span class="param-type">string</span>
 
 
             
@@ -541,200 +457,12 @@ new City({
             
             
             
-            <td class="description last">事件源对象</td>
+            <td class="description last">需要解析的字符串</td>
         </tr>
 	
 	
 	</tbody>
-</table></dl>
-        
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line311">line 311</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="event:click">click</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>event</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">DOMEvent</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">事件源对象</td>
-        </tr>
-	
-	
-	</tbody>
-</table></dl>
-        
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line294">line 294</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="event:hide">hide</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
+</table>
     
     
     
@@ -760,7 +488,7 @@ new City({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line436">line 436</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line421">line 421</a>
     </li></ul></dd>
     
     
@@ -781,6 +509,28 @@ new City({
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    解析结果json对象
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">JSON</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -788,39 +538,27 @@ new City({
         
             
 <dt>
-    <h4 class="name" id="event:pick">pick</h4>
+    <h4 class="name" id="stringify"><span class="type-signature">&lt;static> </span>stringify<span class="signature">(value)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
     
 </dt>
 <dd>
     
     
+    <div class="description">
+        序列化 JSON 对象
+    </div>
+    
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
     
     
     
     
-    
-    
-    
-<dl class="details">
-    
+        <h5>Parameters:</h5>
         
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
 
-<table class="props">
+<table class="params">
     <thead>
 	<tr>
 		
@@ -848,7 +586,7 @@ new City({
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">JSON</span>
 
 
             
@@ -858,13 +596,16 @@ new City({
             
             
             
-            <td class="description last">选中的城市</td>
+            <td class="description last">需要序列化的json对象</td>
         </tr>
 	
 	
 	</tbody>
-</table></dl>
-        
+</table>
+    
+    
+    
+<dl class="details">
     
         
     
@@ -886,7 +627,7 @@ new City({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line370">line 370</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line355">line 355</a>
     </li></ul></dd>
     
     
@@ -907,6 +648,28 @@ new City({
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    序列化后的字符串
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">string</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -914,39 +677,27 @@ new City({
         
             
 <dt>
-    <h4 class="name" id="event:show">show</h4>
+    <h4 class="name" id="toQueryString"><span class="type-signature">&lt;static> </span>toQueryString<span class="signature">(json)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
     
 </dt>
 <dd>
     
     
+    <div class="description">
+        将对象解析成 query 字符串
+    </div>
+    
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
     
     
     
     
-    
-    
-    
-<dl class="details">
-    
+        <h5>Parameters:</h5>
         
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
 
-<table class="props">
+<table class="params">
     <thead>
 	<tr>
 		
@@ -955,8 +706,6 @@ new City({
 		
 		<th>Type</th>
 		
-		
-		<th>Argument</th>
 		
 		
 		
@@ -970,39 +719,32 @@ new City({
 	
         <tr>
             
-                <td class="name"><code>target</code></td>
+                <td class="name"><code>json</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">Object</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                </td>
             
             
             
-            
-            <td class="description last">触发显示浮层的节点</td>
+            <td class="description last">需要解析的json对象</td>
         </tr>
 	
 	
 	</tbody>
-</table></dl>
-        
+</table>
+    
+    
+    
+<dl class="details">
     
         
     
@@ -1024,7 +766,7 @@ new City({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line417">line 417</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line445">line 445</a>
     </li></ul></dd>
     
     
@@ -1045,11 +787,37 @@ new City({
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    解析结果字符串，其中值将被URI编码
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">string</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
 
         </dl>
+    
+    
+    
+    
     
 </article>
 
@@ -1067,7 +835,7 @@ new City({
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:52 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

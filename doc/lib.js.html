@@ -1,4 +1,31 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: lib.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/**
  * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
  * 
@@ -75,7 +102,7 @@ define(function () {
     var each = lib.each = fallback(
         Array.prototype.forEach,
         function (obj, iterator, bind) {
-            for (var i = 0, l = (obj.length >>> 0); i < l; i++) {
+            for (var i = 0, l = (obj.length >>> 0); i &lt; l; i++) {
                 if (i in obj) {
                     iterator.call(bind, obj[i], i, obj);
                 }
@@ -178,7 +205,7 @@ define(function () {
     var map = lib.map = lib.array.map = fallback(
         Array.prototype.map,
         function (obj, iterator, bind) {
-            for (var i = 0, l = obj.length; i < l; i++) {
+            for (var i = 0, l = obj.length; i &lt; l; i++) {
                 if (i in obj) {
                     obj[i] = iterator.call(bind, obj[i], i, obj);
                 }
@@ -209,8 +236,8 @@ define(function () {
         Array.prototype.indexOf,
         function (source, item, from) {
             var length = this.length >>> 0;
-            var i = (from < 0) ? Math.max(0, length + from) : from || 0;
-            for (; i < length; i++){
+            var i = (from &lt; 0) ? Math.max(0, length + from) : from || 0;
+            for (; i &lt; length; i++){
                 if (source[i] === item) {
                     return i;
                 }
@@ -799,7 +826,7 @@ define(function () {
             this._listeners = this._listeners || {};
             var listeners = this._listeners[type] || [];
 
-            if (indexOf(listeners, listener) < 0) {
+            if (indexOf(listeners, listener) &lt; 0) {
                 listener.$type = type;
                 listeners.push(listener);
             }
@@ -1309,7 +1336,7 @@ define(function () {
      * @param {string} className 要查找的 className
      * @param {HTMLElement=} scope 指定查找的范围
      * 
-     * @return {Array.<HTMLElement>} 符合条件的元素数组
+     * @return {Array.&lt;HTMLElement>} 符合条件的元素数组
      */
     lib.q = document.getElementsByClassName
         ? function (className, scope) {
@@ -1320,7 +1347,7 @@ define(function () {
             var nodes = scope.getElementsByTagName('*');
             var matches = [];
 
-            for (var i = 0, l = nodes.length; i < l; i++) {
+            for (var i = 0, l = nodes.length; i &lt; l; i++) {
                 if (lib.contains(nodes[i].className, className)) {
                     matches.push(nodes[i]);
                 }
@@ -1657,7 +1684,7 @@ define(function () {
      * @param {?Function} match 对元素匹配的回调函数
      * @param {boolean} all 是否查找所有符合的元素
      * 
-     * @return {(HTMLElement | Array.<HTMLElement> | null)} 匹配结果
+     * @return {(HTMLElement | Array.&lt;HTMLElement> | null)} 匹配结果
      */
     var walk = function (element, walk, start, match, all) {
         var el = lib.g(element)[start || walk];
@@ -1766,3 +1793,26 @@ define(function () {
 
     return lib;
 });
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#addTriggers">addTriggers</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#binds">binds</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#buildMonth">buildMonth</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#checkValidity">checkValidity</a></li><li><a href="global.html#clear">clear</a></li><li><a href="global.html#computePosition">computePosition</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#disableItems">disableItems</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#enableItems">enableItems</a></li><li><a href="global.html#fill">fill</a></li><li><a href="global.html#format">format</a></li><li><a href="global.html#from">from</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getPage">getPage</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#getValueAsDate">getValueAsDate</a></li><li><a href="global.html#getYYYYMM">getYYYYMM</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#isVisible">isVisible</a></li><li><a href="global.html#onBeforeShow">onBeforeShow</a></li><li><a href="global.html#onChange">onChange</a></li><li><a href="global.html#onClick">onClick</a></li><li><a href="global.html#onDisable">onDisable</a></li><li><a href="global.html#onDocClick">onDocClick</a></li><li><a href="global.html#onEnable">onEnable</a></li><li><a href="global.html#onHide">onHide</a></li><li><a href="global.html#onResize">onResize</a></li><li><a href="global.html#onShow">onShow</a></li><li><a href="global.html#pick">pick</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#refresh">refresh</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#setContent">setContent</a></li><li><a href="global.html#setPage">setPage</a></li><li><a href="global.html#setRange">setRange</a></li><li><a href="global.html#setTarget">setTarget</a></li><li><a href="global.html#setTitle">setTitle</a></li><li><a href="global.html#setTotal">setTotal</a></li><li><a href="global.html#setValue">setValue</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showNextMonth">showNextMonth</a></li><li><a href="global.html#showPreMonth">showPreMonth</a></li><li><a href="global.html#type">type</a></li><li><a href="global.html#updatePrevNextStatus">updatePrevNextStatus</a></li><li><a href="global.html#updateStatus">updateStatus</a></li><li><a href="global.html#validate">validate</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

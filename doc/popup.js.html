@@ -36,10 +36,11 @@
 
 define(function (require) {
 
-    var T = baidu;
-    var DOM = T.dom;
-    var PAGE = T.page;
+    var lib = require('./lib');
     var Control = require('./Control');
+
+    var DOM = lib.dom;
+    var PAGE = lib.page;
 
     /**
      * 弹出层控件
@@ -51,11 +52,7 @@ define(function (require) {
      * @see module:City
      * @see module:Calendar
      */
-    var Popup = function () {
-        this.constructor.superClass.constructor.apply(this, arguments);
-    };
-
-    Popup.prototype = {
+    var Popup = Control.extend({
 
         /**
          * 控件类型标识
@@ -195,22 +192,20 @@ define(function (require) {
          * @see module:Popup#options
          */
         init: function (options) {
-            options = this.setOptions(options);
-
             this.disabled  = options.disabled;
             this.content   = options.content;
 
             if (options.target) {
-                this.target = T.g(options.target);                
+                this.target = lib.g(options.target);                
             }
 
             var prefix = options.prefix;
             var main   = this.main = options.main 
-                && T.g(options.main)
+                && lib.g(options.main)
                 || document.createElement('div');
 
             if (options.main) {
-                T.addClass(main, prefix);
+                lib.addClass(main, prefix);
             }
             else {
                 main.className  = prefix;
@@ -223,15 +218,19 @@ define(function (require) {
 
             if (liveTriggers) {
 
-                this.liveTriggers = T.on(T.g(liveTriggers), 'click', me.onShow);
+                this.liveTriggers = lib.on(
+                    lib.g(liveTriggers),
+                    'click',
+                    me.onShow
+                );
             }
             else {
 
-                if (T.isString(triggers)) {
-                    triggers = T.q(options.triggers);
+                if (lib.isString(triggers)) {
+                    triggers = lib.q(options.triggers);
                 }
 
-                T.each(
+                lib.each(
                     triggers,
                     function (trigger) {
                         T.on(trigger, 'click', me.onShow);
@@ -259,7 +258,7 @@ define(function (require) {
 
                 var me = this;
 
-                T.on(
+                lib.on(
                     main,
                     'click',
                     function (e) {
@@ -267,7 +266,7 @@ define(function (require) {
                         /**
                          * @event module:Popup#click
                          * @type {Object}
-                         * @property {DOMEvent} event 事件源对象
+                         * @property {Event} event 事件源对象
                          */
                         me.fire('click', { event: e });
                     }
@@ -301,7 +300,7 @@ define(function (require) {
          * 显示浮层前处理
          * 
          * @private
-         * @param {DOMEvent} e DOM 事件对象
+         * @param {Event} e DOM 事件对象
          * @fires module:Popup#beforeShow 显示前事件
          */
         onShow: function (e) {
@@ -311,7 +310,7 @@ define(function (require) {
             /**
              * @event module:Popup#beforeShow
              * @type {Object}
-             * @property {DOMEvent} event 事件源对象
+             * @property {Event} event 事件源对象
              */
             this.fire('beforeShow', { event: e });
 
@@ -324,12 +323,12 @@ define(function (require) {
             }
 
             var me = this;
-            var trigger = T.event.getTarget(e);
+            var trigger = lib.getTarget(e);
             var liveTriggers = this.liveTriggers;
 
             if (liveTriggers) {
                 var cls = this.options.triggers;
-                var hasClass = T.dom.hasClass;
+                var hasClass = lib.hasClass;
                 while (!hasClass(trigger, cls) && trigger !== liveTriggers) {
                     trigger = trigger.parentNode;
                 }
@@ -344,8 +343,8 @@ define(function (require) {
             this.trigger = trigger;
 
             this.timer = setTimeout(function () {
-                T.on(document, 'click', me.onHide);
-                T.on(window, 'resize', me.onResize);
+                lib.on(document, 'click', me.onHide);
+                lib.on(window, 'resize', me.onResize);
             }, 0);
         },
 
@@ -355,7 +354,7 @@ define(function (require) {
          * @private
          */
         onHide: function (e) {
-            var target = T.event.getTarget(e);
+            var target = lib.getTarget(e);
             var main   = this.main;
 
             if (main === target || DOM.contains(main, target)) {
@@ -396,8 +395,8 @@ define(function (require) {
              */
             this.fire('hide');
 
-            T.un(document, 'click', this.onHide);
-            T.un(window, 'resize', this.onResize);
+            lib.un(document, 'click', this.onHide);
+            lib.un(window, 'resize', this.onResize);
 
             clearTimeout(this.timer);
             clearTimeout(this.resizeTimer);
@@ -529,12 +528,17 @@ define(function (require) {
 
             }
 
-            DOM.setStyles(main, {left: left + offset.x, top: top + offset.y});
+            DOM.setStyles(
+                main, 
+                {
+                    left: left + offset.x + 'px',
+                    top: top + offset.y + 'px'
+                }
+            );
 
         }
 
-    };
-    T.inherits(Popup, Control);
+    });
 
     return Popup;
 });
@@ -548,13 +552,13 @@ define(function (require) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#type">type</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#addTriggers">addTriggers</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#binds">binds</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#buildMonth">buildMonth</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#checkValidity">checkValidity</a></li><li><a href="global.html#clear">clear</a></li><li><a href="global.html#computePosition">computePosition</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#disableItems">disableItems</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#enableItems">enableItems</a></li><li><a href="global.html#fill">fill</a></li><li><a href="global.html#format">format</a></li><li><a href="global.html#from">from</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getPage">getPage</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#getValueAsDate">getValueAsDate</a></li><li><a href="global.html#getYYYYMM">getYYYYMM</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#isVisible">isVisible</a></li><li><a href="global.html#onBeforeShow">onBeforeShow</a></li><li><a href="global.html#onChange">onChange</a></li><li><a href="global.html#onClick">onClick</a></li><li><a href="global.html#onDisable">onDisable</a></li><li><a href="global.html#onDocClick">onDocClick</a></li><li><a href="global.html#onEnable">onEnable</a></li><li><a href="global.html#onHide">onHide</a></li><li><a href="global.html#onResize">onResize</a></li><li><a href="global.html#onShow">onShow</a></li><li><a href="global.html#pick">pick</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#refresh">refresh</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#setContent">setContent</a></li><li><a href="global.html#setPage">setPage</a></li><li><a href="global.html#setRange">setRange</a></li><li><a href="global.html#setTarget">setTarget</a></li><li><a href="global.html#setTitle">setTitle</a></li><li><a href="global.html#setTotal">setTotal</a></li><li><a href="global.html#setValue">setValue</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showNextMonth">showNextMonth</a></li><li><a href="global.html#showPreMonth">showPreMonth</a></li><li><a href="global.html#type">type</a></li><li><a href="global.html#updatePrevNextStatus">updatePrevNextStatus</a></li><li><a href="global.html#updateStatus">updateStatus</a></li><li><a href="global.html#validate">validate</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Jul 10 2013 14:32:18 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

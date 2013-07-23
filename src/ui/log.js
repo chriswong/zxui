@@ -438,39 +438,33 @@ define(function (require) {
         send: send
     };
 
-    var observable = lib.observable;
-    lib.extend(exports, {
+    /**
+     * 添加事件绑定
+     * 
+     * @static
+     * @method module:log.on
+     * @param {?string} type 事件类型
+     * @param {Function} listner 要添加绑定的监听器
+     */
 
-        /**
-         * 添加事件绑定
-         * 
-         * @static
-         * @method module:log.on
-         * @param {?string} type 事件类型
-         * @param {Function} listner 要添加绑定的监听器
-         */
-        on: observable.on,
+    /**
+     * 解除事件绑定
+     * 
+     * @static
+     * @method module:log.un
+     * @param {string=} type 事件类型
+     * @param {Function=} listner 要解除绑定的监听器
+     */
 
-        /**
-         * 解除事件绑定
-         * 
-         * @static
-         * @method module:log.un
-         * @param {string=} type 事件类型
-         * @param {Function=} listner 要解除绑定的监听器
-         */
-        un: observable.un,
-
-        /**
-         * 触发指定事件
-         * 
-         * @static
-         * @method module:log.fire
-         * @param {string} type 事件类型
-         * @param {Object} args 透传的事件数据对象
-         */
-        fire: observable.fire
-    });
+    /**
+     * 触发指定事件
+     * 
+     * @static
+     * @method module:log.fire
+     * @param {string} type 事件类型
+     * @param {Object} args 透传的事件数据对象
+     */
+    lib.extend(exports, lib.clone(lib.observable));
 
     return exports;
 });

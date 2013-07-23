@@ -35,23 +35,23 @@
 
 define(function (require) {
 
-    var T = baidu;
-    var DOM = T.dom;
-    var PAGE = T.page;
+    var lib = require('./lib');
+    var DOM = lib.dom;
+    var PAGE = lib.page;
     var Control = require('./Control');
 
     /**
      * 从事件源查找目标DOM节点
      * 
-     * @param {DOMEvent} e DOM事件对象
+     * @param {Event} e DOM事件对象
      * @param {string} className 目标的className
      * @return {?HTMLElement} 找到的目标对象
      */
     var getTarget = function (e, className) {
-        var target = T.event.getTarget(e);
+        var target = lib.getTarget(e);
 
-        if (!DOM.hasClass(target, className)) {
-            target = DOM.getAncestorByClass(target, className);
+        if (!lib.hasClass(target, className)) {
+            target = lib.getAncestorByClass(target, className);
 
             if (!target) {
                 return null;
@@ -79,21 +79,7 @@ define(function (require) {
      * }).render();
      * 
      */
-    var Tip = function () {
-        this.constructor.superClass.constructor.apply(this, arguments);
-    };
-
-    /**
-     * 提示框消失的延迟时间，单位毫秒
-     * 
-     * @public
-     * @const
-     * @type {number}
-     */
-    Tip.HIDE_DELAY = 500;
-
-
-    Tip.prototype = {
+    var Tip = Control.extend({
 
         /**
          * 控件类型标识
@@ -199,7 +185,6 @@ define(function (require) {
          * @see module:Tip#options
          */
         init: function (options) {
-            options = this.setOptions(options);
             options.hideDelay = options.hideDelay &lt; 0
                 ? Tip.HIDE_DELAY : options.hideDelay;
 
@@ -246,7 +231,7 @@ define(function (require) {
 
                 document.body.appendChild(main);
 
-                T.on(
+                lib.on(
                     main,
                     'click',
                     function (e) {
@@ -254,14 +239,14 @@ define(function (require) {
                         /**
                          * @event module:Tip#click
                          * @type {Object}
-                         * @property {DOMEvent} event 事件源对象
+                         * @property {Event} event 事件源对象
                          */
                         me.fire('click', {event: e});
                     }
                 );
 
                 if (this.options.mode === 'over') {
-                    T.on(
+                    lib.on(
                         main,
                         'mouseenter',
                         function () {
@@ -269,7 +254,7 @@ define(function (require) {
                         }
                     );
 
-                    T.on(
+                    lib.on(
                         main,
                         'mouseleave',
                         function () {
@@ -282,10 +267,10 @@ define(function (require) {
                 var elements = this.elements = {};
                 var prefix = options.prefix + '-';
 
-                T.each(
+                lib.each(
                     'arrow,title,body'.split(','),
                     function (name) {
-                        elements[name] = T.q(prefix + name, main)[0];
+                        elements[name] = lib.q(prefix + name, main)[0];
                     }
                 );
 
@@ -314,15 +299,15 @@ define(function (require) {
             var flag    = options.flag;
 
             this.triggers = typeof triggers === 'string'
-                ? T.q(options.triggers)
+                ? lib.q(options.triggers)
                 : (triggers.length ? triggers : [triggers]);
 
             if (events) {
-                T.each(
+                lib.each(
                     this.triggers,
                     function (trigger) {
-                        T.addClass(trigger, flag);
-                        T.on(trigger, events.on, me.onShow);
+                        lib.addClass(trigger, flag);
+                        lib.on(trigger, events.on, me.onShow);
                     }
                 );
             }
@@ -343,17 +328,17 @@ define(function (require) {
             var events  = this.events;
 
             triggers = typeof triggers === 'string'
-                ? T.q(triggers, parentNode)
+                ? lib.q(triggers, parentNode)
                 : (triggers.length ? triggers : [triggers]);
 
             if (events) {
                 if (this.triggers) {
-                    T.each(
+                    lib.each(
                         triggers,
                         function (trigger) {
                             if (!triggers.parentElement) {
-                                T.un(trigger, events.on, me.onShow);
-                                T.un(trigger, events.un, me.onHide);
+                                lib.un(trigger, events.on, me.onShow);
+                                lib.un(trigger, events.un, me.onHide);
                             }
                         }
                     );
@@ -395,15 +380,15 @@ define(function (require) {
          * 处理文档中的单击事件
          * 
          * @private
-         * @param {DOMEvent} e 原生事件对象
+         * @param {Event} e 原生事件对象
          */
         onDocClick: function (e) {
             var main = this.main;
-            var target = T.event.getTarget(e);
+            var target = lib.getTarget(e);
 
             if (
                 main === target
-                    || ~T.array.indexOf(this.triggers, target)
+                    || ~lib.array.indexOf(this.triggers, target)
                     || DOM.contains(main, target)
             ) {
                 return;
@@ -417,7 +402,7 @@ define(function (require) {
          * 显示浮层前处理
          * 
          * @private
-         * @param {DOMEvent} e DOM 事件对象
+         * @param {Event} e DOM 事件对象
          * @fires module:Tip#beforeShow 显示前事件
          */
         onShow: function (e) {
@@ -431,16 +416,16 @@ define(function (require) {
 
             var events = this.events;
             if (events) {
-                T.on(target, events.un, this.onHide);
-                T.un(target, events.on, this.onShow);
+                lib.on(target, events.un, this.onHide);
+                lib.un(target, events.on, this.onShow);
 
                 if (this.current) {
-                    T.on(this.current, events.on, this.onShow);
-                    T.un(this.current, events.un, this.onHide);
+                    lib.on(this.current, events.on, this.onShow);
+                    lib.un(this.current, events.un, this.onHide);
                 }
 
                 if (this.options.mode === 'click') {
-                    T.on(document, 'click', this.onDocClick);
+                    lib.on(document, 'click', this.onDocClick);
                 }
             }
 
@@ -450,7 +435,7 @@ define(function (require) {
              * @event module:Tip#beforeShow
              * @type {Object}
              * @property {HTMLElement} target 事件源 DOM 对象
-             * @property {DOMEvent} e 事件源对象
+             * @property {Event} e 事件源对象
              */
             this.fire('beforeShow', { target: target, event: e});
 
@@ -491,7 +476,7 @@ define(function (require) {
            
             this.current = target;
 
-            T.on(window, 'resize', this.onResize);
+            lib.on(window, 'resize', this.onResize);
 
             elements.title.innerHTML = this.title || '';
             elements.body.innerHTML  = this.content;
@@ -499,7 +484,7 @@ define(function (require) {
             T[this.title ? 'show' : 'hide'](elements.title);
 
             if (!options.arrow) {
-                T.hide(elements.arrow);
+                lib.hide(elements.arrow);
             }
 
             this.computePosition();
@@ -525,21 +510,21 @@ define(function (require) {
             var events = this.events;
             var target = this.current;
             if (events && target) {
-                T.on(target, events.on, this.onShow);
-                T.un(target, events.un, this.onHide);
+                lib.on(target, events.on, this.onShow);
+                lib.un(target, events.un, this.onHide);
 
                 if (this.options.mode === 'click') {
-                    T.un(document, 'click', this.onDocClick);
+                    lib.un(document, 'click', this.onDocClick);
                 }
             }
 
             this.clear();
 
             var arrow = this.elements.arrow;
-            DOM.setStyle(main, 'left', - main.offsetWidth - arrow.offsetWidth);
+            main.style.left = - main.offsetWidth - arrow.offsetWidth + 'px';
 
             this.current = null;
-            T.un(window, 'resize', this.onResize);
+            lib.un(window, 'resize', this.onResize);
 
             /**
              * @event module:Tip#hide
@@ -715,18 +700,13 @@ define(function (require) {
                     b: bottom + arrowHeight + offset.y
                 }[first];
 
-                DOM.setStyle(
-                    arrow,
-                    'left',
-
-                    // 在目标宽于提示层或 dir 为 tc 或 bc 时，箭头相对提示层水平居中
-                    {
-                        c: middleLeft,
-                        l: (width - arrowWidth) / 2,
-                        r: (mainWidth - (width - arrowWidth) / 2)
-                    }[width > mainWidth ? 'c' : second]
-                );
-                DOM.setStyle(arrow, 'top', '');
+                // 在目标宽于提示层或 dir 为 tc 或 bc 时，箭头相对提示层水平居中
+                arrow.style.left = {
+                    c: middleLeft,
+                    l: (width - arrowWidth) / 2,
+                    r: (mainWidth - (width - arrowWidth) / 2)
+                }[width > mainWidth ? 'c' : second] + 'px';
+                arrow.style.top = '';
 
             }
 
@@ -743,27 +723,31 @@ define(function (require) {
                     r: right + arrowWidth + offset.x
                 }[first];
 
-                DOM.setStyle(
-                    arrow,
-                    'top',
-
-                    // 在目标高于提示层或 dir 为 lc 或 rc 时，箭头相对提示层垂直居中
-                    {
-                        c: middleTop,
-                        t: (height - arrowHeight) / 2,
-                        b: (mainHeight - (height - arrowHeight) / 2)
-                    }[height > mainHeight ? 'c' : second]
-                );
-                DOM.setStyle(arrow, 'left', '');
+                // 在目标高于提示层或 dir 为 lc 或 rc 时，箭头相对提示层垂直居中
+                arrow.style.top = {
+                    c: middleTop,
+                    t: (height - arrowHeight) / 2,
+                    b: (mainHeight - (height - arrowHeight) / 2)
+                }[height > mainHeight ? 'c' : second] + 'px';
+                arrow.style.left = '';
 
             }
 
-            DOM.setStyles(main, {left: left, top: top});
+            DOM.setStyles(main, {left: left + 'px', top: top + 'px'});
 
         }
 
-    };
-    T.inherits(Tip, Control);
+    });
+
+    /**
+     * 提示框消失的延迟时间，单位毫秒
+     * 
+     * @public
+     * @const
+     * @type {number}
+     */
+    Tip.HIDE_DELAY = 500;
+
 
     return Tip;
 });
@@ -777,13 +761,13 @@ define(function (require) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#type">type</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#addTriggers">addTriggers</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#binds">binds</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#buildMonth">buildMonth</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#checkValidity">checkValidity</a></li><li><a href="global.html#clear">clear</a></li><li><a href="global.html#computePosition">computePosition</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#disableItems">disableItems</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#enableItems">enableItems</a></li><li><a href="global.html#fill">fill</a></li><li><a href="global.html#format">format</a></li><li><a href="global.html#from">from</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getPage">getPage</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#getValueAsDate">getValueAsDate</a></li><li><a href="global.html#getYYYYMM">getYYYYMM</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#isVisible">isVisible</a></li><li><a href="global.html#onBeforeShow">onBeforeShow</a></li><li><a href="global.html#onChange">onChange</a></li><li><a href="global.html#onClick">onClick</a></li><li><a href="global.html#onDisable">onDisable</a></li><li><a href="global.html#onDocClick">onDocClick</a></li><li><a href="global.html#onEnable">onEnable</a></li><li><a href="global.html#onHide">onHide</a></li><li><a href="global.html#onResize">onResize</a></li><li><a href="global.html#onShow">onShow</a></li><li><a href="global.html#pick">pick</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#refresh">refresh</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#setContent">setContent</a></li><li><a href="global.html#setPage">setPage</a></li><li><a href="global.html#setRange">setRange</a></li><li><a href="global.html#setTarget">setTarget</a></li><li><a href="global.html#setTitle">setTitle</a></li><li><a href="global.html#setTotal">setTotal</a></li><li><a href="global.html#setValue">setValue</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showNextMonth">showNextMonth</a></li><li><a href="global.html#showPreMonth">showPreMonth</a></li><li><a href="global.html#type">type</a></li><li><a href="global.html#updatePrevNextStatus">updatePrevNextStatus</a></li><li><a href="global.html#updateStatus">updateStatus</a></li><li><a href="global.html#validate">validate</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Jul 10 2013 14:32:18 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -38,7 +38,7 @@ module.exports = function (grunt) {
         },
 
         jsdoc : {
-            files: ['src/ui/lib.js'], 
+            files: ['src/ui/*.js'], 
             options: {
                 configure: '.jsdocrc',
                 destination: 'doc'

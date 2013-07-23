@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: City</title>
+    <title>JSDoc: Namespace: event</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Module: City</h1>
+    <h1 class="page-title">Namespace: event</h1>
     
     
 
@@ -27,7 +27,9 @@
     
 <header>
     <h2>
-    City
+        <span class="ancestors"><a href="module-lib.html">lib</a>.</span>
+    
+    event
     </h2>
     
 </header>  
@@ -38,7 +40,7 @@
     
     
         
-            <div class="description">国内城市选择控件</div>
+            <div class="description">DOM 事件相关操作</div>
         
         
         
@@ -64,7 +66,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line31">line 31</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line950">line 950</a>
     </li></ul></dd>
     
     
@@ -77,37 +79,10 @@
 
         
         
-            <h3>Example</h3>
-            
-    <pre class="prettyprint"><code>&lt;input type="text" class="input triggers" /&gt;
-&lt;input type="button" value="click" class="triggers" /&gt;
-new City({
-    triggers: '.triggers',
-    target: '.input'
- }).render();</code></pre>
-
-        
     
     </div>
     
     
-        <h3 class="subsection-title">Extends</h3>
-        
-        <ul>
-            <li><a href="module-Control.html">module:Control</a></li>
-        </ul>
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Requires</h3>
-        
-        <ul>
-            <li><a href="module-Control.html">module:Control</a></li>
-        
-            <li><a href="module-Popup.html">module:Popup</a></li>
-        </ul>
     
     
     
@@ -115,43 +90,37 @@ new City({
     
     
     
-        <h3 class="subsection-title">Members</h3>
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
         
         <dl>
             
 <dt>
-    <h4 class="name" id="options"><span class="type-signature">&lt;private> </span>options<span class="type-signature"> :Object</span></h4>
+    <h4 class="name" id="fire"><span class="type-signature">&lt;static> </span>fire<span class="signature">(element, type)</span><span class="type-signature"> &rarr; {HTMLElement|window}</span></h4>
     
     
 </dt>
 <dd>
+    
     
     <div class="description">
-        控件配置项
+        触发目标元素指定事件
     </div>
     
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
 
     
-<dl class="details">
     
+    
+    
+    
+        <h5>Parameters:</h5>
         
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
 
-<table class="props">
+<table class="params">
     <thead>
 	<tr>
 		
@@ -160,8 +129,6 @@ new City({
 		
 		<th>Type</th>
 		
-		
-		<th>Argument</th>
 		
 		
 		
@@ -175,100 +142,33 @@ new City({
 	
         <tr>
             
-                <td class="name"><code>disabled</code></td>
+                <td class="name"><code>element</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">控件的不可用状态</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>main</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
+<span class="param-type">HTMLElement</span>
 |
 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">window</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">控件渲染容器</td>
+            <td class="description last">目标元素</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>target</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-|
-
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">计算弹出层相对位置的目标对象</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>prefix</code></td>
+                <td class="name"><code>type</code></td>
             
             
             <td class="type">
@@ -281,140 +181,19 @@ new City({
             </td>
             
             
-                <td class="attributes">
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">控件class前缀，同时将作为main的class之一</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>index</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">默认激活的标签索引</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>activeClass</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">激活标签、内容的class</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>autoFill</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">是否自动填充默认城市数据(机票可用城市数据)</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>hideCities</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">需要隐藏的城市</td>
+            <td class="description last">事件类型</td>
         </tr>
 	
 	
 	</tbody>
-</table></dl>
-        
+</table>
+    
+    
+    
+<dl class="details">
     
         
     
@@ -436,19 +215,12 @@ new City({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line42">line 42</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line1041">line 1041</a>
     </li></ul></dd>
     
     
     
     
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="module-Popup.html#options">module:Popup#options</a></li>
-        </ul>
-    </dd>
     
     
     
@@ -456,54 +228,392 @@ new City({
 
     
     
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    目标元素
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HTMLElement</span>
+|
+
+<span class="param-type">window</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
 </dd>
 
-        </dl>
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Events</h3>
         
-        <dl>
             
 <dt>
-    <h4 class="name" id="event:beforeShow">beforeShow</h4>
+    <h4 class="name" id="getTarget"><span class="type-signature">&lt;static> </span>getTarget<span class="signature">(e)</span><span class="type-signature"> &rarr; {HTMLElement}</span></h4>
     
     
 </dt>
 <dd>
     
     
+    <div class="description">
+        获取事件源对象
+    </div>
+    
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
 
-
-            </li>
-        </ul>
-    
-    
-    
-    
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+            
+            <td class="type">
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">DOM 事件对象</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
 <dl class="details">
     
         
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
+    
+    
+    
 
-<table class="props">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line1073">line 1073</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    获取事件目标对象
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HTMLElement</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="on"><span class="type-signature">&lt;static> </span>on<span class="signature">(element, type, listener)</span><span class="type-signature"> &rarr; {HTMLElement|window}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        为目标元素添加事件监听器
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>element</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+|
+
+<span class="param-type">window</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">目标元素</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">事件类型</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">需要添加的监听器</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line953">line 953</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    目标元素
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HTMLElement</span>
+|
+
+<span class="param-type">window</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="preventDefault"><span class="type-signature">&lt;static> </span>preventDefault<span class="signature">(event)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        阻止事件默认行为
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
     <thead>
 	<tr>
 		
@@ -530,24 +640,22 @@ new City({
             
             <td class="type">
             
-                
-<span class="param-type">DOMEvent</span>
-
-
-            
             </td>
             
             
             
             
             
-            <td class="description last">事件源对象</td>
+            <td class="description last">事件对象</td>
         </tr>
 	
 	
 	</tbody>
-</table></dl>
-        
+</table>
+    
+    
+    
+<dl class="details">
     
         
     
@@ -569,7 +677,7 @@ new City({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line311">line 311</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line1094">line 1094</a>
     </li></ul></dd>
     
     
@@ -597,39 +705,27 @@ new City({
         
             
 <dt>
-    <h4 class="name" id="event:click">click</h4>
+    <h4 class="name" id="stopPropagation"><span class="type-signature">&lt;static> </span>stopPropagation<span class="signature">(event)</span><span class="type-signature"></span></h4>
     
     
 </dt>
 <dd>
     
     
+    <div class="description">
+        阻止事件冒泡
+    </div>
+    
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
     
     
     
     
-    
-    
-    
-<dl class="details">
-    
+        <h5>Parameters:</h5>
         
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
 
-<table class="props">
+<table class="params">
     <thead>
 	<tr>
 		
@@ -656,24 +752,22 @@ new City({
             
             <td class="type">
             
-                
-<span class="param-type">DOMEvent</span>
-
-
-            
             </td>
             
             
             
             
             
-            <td class="description last">事件源对象</td>
+            <td class="description last">事件对象</td>
         </tr>
 	
 	
 	</tbody>
-</table></dl>
-        
+</table>
+    
+    
+    
+<dl class="details">
     
         
     
@@ -695,7 +789,7 @@ new City({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line294">line 294</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line1113">line 1113</a>
     </li></ul></dd>
     
     
@@ -723,104 +817,27 @@ new City({
         
             
 <dt>
-    <h4 class="name" id="event:hide">hide</h4>
+    <h4 class="name" id="un"><span class="type-signature">&lt;static> </span>un<span class="signature">(element, type, listener)</span><span class="type-signature"> &rarr; {HTMLElement|window}</span></h4>
     
     
 </dt>
 <dd>
     
     
+    <div class="description">
+        为目标元素移除事件监听器
+    </div>
+    
 
     
     
     
     
     
-    
-    
-<dl class="details">
-    
+        <h5>Parameters:</h5>
         
-    
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line436">line 436</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="event:pick">pick</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
-
-<table class="props">
+<table class="params">
     <thead>
 	<tr>
 		
@@ -842,7 +859,33 @@ new City({
 	
         <tr>
             
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>element</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+|
+
+<span class="param-type">window</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">目标元素</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>type</code></td>
             
             
             <td class="type">
@@ -858,151 +901,39 @@ new City({
             
             
             
-            <td class="description last">选中的城市</td>
+            <td class="description last">事件类型</td>
         </tr>
 	
-	
-	</tbody>
-</table></dl>
-        
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line370">line 370</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="event:show">show</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
 	
 	
         <tr>
             
-                <td class="name"><code>target</code></td>
+                <td class="name"><code>listener</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">Function</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                </td>
             
             
             
-            
-            <td class="description last">触发显示浮层的节点</td>
+            <td class="description last">需要移除的监听器</td>
         </tr>
 	
 	
 	</tbody>
-</table></dl>
-        
+</table>
+    
+    
+    
+<dl class="details">
     
         
     
@@ -1024,7 +955,7 @@ new City({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="City.js.html">City.js</a>, <a href="City.js.html#line417">line 417</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line998">line 998</a>
     </li></ul></dd>
     
     
@@ -1045,11 +976,40 @@ new City({
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    目标元素
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HTMLElement</span>
+|
+
+<span class="param-type">window</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
 
         </dl>
+    
+    
+    
+    
     
 </article>
 
@@ -1067,7 +1027,7 @@ new City({
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:52 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
