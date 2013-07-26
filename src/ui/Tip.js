@@ -279,8 +279,10 @@ define(function (require) {
                 lib.each(
                     this.triggers,
                     function (trigger) {
-                        lib.addClass(trigger, flag);
-                        lib.on(trigger, events.on, me.onShow);
+                        if (!lib.hasClass(trigger, flag)) {
+                            lib.addClass(trigger, flag);
+                            lib.on(trigger, events.on, me.onShow);
+                        }
                     }
                 );
             }
@@ -573,7 +575,7 @@ define(function (require) {
             var mainHeight   = main.offsetHeight;
 
             // 箭头宽高
-            // XXX: 如果通过 tpl 修改了控件模板，
+            // FIXME: 如果通过 tpl 修改了控件模板，
             // 或者针对箭头部分改了样式，此处得到结果不对或者报错
             var arrowWidth   = arrow.firstChild.offsetWidth;
             var arrowHeight  = arrow.firstChild.offsetHeight;
@@ -657,9 +659,6 @@ define(function (require) {
             arrowWidth  = arrow.firstChild.offsetWidth;
             arrowHeight = arrow.firstChild.offsetHeight;
 
-            var middleLeft = (mainWidth - arrowWidth) / 2;
-            var middleTop  = (mainHeight - arrowHeight) / 2;
-
             // 提示层在目标上部或下部显示时的定位处理
             if ({t: 1, b: 1}[first]) {
                 left = {
@@ -673,11 +672,13 @@ define(function (require) {
                     b: bottom + arrowHeight + offset.y
                 }[first];
 
+                var middleX = (width - arrowWidth) / 2;
+                
                 // 在目标宽于提示层或 dir 为 tc 或 bc 时，箭头相对提示层水平居中
                 arrow.style.left = {
-                    c: middleLeft,
-                    l: (width - arrowWidth) / 2,
-                    r: (mainWidth - (width - arrowWidth) / 2)
+                    c: (mainWidth - arrowWidth) / 2,
+                    l: middleX,
+                    r: mainWidth - Math.max(arrowWidth, middleX)
                 }[width > mainWidth ? 'c' : second] + 'px';
                 arrow.style.top = '';
 
@@ -696,11 +697,13 @@ define(function (require) {
                     r: right + arrowWidth + offset.x
                 }[first];
 
+                var middleY = (height - arrowHeight) / 2;
+
                 // 在目标高于提示层或 dir 为 lc 或 rc 时，箭头相对提示层垂直居中
                 arrow.style.top = {
-                    c: middleTop,
-                    t: (height - arrowHeight) / 2,
-                    b: (mainHeight - (height - arrowHeight) / 2)
+                    c: (mainHeight - arrowHeight) / 2,
+                    t: middleY,
+                    b: mainHeight - Math.max(arrowHeight, middleY)
                 }[height > mainHeight ? 'c' : second] + 'px';
                 arrow.style.left = '';
 
