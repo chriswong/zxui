@@ -601,6 +601,34 @@ define(function () {
         return ~source.indexOf(target);
     };
     
+    /**
+     * 对目标数字进行 0 补齐处理
+     * 
+     * @method module:lib.pad
+     * @param {(number | string)} source 需要补齐的数字或字符串
+     * @param {number} width 补齐后的固定宽度（必须小于32）
+     */
+    /**
+     * 对目标数字进行0补齐处理
+     * 
+     * @method module:lib.string.pad
+     * @param {(number | string)} source 需要补齐的数字或字符串
+     * @param {number} width 补齐后的固定宽度（必须小于32）
+     */
+    lib.pad = lib.string.pad = function (source, width) {
+        var str = String(Math.abs(source | 0));
+
+        return (source < 0 ? '-' : '')
+            + (
+                str.length >= width
+                    ? str
+                    : (
+                        ((1 << (width - str.length)).toString(2) + str)
+                        .slice(-width)
+                    )
+            );
+    };
+
     /* ========================== lib.fn ========================== */
 
     /** 
