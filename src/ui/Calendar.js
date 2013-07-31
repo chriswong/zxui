@@ -20,18 +20,6 @@ define(function (require) {
      */
     var DATE_FORMAT = 'yyyy-MM-dd';
 
-    /**
-     * 阻止事件冒泡
-     * 
-     * @param {DOMEvent} e 事件对象
-     */
-    function stopPropagation(e) {
-        if (e.stopPropagation) {
-            e.stopPropagation();
-        } else {
-            e.cancelBubble = true;
-        }
-    }
 
     /**
      * 补齐数字位数
@@ -366,7 +354,7 @@ define(function (require) {
             date = date || this.date || this.from(this.value);
 
             if (prev) {
-                T[!range 
+                lib[!range 
                     || this.getYYYYMM(range.begin) < this.getYYYYMM(date)
                     ? 'show' : 'hide'
                 ](prev);
@@ -380,7 +368,7 @@ define(function (require) {
                 1
             );
             if ( next) {
-                T[!range
+                lib[!range
                     || this.getYYYYMM(range.end) > this.getYYYYMM(last)
                     ? 'show' : 'hide'
                 ](next);
@@ -552,6 +540,8 @@ define(function (require) {
                     var nextClass = prefix + '-next';
                     var disClass  = prefix + '-disabled';
                     var hasClass  = lib.hasClass;
+
+                    var stopPropagation = lib.stopPropagation;
 
                     // 上月操作
                     if (hasClass(el, preClass)) {
