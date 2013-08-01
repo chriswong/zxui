@@ -381,14 +381,14 @@ define(function (require) {
         * @private
         */
         buildMonth: function (date) {
-            var year  = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var today = date.getDate();
-            var day   = date.getDay();
-            var yM    = year + pad(month);
+            var year     = date.getFullYear();
+            var month    = date.getMonth() + 1;
+            var today    = date.getDate();
+            var day      = date.getDay();
+            var cacheKey = year + pad(month);
 
-            if (cache[yM]) {
-                return cache[yM];
+            if (cache[cacheKey]) {
+                return cache[cacheKey];
             }
 
             var weeks     = 7;
@@ -504,8 +504,8 @@ define(function (require) {
             html.push('</p>');
             html.push('</div>');
 
-            cache[yM] = html.join('');
-            return cache[yM];
+            cache[cacheKey] = html.join('');
+            return cache[cacheKey];
         },
 
         /**
