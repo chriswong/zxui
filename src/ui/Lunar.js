@@ -535,7 +535,7 @@ define(function (require) {
          */
         getYYYYMM: function (date) {
             return (
-                typeof date === 'number'
+                lib.isString(date)
                 ? date
                 : this.format(this.from(date), 'yyyyMM')
             );
@@ -580,6 +580,7 @@ define(function (require) {
          * 构建HTML
          * 
          * @private
+         * @fires module:Lunar#navigate
          */
         build: function (date) {
 
@@ -589,6 +590,14 @@ define(function (require) {
 
             this.updateStatus();
             this.updatePrevNextStatus(date);
+
+            /**
+             * @event module:Lunar#navigate
+             * @type {Object}
+             * @property {Date} date 选中的日期对象
+             * @property {string} yyyyMM 选中日期的格式化星期
+             */
+            this.fire('navigate', {date: date, yyyyMM: this.getYYYYMM(date)});
         },
 
         /**
@@ -611,7 +620,7 @@ define(function (require) {
             if (prev) {
                 lib[!range 
                     || this.getYYYYMM(range.begin) < dateYYYYMM
-                    ? 'show' : 'hide'
+                        ? 'show' : 'hide'
                 ](prev);
 
             }
@@ -619,7 +628,7 @@ define(function (require) {
             if ( next) {
                 lib[!range
                     || this.getYYYYMM(range.end) > dateYYYYMM
-                    ? 'show' : 'hide'
+                        ? 'show' : 'hide'
                 ](next);
             }
         },
@@ -767,7 +776,8 @@ define(function (require) {
          * 处理选单点击事件
          * 
          * @private
-         * @param {Object} args 从 Popup 传来的事件对象
+         * @param {Event} event DOM 事件对象
+         * @fires module:Lunar#click
          */
         onClick: function (event) {
             var e = event;
@@ -811,8 +821,11 @@ define(function (require) {
                     }
                     // 回到今天
                     else if (hasClass(el, goTodayClass)) {
-                        this.date = new Date();
-                        this.build();
+                        var now = new Date();
+                        if (this.getYYYYMM(this.date) !== this.getYYYYMM(now)) {
+                            this.date = now;
+                            this.build();                          
+                        }
                     }
                     // 添加事件
                     else if (hasClass(el, addEventClass)) {
@@ -830,6 +843,10 @@ define(function (require) {
 
             }
 
+            /**
+             * @event module:Lunar#click
+             * @type {Event}
+             */
             this.fire('click', event);
         },
 
