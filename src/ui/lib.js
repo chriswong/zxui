@@ -598,7 +598,7 @@ define(function () {
         seperator = seperator || ' ';
         source = seperator + source + seperator;
         target = seperator + lib.trim(target) + seperator;
-        return ~source.indexOf(target);
+        return source.indexOf(target) > -1;
     };
     
     /**
