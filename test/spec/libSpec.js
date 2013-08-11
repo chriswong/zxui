@@ -23,15 +23,40 @@
                 expect(lib.isString(new String('string create from new')))
                     .toBeTruthy();
 
+                expect(lib.typeOf(new String('box string'))).toBe('string');
+
             });
 
-            it('数组判断', function () {
+            it('数组判断及转换', function () {
 
                 expect(lib.isArray).not.toBeUndefined();
 
                 expect(lib.isArray(['simply array'])).toBeTruthy();
 
                 expect(lib.isArray(new Array(5))).toBeTruthy();
+
+                expect(lib.typeOf([])).toBe('array');
+
+                var array = lib.toArray(arguments);
+                expect(lib.isArray(array)).toBe(true);
+
+                array = lib.toArray(null);
+                expect(lib.isArray(array)).toBe(true);
+
+                array = lib.toArray([1, 2, 3]);
+                expect(lib.isArray(array)).toBe(true);
+
+                array = lib.toArray({length: 3, 0: 1, 1: 2, 2: 3});
+                expect(lib.isArray(array)).toBe(true);
+
+                array = lib.toArray(document.getElementsByTagName('*'));
+                expect(lib.isArray(array)).toBe(true);
+
+                array = lib.toArray(1);
+                expect(lib.isArray(array)).toBe(true);
+
+                array = [1, 2];
+                expect(lib.clone(array) === array).toBeFalsy();
 
             });
 
@@ -41,6 +66,8 @@
 
                 expect(lib.isFunction(lib.isFunction)).toBeTruthy();
 
+                expect(lib.typeOf(lib.isFunction)).toBe('function');
+
             });
 
             it('日期判断', function () {
@@ -48,6 +75,13 @@
                 expect(lib.isDate).not.toBeUndefined();
 
                 expect(lib.isDate(new Date())).toBeTruthy();
+
+                expect(lib.typeOf(new Date())).toBe('date');
+
+            });
+
+            it('DOM判断', function () {
+                expect(lib.typeOf(document.createElement('div'))).toBe('dom');
 
             });
 
@@ -62,8 +96,85 @@
 
                 expect(lib.isObject(new Object())).toBeTruthy();
 
+                expect(lib.typeOf({})).toBe('object');
+
             });
 
+        });
+
+        describe('JSON处理', function () {
+            it('toQueryString', function () {
+                var input = {a: [1, 2], b: 1, c: 'c', d: {e: 1}};
+                var output = 'a[1]=2&a[0]=1&b=1&c=c&d[e]=1';
+                expect(lib.toQueryString(input)).toBe(output);
+            });
+        });
+
+        describe('string处理', function () {
+            it('camelCase', function () {
+                var input = 'position-x';
+                var output = 'positionX';
+                expect(lib.camelCase(input)).toBe(output);
+
+                input = 'border-left-width';
+                output = 'borderLeftWidth';
+                expect(lib.camelCase(input)).toBe(output);
+
+                input = 'border-Left-width';
+                output = 'borderLeftWidth';
+                expect(lib.camelCase(input)).toBe(output);
+            });
+
+            it('capitalize', function () {
+                var input = 'position';
+                var output = 'Position';
+                expect(lib.capitalize(input)).toBe(output);
+
+                input = 'border-left-width';
+                output = 'Border-Left-Width';
+                expect(lib.capitalize(input)).toBe(output);
+
+                input = 'border-Left-width';
+                output = 'Border-Left-Width';
+                expect(lib.capitalize(input)).toBe(output);
+            });
+
+            it('contains', function () {
+                var input = 'position x ';
+                expect(lib.contains(input)).toBe(true);
+
+                input = 'border  left   width ';
+                expect(lib.contains(input)).toBe(true);
+            });
+
+            it('pad', function () {
+                var width = 5;
+                var input = '5';
+                var output = '00005';
+                expect(lib.pad(input, width)).toBe(output);
+
+                input = 10;
+                output = '00010';
+                expect(lib.pad(input, width)).toBe(output);
+
+                input = 10000;
+                output = '10000';
+                expect(lib.pad(input, width)).toBe(output);
+
+                input = 100000;
+                output = '100000';
+                expect(lib.pad(input, width)).toBe(output);
+
+                input = -1000;
+                output = '-01000';
+                expect(lib.pad(input, width)).toBe(output);
+            });
+        });
+
+        describe('function处理', function () {
+            it('bind', function () {
+                
+            });
         });
 
         describe('类模拟', function () {
