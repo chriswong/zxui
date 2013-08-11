@@ -58,7 +58,7 @@ define(function () {
      */
     var typeOf = lib.typeOf = function (obj) {
         var type = toString.call(obj).slice(8, -1).toLowerCase();
-        return type === 'object' && 'nodeType' in obj
+        return typeof obj === 'object' && 'nodeType' in obj
             ? 'dom'
             : (obj == null ? null : type);
     };
