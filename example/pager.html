@@ -18,8 +18,11 @@
 A.init(function () {
 
     var me = this;
+    require.config({
+      baseUrl: '../src/ui'
+    });
 
-    require(['../src/ui/Pager'], function (Pager) {
+    require(['Pager'], function (Pager) {
 
         var pager = new Pager({
             main: me.qq('ecl-ui-pager'),

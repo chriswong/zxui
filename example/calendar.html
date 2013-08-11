@@ -27,7 +27,10 @@ A.init(function () {
 
     var me = this;
 
-    require(['../src/ui/Calendar'], function (Calendar) {
+    require.config({
+      baseUrl: '../src/ui'
+    });
+    require(['Calendar'], function (Calendar) {
 
         var addDays = function (date, days) {
             return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);

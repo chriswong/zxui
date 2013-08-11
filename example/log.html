@@ -28,13 +28,16 @@
 
 <script>
 (function () {
+    require.config({
+      baseUrl: '../src/ui'
+    });
 
-    require(['../src/ui/log'], function (log) {
+    require(['log'], function (log) {
         log.config({data:{a: 0, e: 1, y: 'x'}})
         log.start();
     });
 
-    require(['../src/ui/lib'], function (lib) {
+    require(['lib'], function (lib) {
         
         console.log(lib);
     

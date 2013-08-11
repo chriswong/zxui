@@ -24,7 +24,10 @@
 A.init(function () {
     var me = this;
 
-    require(['../src/ui/City'], function (City) {
+    require.config({
+      baseUrl: '../src/ui'
+    });
+    require(['City'], function (City) {
 
         new City({
           prefix: 'ecl-ui-city',

@@ -270,7 +270,7 @@ define(function (require) {
          */
         getYYYYMM: function (date) {
             return (
-                typeof date === 'number'
+                typeof date === 'string'
                 ? date
                 : this.format(this.from(date), 'yyyyMM')
             );
@@ -356,7 +356,7 @@ define(function (require) {
             if (prev) {
                 lib[!range 
                     || this.getYYYYMM(range.begin) < this.getYYYYMM(date)
-                    ? 'show' : 'hide'
+                        ? 'show' : 'hide'
                 ](prev);
 
             }
@@ -370,7 +370,7 @@ define(function (require) {
             if ( next) {
                 lib[!range
                     || this.getYYYYMM(range.end) > this.getYYYYMM(last)
-                    ? 'show' : 'hide'
+                        ? 'show' : 'hide'
                 ](next);
             }
         },

@@ -62,7 +62,10 @@ A.init(function () {
 
     var me = this;
 
-    require(['../src/ui/Select'], function (Select) {
+    require.config({
+      baseUrl: '../src/ui'
+    });
+    require(['Select'], function (Select) {
 
         var mains = me.q('ecl-ui-sel');
         var targets = me.q('ecl-ui-sel-target');

@@ -38,8 +38,11 @@
 <script>
 A.init(function () {
     var me = this;
+    require.config({
+      baseUrl: '../src/ui'
+    });
 
-    require(['../src/ui/Filter'], function (Filter) {
+    require(['Filter'], function (Filter) {
 
     	var map = {
     		'1': [2, 3, 5],

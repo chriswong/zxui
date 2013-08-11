@@ -40,7 +40,10 @@ for(var i = 0; i < 10; i++) {
 })();
 A.init(function () {
 
-    require(['../src/ui/Tip'], function (Tip) {
+    require.config({
+      baseUrl: '../src/ui'
+    });
+    require(['Tip'], function (Tip) {
 
         new Tip({
             //mode: 'click',
