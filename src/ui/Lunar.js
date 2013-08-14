@@ -833,7 +833,7 @@ define(function (require) {
                     }
                     // 选取日期
                     else if (!hasClass(el, disClass)) {
-                        this.pick(el);
+                        this.pick(el, e);
                     }
 
                     break;
@@ -967,9 +967,10 @@ define(function (require) {
          * 
          * @private
          * @param {HTMLElement} el 点击的当前事件源对象
+         * @param {Event} event DOM 事件对象
          * @fires module:Lunar#pick
          */
-        pick: function (el) {
+        pick: function (el, event) {
             var week  = el.getAttribute('data-week');
             var date  = this.from(el.getAttribute('data-date'), DATE_FORMAT);
             var value = this.format(date);
@@ -980,11 +981,13 @@ define(function (require) {
              * @property {string} value 选中日期的格式化
              * @property {string} week 选中日期的格式化星期
              * @property {Date} date 选中的日期对象
+             * @property {Event} event 事件对象
              */
             this.fire('pick', { 
                 value: value,
                 week: this.options.lang.week + this.days[week],
-                date: date
+                date: date,
+                event: event
             });
         },
 
