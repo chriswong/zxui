@@ -204,9 +204,9 @@ define(function (require) {
                 }
 
                 lib.each(
-                    triggers,
+                    lib.toArray(triggers),
                     function (trigger) {
-                        T.on(trigger, 'click', me.onShow);
+                        lib.on(trigger, 'click', me.onShow);
                     }
                 );
 
