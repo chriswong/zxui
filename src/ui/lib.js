@@ -371,7 +371,7 @@ define(function () {
      */
     lib.stringify = lib.object.stringify = window.JSON
         && JSON.stringify
-        || function () {
+        || (function () {
 
         var special = {
             '\b': '\\b', 
@@ -415,8 +415,7 @@ define(function () {
 
             return null;
         };
-
-    };
+    })();
 
 
     /**
@@ -793,7 +792,7 @@ define(function () {
         function implement(newClass, params) {
             
             if (lib.isFunction(params)) {
-                params = new params();
+                params = params.prototype;
             }
 
             for (var key in params) {
@@ -1008,6 +1007,7 @@ define(function () {
                 realType = custom.base;
                 condition = function (event) {
                     if (custom.condition.call(element, event, type)) {
+                        event._type = type;
                         listener.call(element, event);
                     }
                 };
@@ -1087,9 +1087,17 @@ define(function () {
      */
     lib.fire = lib.event.fire = document.createEvent
         ? function (element, type) {
+
+            var custom = eventFix.custom[type];
+            var realType = type;
+            if (custom) {
+                realType = custom.base;
+            }
+
             var event = document.createEvent('HTMLEvents');
-            event.initEvent(type, true, true);
+            event.initEvent(realType, true, true);
             element.dispatchEvent(event);
+
             return element;
         }
         : function (element, type) {
@@ -1228,6 +1236,21 @@ define(function () {
     /* ========================== PAGE ========================== */
 
     /**
+     * 获取文档的兼容根节点
+     * 
+     * @inner
+     * @param {?HTMLElement=} el 节点引用，跨 frame 时需要
+     * @return {HTMLElement} 兼容的有效根节点
+     */
+    function getCompatElement(el) {
+        var doc = el && el.ownerDocument || document;
+        var compatMode = doc.compatMode;
+        return !compatMode || compatMode === 'CSS1Compat'
+            ? doc.documentElement
+            : doc.body;
+    }
+
+    /**
      * PAGE 相关工具函数
      * 
      * @namespace module:lib.page
@@ -1249,10 +1272,7 @@ define(function () {
      * @return {number} 横向滚动偏移量
      */
     lib.getScrollLeft = lib.page.getScrollLeft = function () {
-        var d = document;
-        return (window.pageXOffset
-                || d.documentElement.scrollLeft
-                || d.body.scrollLeft);
+        return window.pageXOffset || getCompatElement().scrollLeft;
     };
 
     /**
@@ -1270,10 +1290,7 @@ define(function () {
      * @return {number} 纵向滚动偏移量
      */
     lib.getScrollTop = lib.page.getScrollTop = function () {
-        var d = document;
-        return (window.pageYOffset
-                || d.documentElement.scrollTop
-                || d.body.scrollTop);
+        return window.pageYOffset || getCompatElement().scrollTop;
     };
 
     /**
@@ -1291,7 +1308,7 @@ define(function () {
      * @return {number} 页面视觉区域宽度
      */
     lib.getViewWidth = lib.page.getViewWidth = function () {
-        return document.documentElement.clientWidth;
+        return getCompatElement().clientWidth;
     };
 
     /**
@@ -1309,7 +1326,7 @@ define(function () {
      * @return {number} 页面视觉区域高度
      */
     lib.getViewHeight = lib.page.getViewHeight = function () {
-        return document.documentElement.clientHeight;
+        return getCompatElement().clientHeight;
     };
 
     /* ========================== DOM ========================== */
@@ -1675,6 +1692,35 @@ define(function () {
                 element.style[lib.camelCase(name)] = properties[name];
             }
         }
+    };
+
+    var guidCounter = 0x0917;
+
+    /**
+     * 得到 HTMLElement 的唯一标识
+     * 
+     * @method module:lib.guid
+     * 
+     * @param {HTMLElement} element 目标元素
+     * @return {number} 唯一标识值
+     */
+    /**
+     * 得到 HTMLElement 的唯一标识
+     * 
+     * @method module:lib.dom.guid
+     * 
+     * @param {HTMLElement} element 目标元素
+     * @return {number} 唯一标识值
+     */
+    lib.guid = lib.dom.guid = function (element) {
+        var guid = element.getAttribute('data-guid') | 0;
+
+        // guid 不会等于 0
+        if (!guid) {
+            guid = guidCounter++;
+            element.setAttribute('data-guid', guid);
+        }
+        return guid;
     };
 
     /**
