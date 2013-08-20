@@ -774,8 +774,8 @@
                 expect(children.length).toBe(2);
                 expect(children[0].tagName).toBe('P');
                 expect(children[1].tagName).toBe('DIV');
-                expect(dom.contains(children[0])).toBe(true);
-                expect(dom.contains(children[1])).toBe(true);
+                expect(dom.contains(el, children[0])).toBe(true);
+                expect(dom.contains(el, children[1])).toBe(true);
 
                 body.removeChild(el);
                 el = null;
