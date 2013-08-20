@@ -1341,24 +1341,42 @@ define(function () {
     /**
      * 从文档中获取指定的DOM元素
      * 
+     * @method module:lib.g
      * @param {string|HTMLElement} id 元素或元素 id
      * 
      * @return {?HTMLElement} 获取的元素，查找不到时返回null，如果参数不合法，直接返回参数
      */
-    lib.g = function (id) {
+    /**
+     * 从文档中获取指定的DOM元素
+     * 
+     * @method module:lib.dom.g
+     * @param {string|HTMLElement} id 元素或元素 id
+     * 
+     * @return {?HTMLElement} 获取的元素，查找不到时返回null，如果参数不合法，直接返回参数
+     */
+    lib.g = lib.dom.g = function (id) {
         return typeOf(id) === 'string' ? document.getElementById(id) : id;
     };
 
     /**
      * 根据 className 查找元素集合
      * 
-     * @method
+     * @method module:lib.q
      * @param {string} className 要查找的 className
      * @param {HTMLElement=} scope 指定查找的范围
      * 
      * @return {Array.<HTMLElement>} 符合条件的元素数组
      */
-    lib.q = document.getElementsByClassName
+    /**
+     * 根据 className 查找元素集合
+     * 
+     * @method module:lib.dom.q
+     * @param {string} className 要查找的 className
+     * @param {HTMLElement=} scope 指定查找的范围
+     * 
+     * @return {Array.<HTMLElement>} 符合条件的元素数组
+     */
+    lib.q = lib.dom.q = document.getElementsByClassName
         ? function (className, scope) {
             return slice((scope || document).getElementsByClassName(className));
         }
@@ -1379,7 +1397,7 @@ define(function () {
      * 获取目标元素符合条件的最近的祖先元素
      * 
      * @method module:lib.getAncestorBy
-     * @param {HTMLElement|string} element 目标元素
+     * @param {(HTMLElement | string)} element 目标元素
      * @param {Function} condition 判断祖先元素条件的函数，function (element)
      *             
      * @return {?HTMLElement} 符合条件的最近的祖先元素，查找不到时返回 null
@@ -1388,22 +1406,23 @@ define(function () {
      * 获取目标元素符合条件的最近的祖先元素
      * 
      * @method module:lib.dom.getAncestorBy
-     * @param {HTMLElement|string} element 目标元素
+     * @param {(HTMLElement | string)} element 目标元素
      * @param {Function} condition 判断祖先元素条件的函数，function (element)
      *             
      * @return {?HTMLElement} 符合条件的最近的祖先元素，查找不到时返回 null
      */
-    lib.getAncestorBy = lib.dom.getAncestorBy = 
-        function (element, condition, arg) {
+    lib.getAncestorBy
+        = lib.dom.getAncestorBy 
+        = function (element, condition, arg) {
 
-        while ((element = element.parentNode) && element.nodeType === 1) {
-            if (condition(element, arg)) {
-                return element;
+            while ((element = element.parentNode) && element.nodeType === 1) {
+                if (condition(element, arg)) {
+                    return element;
+                }
             }
-        }
 
-        return null;
-    };
+            return null;
+        };
 
     /**
      * 获取目标元素指定元素className最近的祖先元素
@@ -1425,15 +1444,16 @@ define(function () {
      * @return {?HTMLElement} 指定元素className最近的祖先元素，
      * 查找不到时返回null
      */
-    lib.getAncestorByClass = lib.dom.getAncestorByClass = 
-        function (element, className) {
+    lib.getAncestorByClass
+        = lib.dom.getAncestorByClass
+        = function (element, className) {
 
-        return lib.getAncestorBy(
-            element,
-            lib.hasClass,
-            className
-        );
-    };
+            return lib.getAncestorBy(
+                element,
+                lib.hasClass,
+                className
+            );
+        };
 
     var hasClassList = 'classList' in document.documentElement;
 
@@ -1545,14 +1565,18 @@ define(function () {
      */
     lib.toggleClass = lib.dom.toggleClass = hasClassList
         ? function (element, className) {
-            element.classList.remove(className);
+            element.classList.toggle(className);
             return element;
         }
         : function (element, className) {
-            element.className = element.className.replace(
-                new RegExp('(^|\\s)' + className + '(?:\\s|$)'),
-                '$1'
-            );
+            var originClass = element.className;
+            var contains = originClass && lib.contains(element, className);
+            element.className = contains
+                ? originClass.replace(
+                    new RegExp('(^|\\s)' + className + '(?:\\s|$)'),
+                    '$1'
+                )
+                : (originClass + ' ' + className);
             return element;
         };
 
