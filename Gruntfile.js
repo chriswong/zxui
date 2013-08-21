@@ -84,6 +84,8 @@ module.exports = function (grunt) {
             requirejs: {
                 src: 'src/ui/*.js',
                 options: {
+                    outfile: 'SpecRunner.html',
+                    keepRunner: true,
                     styles: '<%= csslint.src %>',
                     specs: 'test/spec/*Spec.js',
                     helpers: 'test/spec/*Helper.js',
@@ -103,6 +105,8 @@ module.exports = function (grunt) {
                 options: {
                     specs: ['test/spec/*Spec.js'],
                     vendor: ['./dep/vars.js', './dep/common-2.3.js'],
+                    outfile: 'SpecRunner.html',
+                    keepRunner: true,
                     styles: '<%= csslint.src %>',
                     template: require('grunt-template-jasmine-istanbul'),
                     templateOptions: {
