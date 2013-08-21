@@ -15,8 +15,8 @@ define(function (require) {
      * 分页控件
      * 
      * 提供Ajax及本地数据分页功能
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @exports Pager
      * @example
@@ -31,13 +31,13 @@ define(function (require) {
      *     }
      *  }).render();
      */
-    var Pager = Control.extend({
+    var Pager = Control.extend(/** @lends module:Pager.prototype */{
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'Pager',
 
@@ -59,6 +59,7 @@ define(function (require) {
          * @property {string} options.lang.prev 上一页显示文字(支持HTML)
          * @property {string} options.lang.next 下一页显示文字(支持HTML)
          * @property {string} options.lang.ellipsis 省略处显示文字(支持HTML)
+         * @private
          */
         options: {
 
@@ -106,17 +107,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @private
          * @type {string}
+         * @private
          */
         binds: 'onChange',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @param {Object} options 控件配置项
          * @see module:Pager#options
+         * @private
          */
         init: function (options) {
 
@@ -143,8 +144,8 @@ define(function (require) {
         /**
          * 设置页码
          * 
-         * @public
          * @param {number} page 新页码
+         * @public
          */
         setPage: function (page) {
             page = Math.max(0, Math.min(page | 0, this.total - 1));
@@ -157,8 +158,8 @@ define(function (require) {
         /**
          * 获取当前页码
          * 
-         * @public
          * @return {number} 控件当前页码
+         * @public
          */
         getPage: function () {
             return this.page;
@@ -167,8 +168,8 @@ define(function (require) {
         /**
          * 设置总页数
          * 
-         * @public
          * @param {number} total 要设置的总页数
+         * @public
          */
         setTotal: function (total) {
             this.total = (total | 0) || 1;
@@ -178,8 +179,8 @@ define(function (require) {
         /**
          * 获取总页数
          * 
-         * @public
          * @return {number} 控件总页数
+         * @public
          */
         getTotal: function () {
             return this.total;
@@ -190,8 +191,9 @@ define(function (require) {
          * 绘制控件
          * 页数小于2页时可配置控件隐藏
          * 
-         * @public
          * @return {module:Pager} 当前实例
+         * @override
+         * @public
          */
         render: function () {
             if (!this.main) {
@@ -214,8 +216,8 @@ define(function (require) {
         /**
          * 生成所有页码
          * 
-         * @private
          * @return {string} 分页的HTML代码
+         * @private
          */
         build: function () {
             var options    = this.options;
@@ -330,10 +332,10 @@ define(function (require) {
         /**
          * 页码改变时
          * 
-         * @private
-         * @param {DOMEvent} e 事件对象
+         * @param {Event} e 事件对象
          * @fires module:Pager#click
          * @fires module:Pager#change
+         * @private
          */
         onChange: function (e, target) {
             e && lib.preventDefault(e);

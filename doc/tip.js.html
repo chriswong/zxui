@@ -46,6 +46,7 @@ define(function (require) {
      * @param {Event} e DOM事件对象
      * @param {string} className 目标的className
      * @return {?HTMLElement} 找到的目标对象
+     * @inner
      */
     var getTarget = function (e, className) {
         var target = lib.getTarget(e);
@@ -64,8 +65,8 @@ define(function (require) {
     /**
      * 提示层控件
      * 
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @exports Tip
      * @example
@@ -79,20 +80,19 @@ define(function (require) {
      * }).render();
      * 
      */
-    var Tip = Control.extend({
+    var Tip = Control.extend(/** @lends module:Tip.prototype */{
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'Tip',
 
         /**
          * 控件配置项
          * 
-         * @private
          * @name module:Tip#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
@@ -112,6 +112,7 @@ define(function (require) {
          * @property {number} offset.x x 轴方向偏移量
          * @property {number} offset.y y轴方向偏移量
          * @property {string} tpl 浮层内部HTML模板
+         * @private
          */
         options: {
 
@@ -172,17 +173,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @private
          * @type {string}
+         * @private
          */
         binds: 'onResize, onDocClick, onShow, onHide, hide',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @param {Object} options 控件配置项
          * @see module:Tip#options
+         * @private
          */
         init: function (options) {
             options.hideDelay = options.hideDelay &lt; 0
@@ -215,9 +216,10 @@ define(function (require) {
         /**
          * 绘制控件
          * 
-         * @public
          * @fires module:Tip#click
          * @return {module:Tip} 当前实例
+         * @override
+         * @public
          */
         render: function () {
 
@@ -288,9 +290,9 @@ define(function (require) {
         /**
          * 增加触发 tips 的 DOM
          * 
-         * @public
          * @param {(string | HTMLElement | HTMLCollection | Array)} triggers 
          * className/dom节点/dom集合或dom节点数组
+         * @public
          */
         addTriggers: function (triggers) {
             var me      = this;
@@ -306,8 +308,10 @@ define(function (require) {
                 lib.each(
                     this.triggers,
                     function (trigger) {
-                        lib.addClass(trigger, flag);
-                        lib.on(trigger, events.on, me.onShow);
+                        if (!lib.hasClass(trigger, flag)) {
+                            lib.addClass(trigger, flag);
+                            lib.on(trigger, events.on, me.onShow);
+                        }
                     }
                 );
             }
@@ -319,9 +323,9 @@ define(function (require) {
          * 用于经常更新的内容，在更新内容后调用此方法会
          * 解除旧 DOM 节点的绑定，再重新查找绑定新节点
          * 
-         * @public
          * @param {string} triggers 触发器的 class
          * @param {HTMLElement=} parentNode 指定触发器的共同容器
+         * @public
          */
         refresh: function (triggers, parentNode) {
             var me      = this;
@@ -379,8 +383,8 @@ define(function (require) {
         /**
          * 处理文档中的单击事件
          * 
-         * @private
          * @param {Event} e 原生事件对象
+         * @private
          */
         onDocClick: function (e) {
             var main = this.main;
@@ -401,9 +405,9 @@ define(function (require) {
         /**
          * 显示浮层前处理
          * 
-         * @private
          * @param {Event} e DOM 事件对象
          * @fires module:Tip#beforeShow 显示前事件
+         * @private
          */
         onShow: function (e) {
             var target = getTarget(e, this.options.flag);
@@ -464,9 +468,9 @@ define(function (require) {
         /**
          * 显示浮层
          * 
-         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:Tip#show 显示事件
+         * @public
          */
         show: function (target) {
             var options  = this.options;
@@ -501,8 +505,8 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
-         * @public
          * @fires module:Tip#hide 隐藏事件
+         * @public
          */
         hide: function () {
             var main    = this.main;
@@ -535,8 +539,8 @@ define(function (require) {
         /**
          * 判断提示层是否可见
          * 
-         * @public
          * @return {boolean} 可见的状态
+         * @public
          */
         isVisible: function () {
 
@@ -549,8 +553,8 @@ define(function (require) {
          * 
          * 如果参数为空，则隐藏提示层的标题部分
          * 
-         * @public
          * @param {string} html
+         * @public
          */
         setTitle: function (html) {
             this.title = html || '';
@@ -563,8 +567,8 @@ define(function (require) {
         /**
          * 设置提示层显示的内容
          * 
-         * @public
          * @param {string} html 要提示的内容的HTML
+         * @public
          */
         setContent: function (html) {
             this.content = html || '';
@@ -600,7 +604,7 @@ define(function (require) {
             var mainHeight   = main.offsetHeight;
 
             // 箭头宽高
-            // XXX: 如果通过 tpl 修改了控件模板，
+            // FIXME: 如果通过 tpl 修改了控件模板，
             // 或者针对箭头部分改了样式，此处得到结果不对或者报错
             var arrowWidth   = arrow.firstChild.offsetWidth;
             var arrowHeight  = arrow.firstChild.offsetHeight;
@@ -684,9 +688,6 @@ define(function (require) {
             arrowWidth  = arrow.firstChild.offsetWidth;
             arrowHeight = arrow.firstChild.offsetHeight;
 
-            var middleLeft = (mainWidth - arrowWidth) / 2;
-            var middleTop  = (mainHeight - arrowHeight) / 2;
-
             // 提示层在目标上部或下部显示时的定位处理
             if ({t: 1, b: 1}[first]) {
                 left = {
@@ -700,11 +701,13 @@ define(function (require) {
                     b: bottom + arrowHeight + offset.y
                 }[first];
 
+                var middleX = (width - arrowWidth) / 2;
+                
                 // 在目标宽于提示层或 dir 为 tc 或 bc 时，箭头相对提示层水平居中
                 arrow.style.left = {
-                    c: middleLeft,
-                    l: (width - arrowWidth) / 2,
-                    r: (mainWidth - (width - arrowWidth) / 2)
+                    c: (mainWidth - arrowWidth) / 2,
+                    l: middleX,
+                    r: mainWidth - Math.max(arrowWidth, middleX)
                 }[width > mainWidth ? 'c' : second] + 'px';
                 arrow.style.top = '';
 
@@ -723,17 +726,25 @@ define(function (require) {
                     r: right + arrowWidth + offset.x
                 }[first];
 
+                var middleY = (height - arrowHeight) / 2;
+
                 // 在目标高于提示层或 dir 为 lc 或 rc 时，箭头相对提示层垂直居中
                 arrow.style.top = {
-                    c: middleTop,
-                    t: (height - arrowHeight) / 2,
-                    b: (mainHeight - (height - arrowHeight) / 2)
+                    c: (mainHeight - arrowHeight) / 2,
+                    t: middleY,
+                    b: mainHeight - Math.max(arrowHeight, middleY)
                 }[height > mainHeight ? 'c' : second] + 'px';
                 arrow.style.left = '';
 
             }
 
-            DOM.setStyles(main, {left: left + 'px', top: top + 'px'});
+            DOM.setStyles(
+                main, 
+                {
+                    left: Math.min(left, scrollRight - mainWidth) + 'px', 
+                    top: Math.min(top, scrollBottom - mainHeight) + 'px'
+                }
+            );
 
         }
 
@@ -742,9 +753,9 @@ define(function (require) {
     /**
      * 提示框消失的延迟时间，单位毫秒
      * 
-     * @public
-     * @const
      * @type {number}
+     * @const
+     * @static
      */
     Tip.HIDE_DELAY = 500;
 
@@ -761,13 +772,13 @@ define(function (require) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#addTriggers">addTriggers</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#binds">binds</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#buildMonth">buildMonth</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#checkValidity">checkValidity</a></li><li><a href="global.html#clear">clear</a></li><li><a href="global.html#computePosition">computePosition</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#disableItems">disableItems</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#enableItems">enableItems</a></li><li><a href="global.html#fill">fill</a></li><li><a href="global.html#format">format</a></li><li><a href="global.html#from">from</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getPage">getPage</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#getValueAsDate">getValueAsDate</a></li><li><a href="global.html#getYYYYMM">getYYYYMM</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#isVisible">isVisible</a></li><li><a href="global.html#onBeforeShow">onBeforeShow</a></li><li><a href="global.html#onChange">onChange</a></li><li><a href="global.html#onClick">onClick</a></li><li><a href="global.html#onDisable">onDisable</a></li><li><a href="global.html#onDocClick">onDocClick</a></li><li><a href="global.html#onEnable">onEnable</a></li><li><a href="global.html#onHide">onHide</a></li><li><a href="global.html#onResize">onResize</a></li><li><a href="global.html#onShow">onShow</a></li><li><a href="global.html#pick">pick</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#refresh">refresh</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#setContent">setContent</a></li><li><a href="global.html#setPage">setPage</a></li><li><a href="global.html#setRange">setRange</a></li><li><a href="global.html#setTarget">setTarget</a></li><li><a href="global.html#setTitle">setTitle</a></li><li><a href="global.html#setTotal">setTotal</a></li><li><a href="global.html#setValue">setValue</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showNextMonth">showNextMonth</a></li><li><a href="global.html#showPreMonth">showPreMonth</a></li><li><a href="global.html#type">type</a></li><li><a href="global.html#updatePrevNextStatus">updatePrevNextStatus</a></li><li><a href="global.html#updateStatus">updateStatus</a></li><li><a href="global.html#validate">validate</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Aug 21 2013 23:25:02 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

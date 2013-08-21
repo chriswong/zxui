@@ -19,6 +19,7 @@ define(function (require) {
      * @param {Event} e DOM事件对象
      * @param {string} className 目标的className
      * @return {?HTMLElement} 找到的目标对象
+     * @inner
      */
     var getTarget = function (e, className) {
         var target = lib.getTarget(e);
@@ -37,8 +38,8 @@ define(function (require) {
     /**
      * 提示层控件
      * 
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @exports Tip
      * @example
@@ -52,20 +53,19 @@ define(function (require) {
      * }).render();
      * 
      */
-    var Tip = Control.extend({
+    var Tip = Control.extend(/** @lends module:Tip.prototype */{
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'Tip',
 
         /**
          * 控件配置项
          * 
-         * @private
          * @name module:Tip#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
@@ -85,6 +85,7 @@ define(function (require) {
          * @property {number} offset.x x 轴方向偏移量
          * @property {number} offset.y y轴方向偏移量
          * @property {string} tpl 浮层内部HTML模板
+         * @private
          */
         options: {
 
@@ -145,17 +146,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @private
          * @type {string}
+         * @private
          */
         binds: 'onResize, onDocClick, onShow, onHide, hide',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @param {Object} options 控件配置项
          * @see module:Tip#options
+         * @private
          */
         init: function (options) {
             options.hideDelay = options.hideDelay < 0
@@ -188,9 +189,10 @@ define(function (require) {
         /**
          * 绘制控件
          * 
-         * @public
          * @fires module:Tip#click
          * @return {module:Tip} 当前实例
+         * @override
+         * @public
          */
         render: function () {
 
@@ -261,9 +263,9 @@ define(function (require) {
         /**
          * 增加触发 tips 的 DOM
          * 
-         * @public
          * @param {(string | HTMLElement | HTMLCollection | Array)} triggers 
          * className/dom节点/dom集合或dom节点数组
+         * @public
          */
         addTriggers: function (triggers) {
             var me      = this;
@@ -294,9 +296,9 @@ define(function (require) {
          * 用于经常更新的内容，在更新内容后调用此方法会
          * 解除旧 DOM 节点的绑定，再重新查找绑定新节点
          * 
-         * @public
          * @param {string} triggers 触发器的 class
          * @param {HTMLElement=} parentNode 指定触发器的共同容器
+         * @public
          */
         refresh: function (triggers, parentNode) {
             var me      = this;
@@ -354,8 +356,8 @@ define(function (require) {
         /**
          * 处理文档中的单击事件
          * 
-         * @private
          * @param {Event} e 原生事件对象
+         * @private
          */
         onDocClick: function (e) {
             var main = this.main;
@@ -376,9 +378,9 @@ define(function (require) {
         /**
          * 显示浮层前处理
          * 
-         * @private
          * @param {Event} e DOM 事件对象
          * @fires module:Tip#beforeShow 显示前事件
+         * @private
          */
         onShow: function (e) {
             var target = getTarget(e, this.options.flag);
@@ -439,9 +441,9 @@ define(function (require) {
         /**
          * 显示浮层
          * 
-         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:Tip#show 显示事件
+         * @public
          */
         show: function (target) {
             var options  = this.options;
@@ -476,8 +478,8 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
-         * @public
          * @fires module:Tip#hide 隐藏事件
+         * @public
          */
         hide: function () {
             var main    = this.main;
@@ -510,8 +512,8 @@ define(function (require) {
         /**
          * 判断提示层是否可见
          * 
-         * @public
          * @return {boolean} 可见的状态
+         * @public
          */
         isVisible: function () {
 
@@ -524,8 +526,8 @@ define(function (require) {
          * 
          * 如果参数为空，则隐藏提示层的标题部分
          * 
-         * @public
          * @param {string} html
+         * @public
          */
         setTitle: function (html) {
             this.title = html || '';
@@ -538,8 +540,8 @@ define(function (require) {
         /**
          * 设置提示层显示的内容
          * 
-         * @public
          * @param {string} html 要提示的内容的HTML
+         * @public
          */
         setContent: function (html) {
             this.content = html || '';
@@ -724,9 +726,9 @@ define(function (require) {
     /**
      * 提示框消失的延迟时间，单位毫秒
      * 
-     * @public
-     * @const
      * @type {number}
+     * @const
+     * @static
      */
     Tip.HIDE_DELAY = 500;
 

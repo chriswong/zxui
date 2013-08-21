@@ -15,8 +15,8 @@ define(function (require) {
     /**
      * 国内城市选择控件
      * 
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @requires Popup
      * @exports City
@@ -28,21 +28,20 @@ define(function (require) {
      *     target: '.input'
      *  }).render();
      */
-    var City = Control.extend({
+    var City = Control.extend(/** @lends module:City.prototype */{
 
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'City',
 
         /**
          * 控件配置项
          * 
-         * @private
          * @name module:City#options
          * @see module:Popup#options
          * @type {Object}
@@ -54,6 +53,7 @@ define(function (require) {
          * @property {string} activeClass 激活标签、内容的class
          * @property {boolean} autoFill 是否自动填充默认城市数据(机票可用城市数据)
          * @property {?string} hideCities 需要隐藏的城市
+         * @private
          */
         options: {
 
@@ -86,17 +86,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @private
          * @type {string}
+         * @private
          */
         binds: 'onClick,onBeforeShow',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @param {Object} options 控件配置项
          * @see module:City#options
+         * @private
          */
         init: function (options) {
             this.disabled = options.disabled;
@@ -145,6 +145,7 @@ define(function (require) {
          * @param {(Array | string)} tabs 城市数组，
          * 每项格式为"标签|城市A,城市B,城市C"当参数为字符类型时仅作为一个城市标签项
          * @return {City} 当前City实例
+         * @public
          */
         fill: function (tabsOrItem) {
             var tabs = this.tabs;
@@ -163,8 +164,9 @@ define(function (require) {
         /**
          * 绘制控件
          * 
-         * @public
          * @return {module:City} 当前实例
+         * @override
+         * @public
          */
         render: function () {
 
@@ -250,9 +252,9 @@ define(function (require) {
         /**
          * 处理选单点击事件
          * 
-         * @private
          * @param {Object} args 从 Popup 传来的事件对象
          * @fires module:City#click 点击事件
+         * @private
          */
         onClick: function (args) {
             var e = args.event;
@@ -302,9 +304,9 @@ define(function (require) {
         /**
          * 转发Popup的onBeforeShow事件
          * 
-         * @private
          * @param {Object} arg 事件参数
          * @fires module:City#beforeShow 显示前事件
+         * @private
          */
         onBeforeShow: function (arg) {
 
@@ -330,9 +332,9 @@ define(function (require) {
         /**
          * 动态更新 target
          * 
-         * @public
          * @param {HTMLElement} target 新的 target 节点
          * @throws 如果 target 为非 Element 节点将抛出异常
+         * @public
          */
         setTarget: function (target) {
             if (!target || target.nodeType !== 1) {
@@ -349,9 +351,9 @@ define(function (require) {
         /**
          * 选择城市
          * 
-         * @private
          * @param {HTMLElement} el 点击的当前事件源对象
          * @fires module:City#pick
+         * @private
          */
         pick: function (el) {
             var value = el.innerHTML;
@@ -379,8 +381,8 @@ define(function (require) {
         /**
          * 切换标签
          * 
-         * @public
          * @param {number} i 要切换到的目标标签索引
+         * @public
          */
         change: function (i) {
             var options     = this.options;
@@ -406,9 +408,9 @@ define(function (require) {
         /**
          * 显示浮层
          * 
-         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:City#show 显示事件
+         * @public
          */
         show: function (target) {
 
@@ -426,8 +428,8 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
-         * @public
          * @fires module:City#hide 隐藏事件
+         * @public
          */
         hide: function () {
             

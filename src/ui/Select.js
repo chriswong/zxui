@@ -17,6 +17,7 @@ define(function (require) {
      * 
      * @param {string} str 目标字符
      * @return {number} 目标字符的字节长度
+     * @inner
      */
     function bLength (str) {
         return str.replace(/[^\x00-\xff]/gi, '..').length;
@@ -29,6 +30,7 @@ define(function (require) {
      * @param {number} max 截取的字节长度
      * @param {?string=} ellipsis 超长后的附加后缀
      * @return {string} 目标字符串被截取后加上后缀的字符串
+     * @inner
      */
     function textOverflow(str, max, ellipsis){
 
@@ -62,8 +64,8 @@ define(function (require) {
     /**
      * 下拉选择菜单
      * 
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @exports Select
      * @example
@@ -79,13 +81,13 @@ define(function (require) {
      *     }
      *   }).render();
      */
-    var Select = Control.extend({
+    var Select = Control.extend(/** @lends module:Select.prototype */{
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'Select',
 
@@ -133,17 +135,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @private
          * @type {string}
+         * @private
          */
         binds: 'onClick,onBeforeShow,onHide,onDisable,onEnable',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @param {Object} options 控件配置项
          * @see module:Select#options
+         * @private
          */
         init: function (options) {
 
@@ -158,8 +160,9 @@ define(function (require) {
         /**
          * 绘制控件
          * 
-         * @public
          * @return {module:Select} 当前实例
+         * @override
+         * @public
          */
         render: function () {
             var options = this.options;
@@ -224,8 +227,8 @@ define(function (require) {
         /**
          * 处理选单点击事件
          * 
-         * @private
          * @param {Object} args 从 Popup 传来的事件对象
+         * @private
          */
         onClick: function (args) {
             var e = args.event;
@@ -258,9 +261,9 @@ define(function (require) {
         /**
          * 转发Popup的onBeforeShow事件
          * 
-         * @private
          * @param {Object} arg 事件参数
          * @fires module:Select#beforeShow
+         * @private
          */
         onBeforeShow: function (arg) {
 
@@ -293,9 +296,9 @@ define(function (require) {
         /**
          * 显示浮层
          * 
-         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:Select#show 显示事件
+         * @public
          */
         show: function (target) {
 
@@ -313,8 +316,8 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
-         * @public
          * @fires module:Select#hide 隐藏事件
+         * @public
          */
         hide: function () {
             
@@ -329,11 +332,11 @@ define(function (require) {
         /**
          * 选取选项
          * 
-         * @private
          * @param {HTMLElement} el 点击的当前事件源对象
          * @param {boolean} isSilent 静默模式，是否发送事件通知
          * @fires module:Select#pick
          * @fires module:Select#change
+         * @private
          */
         pick: function (el, isSilent) {
 
@@ -427,6 +430,7 @@ define(function (require) {
          * 重置选项
          * 
          * 将选项恢复到初始值，依赖于第一个选项，其值为 0 或空
+         * @public
          */
         reset: function () {
             this.pick(lib.dom.first(this.main), true);

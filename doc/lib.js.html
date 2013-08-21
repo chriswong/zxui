@@ -85,7 +85,9 @@ define(function () {
      */
     var typeOf = lib.typeOf = function (obj) {
         var type = toString.call(obj).slice(8, -1).toLowerCase();
-        return type === 'object' && 'nodeType' in obj ? 'dom' : type;
+        return typeof obj === 'object' && 'nodeType' in obj
+            ? 'dom'
+            : (obj == null ? null : type);
     };
 
     /* ========================== lib.array ========================== */
@@ -167,7 +169,7 @@ define(function () {
          * @return {boolean} 类型判断结果
          */
         lib['is' + type] = function (obj) {
-            return toString.call(obj).slice(8, -1) === type;
+            return obj != null && toString.call(obj).slice(8, -1) === type;
         };
     });
 
@@ -396,7 +398,7 @@ define(function () {
      */
     lib.stringify = lib.object.stringify = window.JSON
         && JSON.stringify
-        || function () {
+        || (function () {
 
         var special = {
             '\b': '\\b', 
@@ -440,8 +442,7 @@ define(function () {
 
             return null;
         };
-
-    };
+    })();
 
 
     /**
@@ -623,9 +624,37 @@ define(function () {
         seperator = seperator || ' ';
         source = seperator + source + seperator;
         target = seperator + lib.trim(target) + seperator;
-        return ~source.indexOf(target);
+        return source.indexOf(target) > -1;
     };
     
+    /**
+     * 对目标数字进行 0 补齐处理
+     * 
+     * @method module:lib.pad
+     * @param {(number | string)} source 需要补齐的数字或字符串
+     * @param {number} width 补齐后的固定宽度（必须小于32）
+     */
+    /**
+     * 对目标数字进行0补齐处理
+     * 
+     * @method module:lib.string.pad
+     * @param {(number | string)} source 需要补齐的数字或字符串
+     * @param {number} width 补齐后的固定宽度（必须小于32）
+     */
+    lib.pad = lib.string.pad = function (source, width) {
+        var str = String(Math.abs(source | 0));
+
+        return (source &lt; 0 ? '-' : '')
+            + (
+                str.length >= width
+                    ? str
+                    : (
+                        ((1 &lt;&lt; (width - str.length)).toString(2) + str)
+                        .slice(-width)
+                    )
+            );
+    };
+
     /* ========================== lib.fn ========================== */
 
     /** 
@@ -790,7 +819,7 @@ define(function () {
         function implement(newClass, params) {
             
             if (lib.isFunction(params)) {
-                params = new params();
+                params = params.prototype;
             }
 
             for (var key in params) {
@@ -1005,6 +1034,7 @@ define(function () {
                 realType = custom.base;
                 condition = function (event) {
                     if (custom.condition.call(element, event, type)) {
+                        event._type = type;
                         listener.call(element, event);
                     }
                 };
@@ -1084,9 +1114,17 @@ define(function () {
      */
     lib.fire = lib.event.fire = document.createEvent
         ? function (element, type) {
+
+            var custom = eventFix.custom[type];
+            var realType = type;
+            if (custom) {
+                realType = custom.base;
+            }
+
             var event = document.createEvent('HTMLEvents');
-            event.initEvent(type, true, true);
+            event.initEvent(realType, true, true);
             element.dispatchEvent(event);
+
             return element;
         }
         : function (element, type) {
@@ -1225,6 +1263,21 @@ define(function () {
     /* ========================== PAGE ========================== */
 
     /**
+     * 获取文档的兼容根节点
+     * 
+     * @inner
+     * @param {?HTMLElement=} el 节点引用，跨 frame 时需要
+     * @return {HTMLElement} 兼容的有效根节点
+     */
+    function getCompatElement(el) {
+        var doc = el && el.ownerDocument || document;
+        var compatMode = doc.compatMode;
+        return !compatMode || compatMode === 'CSS1Compat'
+            ? doc.documentElement
+            : doc.body;
+    }
+
+    /**
      * PAGE 相关工具函数
      * 
      * @namespace module:lib.page
@@ -1246,10 +1299,7 @@ define(function () {
      * @return {number} 横向滚动偏移量
      */
     lib.getScrollLeft = lib.page.getScrollLeft = function () {
-        var d = document;
-        return (window.pageXOffset
-                || d.documentElement.scrollLeft
-                || d.body.scrollLeft);
+        return window.pageXOffset || getCompatElement().scrollLeft;
     };
 
     /**
@@ -1267,10 +1317,7 @@ define(function () {
      * @return {number} 纵向滚动偏移量
      */
     lib.getScrollTop = lib.page.getScrollTop = function () {
-        var d = document;
-        return (window.pageYOffset
-                || d.documentElement.scrollTop
-                || d.body.scrollTop);
+        return window.pageYOffset || getCompatElement().scrollTop;
     };
 
     /**
@@ -1288,7 +1335,7 @@ define(function () {
      * @return {number} 页面视觉区域宽度
      */
     lib.getViewWidth = lib.page.getViewWidth = function () {
-        return document.documentElement.clientWidth;
+        return getCompatElement().clientWidth;
     };
 
     /**
@@ -1306,7 +1353,7 @@ define(function () {
      * @return {number} 页面视觉区域高度
      */
     lib.getViewHeight = lib.page.getViewHeight = function () {
-        return document.documentElement.clientHeight;
+        return getCompatElement().clientHeight;
     };
 
     /* ========================== DOM ========================== */
@@ -1321,24 +1368,42 @@ define(function () {
     /**
      * 从文档中获取指定的DOM元素
      * 
+     * @method module:lib.g
      * @param {string|HTMLElement} id 元素或元素 id
      * 
      * @return {?HTMLElement} 获取的元素，查找不到时返回null，如果参数不合法，直接返回参数
      */
-    lib.g = function (id) {
+    /**
+     * 从文档中获取指定的DOM元素
+     * 
+     * @method module:lib.dom.g
+     * @param {string|HTMLElement} id 元素或元素 id
+     * 
+     * @return {?HTMLElement} 获取的元素，查找不到时返回null，如果参数不合法，直接返回参数
+     */
+    lib.g = lib.dom.g = function (id) {
         return typeOf(id) === 'string' ? document.getElementById(id) : id;
     };
 
     /**
      * 根据 className 查找元素集合
      * 
-     * @method
+     * @method module:lib.q
      * @param {string} className 要查找的 className
      * @param {HTMLElement=} scope 指定查找的范围
      * 
      * @return {Array.&lt;HTMLElement>} 符合条件的元素数组
      */
-    lib.q = document.getElementsByClassName
+    /**
+     * 根据 className 查找元素集合
+     * 
+     * @method module:lib.dom.q
+     * @param {string} className 要查找的 className
+     * @param {HTMLElement=} scope 指定查找的范围
+     * 
+     * @return {Array.&lt;HTMLElement>} 符合条件的元素数组
+     */
+    lib.q = lib.dom.q = document.getElementsByClassName
         ? function (className, scope) {
             return slice((scope || document).getElementsByClassName(className));
         }
@@ -1359,7 +1424,7 @@ define(function () {
      * 获取目标元素符合条件的最近的祖先元素
      * 
      * @method module:lib.getAncestorBy
-     * @param {HTMLElement|string} element 目标元素
+     * @param {(HTMLElement | string)} element 目标元素
      * @param {Function} condition 判断祖先元素条件的函数，function (element)
      *             
      * @return {?HTMLElement} 符合条件的最近的祖先元素，查找不到时返回 null
@@ -1368,22 +1433,23 @@ define(function () {
      * 获取目标元素符合条件的最近的祖先元素
      * 
      * @method module:lib.dom.getAncestorBy
-     * @param {HTMLElement|string} element 目标元素
+     * @param {(HTMLElement | string)} element 目标元素
      * @param {Function} condition 判断祖先元素条件的函数，function (element)
      *             
      * @return {?HTMLElement} 符合条件的最近的祖先元素，查找不到时返回 null
      */
-    lib.getAncestorBy = lib.dom.getAncestorBy = 
-        function (element, condition, arg) {
+    lib.getAncestorBy
+        = lib.dom.getAncestorBy 
+        = function (element, condition, arg) {
 
-        while ((element = element.parentNode) && element.nodeType === 1) {
-            if (condition(element, arg)) {
-                return element;
+            while ((element = element.parentNode) && element.nodeType === 1) {
+                if (condition(element, arg)) {
+                    return element;
+                }
             }
-        }
 
-        return null;
-    };
+            return null;
+        };
 
     /**
      * 获取目标元素指定元素className最近的祖先元素
@@ -1405,15 +1471,16 @@ define(function () {
      * @return {?HTMLElement} 指定元素className最近的祖先元素，
      * 查找不到时返回null
      */
-    lib.getAncestorByClass = lib.dom.getAncestorByClass = 
-        function (element, className) {
+    lib.getAncestorByClass
+        = lib.dom.getAncestorByClass
+        = function (element, className) {
 
-        return lib.getAncestorBy(
-            element,
-            lib.hasClass,
-            className
-        );
-    };
+            return lib.getAncestorBy(
+                element,
+                lib.hasClass,
+                className
+            );
+        };
 
     var hasClassList = 'classList' in document.documentElement;
 
@@ -1525,14 +1592,18 @@ define(function () {
      */
     lib.toggleClass = lib.dom.toggleClass = hasClassList
         ? function (element, className) {
-            element.classList.remove(className);
+            element.classList.toggle(className);
             return element;
         }
         : function (element, className) {
-            element.className = element.className.replace(
-                new RegExp('(^|\\s)' + className + '(?:\\s|$)'),
-                '$1'
-            );
+            var originClass = element.className;
+            var contains = originClass && lib.contains(element, className);
+            element.className = contains
+                ? originClass.replace(
+                    new RegExp('(^|\\s)' + className + '(?:\\s|$)'),
+                    '$1'
+                )
+                : (originClass + ' ' + className);
             return element;
         };
 
@@ -1674,6 +1745,35 @@ define(function () {
         }
     };
 
+    var guidCounter = 0x0917;
+
+    /**
+     * 得到 HTMLElement 的唯一标识
+     * 
+     * @method module:lib.guid
+     * 
+     * @param {HTMLElement} element 目标元素
+     * @return {number} 唯一标识值
+     */
+    /**
+     * 得到 HTMLElement 的唯一标识
+     * 
+     * @method module:lib.dom.guid
+     * 
+     * @param {HTMLElement} element 目标元素
+     * @return {number} 唯一标识值
+     */
+    lib.guid = lib.dom.guid = function (element) {
+        var guid = element.getAttribute('data-guid') | 0;
+
+        // guid 不会等于 0
+        if (!guid) {
+            guid = guidCounter++;
+            element.setAttribute('data-guid', guid);
+        }
+        return guid;
+    };
+
     /**
      * DOM 步进遍历
      * 
@@ -1803,13 +1903,13 @@ define(function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#addTriggers">addTriggers</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#binds">binds</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#buildMonth">buildMonth</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#checkValidity">checkValidity</a></li><li><a href="global.html#clear">clear</a></li><li><a href="global.html#computePosition">computePosition</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#disableItems">disableItems</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#enableItems">enableItems</a></li><li><a href="global.html#fill">fill</a></li><li><a href="global.html#format">format</a></li><li><a href="global.html#from">from</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getPage">getPage</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#getValueAsDate">getValueAsDate</a></li><li><a href="global.html#getYYYYMM">getYYYYMM</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#isVisible">isVisible</a></li><li><a href="global.html#onBeforeShow">onBeforeShow</a></li><li><a href="global.html#onChange">onChange</a></li><li><a href="global.html#onClick">onClick</a></li><li><a href="global.html#onDisable">onDisable</a></li><li><a href="global.html#onDocClick">onDocClick</a></li><li><a href="global.html#onEnable">onEnable</a></li><li><a href="global.html#onHide">onHide</a></li><li><a href="global.html#onResize">onResize</a></li><li><a href="global.html#onShow">onShow</a></li><li><a href="global.html#pick">pick</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#refresh">refresh</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#setContent">setContent</a></li><li><a href="global.html#setPage">setPage</a></li><li><a href="global.html#setRange">setRange</a></li><li><a href="global.html#setTarget">setTarget</a></li><li><a href="global.html#setTitle">setTitle</a></li><li><a href="global.html#setTotal">setTotal</a></li><li><a href="global.html#setValue">setValue</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showNextMonth">showNextMonth</a></li><li><a href="global.html#showPreMonth">showPreMonth</a></li><li><a href="global.html#type">type</a></li><li><a href="global.html#updatePrevNextStatus">updatePrevNextStatus</a></li><li><a href="global.html#updateStatus">updateStatus</a></li><li><a href="global.html#validate">validate</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Aug 21 2013 23:25:02 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

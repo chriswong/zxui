@@ -15,8 +15,8 @@ define(function (require) {
     /**
      * 条件过滤器
      * 
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @exports Filter
      * @example
@@ -49,26 +49,27 @@ define(function (require) {
      *
      * }).render();
      */
-    var Filter = Control.extend({
+    var Filter = Control.extend(/** @lends module:Filter.prototype */{
 
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @override
+         * @private
          */
         type: 'Filter',
 
         /**
          * 控件配置项
          * 
-         * @private
          * @name module:Filter#options
          * @type {Object}
          * @property {boolean} options.disabled 控件的不可用状态
          * @property {(string | HTMLElement)} options.main 控件渲染容器
          * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
+         * @private
          */
         options: {
 
@@ -92,17 +93,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @public
          * @type {string}
+         * @public
          */
         binds: 'onClick',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @param {Object} options 控件配置项
          * @see module:Filter#options
+         * @private
          */
         init: function (options) {
             this.disabled  = options.disabled;
@@ -114,10 +115,11 @@ define(function (require) {
         /**
          * 绘制控件
          * 
-         * @public
-         * @param {string=|HTMLElement=} wrapper 作为组件根元素的DOM节点
+         * @param {(string= | HTMLElement=)} wrapper 作为组件根元素的DOM节点
          * @throws 如果控件根元素不存在将抛出异常
          * @return {module:Filter} 当前实例
+         * @override
+         * @public
          */
         render: function (wrapper) {
             var main    = wrapper && lib.g(wrapper) || this.main;
@@ -151,17 +153,17 @@ define(function (require) {
         /**
          * 处理选单点击事件
          * 
-         * @private
-         * @param {DOMEvent} e 事件源对象
+         * @param {Event} e 事件源对象
          * @fires module:Filter#change
          * @fires module:Filter#click
+         * @private
          */
         onClick: function (e) {
 
             /**
              * @event module:Filter#click
              * @type {object}
-             * @property {DOMEvent} event 事件源对象
+             * @property {Event} event 事件源对象
              */
             this.fire('click', {event: e});
 
@@ -191,8 +193,6 @@ define(function (require) {
                 // 单选组的第一个选项已选中时的点击忽略
                 && !(isRadio && input.checked)
             ) {
-                //console.log(target);
-
                 // 防止在 label 外 mouseup 导致 radio/checkbox 未选中
                 var isChecked = isRadio
                     ? true
@@ -271,9 +271,9 @@ define(function (require) {
         /**
          * 获取指定键名的当前选中项数据
          * 
-         * @public
          * @param {string} key 选择项键名
          * @return {Object} 返回指定键名的选中项数据
+         * @public
          */
         getData: function (key) {
             var group = this.groups[key];
@@ -301,9 +301,9 @@ define(function (require) {
         /**
          * 禁止指定选项组中指定值的项
          * 
-         * @public
          * @param {string} key 选项组键名
          * @param {Array.<string>} values 要禁止的指定项的值
+         * @public
          */
         disableItems: function (key, values) {
             var options = this.options;
@@ -333,8 +333,8 @@ define(function (require) {
         /**
          * 启用指定选项组
          * 
-         * @public
          * @param {string} key 选项组关键字
+         * @public
          */
         enableItems: function (key) {
             var disabledClass = this.options.disabledClass;

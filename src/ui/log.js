@@ -17,6 +17,7 @@ define(function (require) {
      * @param {string} data 需要解析的字符串
      * @see baidu.json.parse
      * @return {Object} 解析结果json对象
+     * @inner
      */
     var parseJson = function (data) {
         try {
@@ -30,9 +31,9 @@ define(function (require) {
     /**
      * 发送日志请求
      * 
-     * @inner
      * @param {string} url 日志完整地址
      * @fires module:log#send
+     * @inner
      */
     var send = (function () {
         var list = [];
@@ -62,11 +63,11 @@ define(function (require) {
      * 填充数据
      * 根据当前点击对象，解释对象所处 XPath 及 url
      * 
-     * @inner
      * @param {Object} data待发送的数据对象
      * @param {HTMLElement} from 当前点击对象
      * @param {HTMLElement} to 统计日志最上层容器
      * @return {Object} 合并所有HTML自定义属性和相关配置项后的数据对象
+     * @inner
      */
     var fill = function (data, from, to) {
         var type;
@@ -300,6 +301,7 @@ define(function (require) {
      * 
      * @param {HTMLElement } el 点击统计的容器
      * @param {number} index 点击统计容器的序号
+     * @inner
      */
     var bindP5 = function (el, index) {
         var data = parseJson(el.getAttribute('data-click'));
@@ -312,10 +314,10 @@ define(function (require) {
      * 页面点击监听
      * http://fe.baidu.com/doc/aladdin/#standard/aladdin_click.text
      * 
-     * @inner
      * @param {?Event} e DOM 事件对象
      * @param {HTMLElement=} el 指定触发统计的 HTMLElement
      * @fires module:log#click
+     * @inner
      */
     var onClick = function (e, el) {
         var target = el || lib.getTarget(e);
@@ -379,6 +381,7 @@ define(function (require) {
     /**
      * 中间页日志统计模块
      * 
+     * @requires lib
      * @module log
      * @example
      * log.config({action: 'http://www.domain.com/api'});
@@ -441,7 +444,6 @@ define(function (require) {
     /**
      * 添加事件绑定
      * 
-     * @static
      * @method module:log.on
      * @param {?string} type 事件类型
      * @param {Function} listner 要添加绑定的监听器
@@ -450,7 +452,6 @@ define(function (require) {
     /**
      * 解除事件绑定
      * 
-     * @static
      * @method module:log.un
      * @param {string=} type 事件类型
      * @param {Function=} listner 要解除绑定的监听器
@@ -459,7 +460,6 @@ define(function (require) {
     /**
      * 触发指定事件
      * 
-     * @static
      * @method module:log.fire
      * @param {string} type 事件类型
      * @param {Object} args 透传的事件数据对象

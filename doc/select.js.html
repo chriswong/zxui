@@ -44,6 +44,7 @@ define(function (require) {
      * 
      * @param {string} str 目标字符
      * @return {number} 目标字符的字节长度
+     * @inner
      */
     function bLength (str) {
         return str.replace(/[^\x00-\xff]/gi, '..').length;
@@ -56,6 +57,7 @@ define(function (require) {
      * @param {number} max 截取的字节长度
      * @param {?string=} ellipsis 超长后的附加后缀
      * @return {string} 目标字符串被截取后加上后缀的字符串
+     * @inner
      */
     function textOverflow(str, max, ellipsis){
 
@@ -89,8 +91,8 @@ define(function (require) {
     /**
      * 下拉选择菜单
      * 
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @exports Select
      * @example
@@ -106,13 +108,13 @@ define(function (require) {
      *     }
      *   }).render();
      */
-    var Select = Control.extend({
+    var Select = Control.extend(/** @lends module:Select.prototype */{
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'Select',
 
@@ -160,17 +162,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @private
          * @type {string}
+         * @private
          */
         binds: 'onClick,onBeforeShow,onHide,onDisable,onEnable',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @param {Object} options 控件配置项
          * @see module:Select#options
+         * @private
          */
         init: function (options) {
 
@@ -185,8 +187,9 @@ define(function (require) {
         /**
          * 绘制控件
          * 
-         * @public
          * @return {module:Select} 当前实例
+         * @override
+         * @public
          */
         render: function () {
             var options = this.options;
@@ -251,8 +254,8 @@ define(function (require) {
         /**
          * 处理选单点击事件
          * 
-         * @private
          * @param {Object} args 从 Popup 传来的事件对象
+         * @private
          */
         onClick: function (args) {
             var e = args.event;
@@ -285,9 +288,9 @@ define(function (require) {
         /**
          * 转发Popup的onBeforeShow事件
          * 
-         * @private
          * @param {Object} arg 事件参数
          * @fires module:Select#beforeShow
+         * @private
          */
         onBeforeShow: function (arg) {
 
@@ -320,9 +323,9 @@ define(function (require) {
         /**
          * 显示浮层
          * 
-         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:Select#show 显示事件
+         * @public
          */
         show: function (target) {
 
@@ -340,8 +343,8 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
-         * @public
          * @fires module:Select#hide 隐藏事件
+         * @public
          */
         hide: function () {
             
@@ -356,11 +359,11 @@ define(function (require) {
         /**
          * 选取选项
          * 
-         * @private
          * @param {HTMLElement} el 点击的当前事件源对象
          * @param {boolean} isSilent 静默模式，是否发送事件通知
          * @fires module:Select#pick
          * @fires module:Select#change
+         * @private
          */
         pick: function (el, isSilent) {
 
@@ -454,6 +457,7 @@ define(function (require) {
          * 重置选项
          * 
          * 将选项恢复到初始值，依赖于第一个选项，其值为 0 或空
+         * @public
          */
         reset: function () {
             this.pick(lib.dom.first(this.main), true);
@@ -472,13 +476,13 @@ define(function (require) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addChild">addChild</a></li><li><a href="global.html#addTriggers">addTriggers</a></li><li><a href="global.html#appendTo">appendTo</a></li><li><a href="global.html#bindEvents">bindEvents</a></li><li><a href="global.html#binds">binds</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#buildMonth">buildMonth</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#checkValidity">checkValidity</a></li><li><a href="global.html#clear">clear</a></li><li><a href="global.html#computePosition">computePosition</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#disabled">disabled</a></li><li><a href="global.html#disableItems">disableItems</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#enableItems">enableItems</a></li><li><a href="global.html#fill">fill</a></li><li><a href="global.html#format">format</a></li><li><a href="global.html#from">from</a></li><li><a href="global.html#getChild">getChild</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getPage">getPage</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#getValueAsDate">getValueAsDate</a></li><li><a href="global.html#getYYYYMM">getYYYYMM</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initChildren">initChildren</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isDisabled">isDisabled</a></li><li><a href="global.html#isVisible">isVisible</a></li><li><a href="global.html#onBeforeShow">onBeforeShow</a></li><li><a href="global.html#onChange">onChange</a></li><li><a href="global.html#onClick">onClick</a></li><li><a href="global.html#onDisable">onDisable</a></li><li><a href="global.html#onDocClick">onDocClick</a></li><li><a href="global.html#onEnable">onEnable</a></li><li><a href="global.html#onHide">onHide</a></li><li><a href="global.html#onResize">onResize</a></li><li><a href="global.html#onShow">onShow</a></li><li><a href="global.html#pick">pick</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#refresh">refresh</a></li><li><a href="global.html#removeChild">removeChild</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#setContent">setContent</a></li><li><a href="global.html#setPage">setPage</a></li><li><a href="global.html#setRange">setRange</a></li><li><a href="global.html#setTarget">setTarget</a></li><li><a href="global.html#setTitle">setTitle</a></li><li><a href="global.html#setTotal">setTotal</a></li><li><a href="global.html#setValue">setValue</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showNextMonth">showNextMonth</a></li><li><a href="global.html#showPreMonth">showPreMonth</a></li><li><a href="global.html#type">type</a></li><li><a href="global.html#updatePrevNextStatus">updatePrevNextStatus</a></li><li><a href="global.html#updateStatus">updateStatus</a></li><li><a href="global.html#validate">validate</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 21 2013 21:45:51 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Aug 21 2013 23:25:02 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

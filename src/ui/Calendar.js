@@ -26,6 +26,7 @@ define(function (require) {
      * 
      * @param {(number | string)} n 需要补齐的数字
      * @return {string} 补齐两位后的字符
+     * @inner
      */
     function pad(n) {
         return (n > 9 ? '' : '0') + n;
@@ -35,7 +36,6 @@ define(function (require) {
     /**
      * 每个月的HTML缓存
      * 
-     * @private
      * @type {Object}
      */
     var cache = {};
@@ -43,8 +43,8 @@ define(function (require) {
     /**
      * 比PC-UI WCal好用的日历控件
      * 
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @requires Popup
      * @exports Calendar
@@ -57,20 +57,19 @@ define(function (require) {
      *     target: '.input'
      *  }).render();
      */
-    var Calendar = Control.extend({
+    var Calendar = Control.extend(/** @lends module:Calendar.prototype */{
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'Calendar',
 
         /**
          * 控件配置项
          * 
-         * @private
          * @name module:Calendar#options
          * @see module:Popup#options
          * @type {Object}
@@ -92,6 +91,7 @@ define(function (require) {
          * @property {Object} lang 预设模板
          * @property {string} lang.week 对于 '周' 的称呼
          * @property {string} lang.days 一周对应的显示
+         * @private
          */
         options: {
 
@@ -143,17 +143,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @private
          * @type {string}
+         * @private
          */
         binds: 'onClick,onBeforeShow,onHide',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @param {Object} options 控件配置项
          * @see module:Calendar#options
+         * @private
          */
         init: function (options) {
             this.disabled   = options.disabled;
@@ -171,10 +171,10 @@ define(function (require) {
         /**
          * 解释日期类型
          * 
-         * @public
          * @param {(string | Date)} value 源日期字符串或对象
          * @param {string} format 日期格式
          * @return {Date} 解释到的日期对象
+         * @public
          */
         from: function (value, format) {
             format = format || this.dateFormat;
@@ -215,10 +215,10 @@ define(function (require) {
         /**
          * 格式化日期
          * 
-         * @public
          * @param {Date} date 源日期对象
          * @param {string=} format 日期格式，默认为当前实例的dateFormat
          * @return {string} 格式化后的日期字符串
+         * @public
          */
         format: function (date, format) {
             // 控件不包含时间，所以不存在大小写区别
@@ -264,9 +264,9 @@ define(function (require) {
         /**
          * 取得指定日期的 yyyyMM 格式化后字符串值
          * 
-         * @private
          * @param {?Date=} date 待格式化的日期
          * @return {string} 按 yyyyMM格式化后的日期字符串
+         * @private
          */
         getYYYYMM: function (date) {
             return (
@@ -279,8 +279,9 @@ define(function (require) {
         /**
          * 绘制控件
          * 
-         * @public
          * @return {module:Calendar} 当前实例
+         * @override
+         * @public
          */
         render: function () {
             var options = this.options;
@@ -341,8 +342,8 @@ define(function (require) {
         /**
          * 更新上下月按钮状态
          * 
-         * @private
          * @param {?Date=} date 当前日期
+         * @private
          */
         updatePrevNextStatus: function (date) {
             var options = this.options;
@@ -511,8 +512,8 @@ define(function (require) {
         /**
          * 处理选单点击事件
          * 
-         * @private
          * @param {Object} args 从 Popup 传来的事件对象
+         * @private
          */
         onClick: function (args) {
             var e = args.event;
@@ -688,9 +689,9 @@ define(function (require) {
         /**
          * 转发Popup的onBeforeShow事件
          * 
-         * @private
          * @param {Object} arg 事件参数
          * @fires module:Calendar#beforeShow
+         * @private
          */
         onBeforeShow: function (arg) {
 
@@ -743,8 +744,8 @@ define(function (require) {
         /**
          * 动态更新 target
          * 
-         * @public
          * @param {HTMLElement} target 新的 target 节点
+         * @public
          */
         setTarget: function (target) {
             if (!target || target.nodeType !== 1) {
@@ -761,9 +762,9 @@ define(function (require) {
         /**
          * 选择日期
          * 
-         * @private
          * @param {HTMLElement} el 点击的当前事件源对象
          * @fires module:Calendar#pick
+         * @private
          */
         pick: function (el) {
             var value  = el.getAttribute('data-date');
@@ -802,9 +803,9 @@ define(function (require) {
         /**
          * 显示浮层
          * 
-         * @public
          * @param {?HTMLElement=} target 触发显示浮层的节点
          * @fires module:Calendar#show 显示事件
+         * @public
          */
         show: function (target) {
 
@@ -823,6 +824,7 @@ define(function (require) {
          * 监听 module:Popup 的隐藏事件
          * 
          * @fires module:Calendar#hide 隐藏事件
+         * @private
          */
         onHide: function () {
 
@@ -844,8 +846,8 @@ define(function (require) {
         /**
          * 验证控件输入状态
          * 
-         * @public
          * @return {boolean} 是否为指定格式的日期值
+         * @public
          */
         checkValidity: function () {
             return this.validate();
@@ -854,8 +856,8 @@ define(function (require) {
         /**
          * 获取当前选中的日期
          * 
-         * @public
          * @return {string} 当前日期格式化值
+         * @public
          */
         getValue: function () {
             var date = this.date;
@@ -866,8 +868,8 @@ define(function (require) {
         /**
          * 获取当前选中的日期
          * 
-         * @public
          * @return {Date} 获取到的日期
+         * @public
          */
         getValueAsDate: function () {
             return this.from(this.getValue());
@@ -876,8 +878,8 @@ define(function (require) {
         /**
          * 设置允许选中的日期区间
          * 
-         * @public
          * @param {Object} range 允许选择的日期区间
+         * @public
          */
         setRange: function (range) {
             if (!range) {
@@ -901,8 +903,8 @@ define(function (require) {
         /**
          * 设置当前选中的日期
          * 
-         * @public
          * @param {string} value 要设置的日期
+         * @public
          */
         setValue: function (value) {
             this.date = this.from(value);
@@ -913,8 +915,8 @@ define(function (require) {
         /**
          * 验证控件
          * 
-         * @public
          * @return {boolean} 验证结果
+         * @public
          */
         validate: function () {
             var value = this.target.value;

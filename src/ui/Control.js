@@ -14,18 +14,17 @@ define(function (require) {
      * 控件基类
      * 
      * 只可继承，不可实例化
-     * @constructor
+     * 
+     * @requires lib
      * @exports Control
-     * @fires module:Control#beforeinit
-     * @fires module:Control#afterinit
      */
-    var Control = lib.newClass({
+    var Control = lib.newClass(/** @lends module:Control.prototype */{
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'Control',
 
@@ -33,14 +32,15 @@ define(function (require) {
          * 控件可用状态
          *
          * @type {boolean}
+         * @private
          */
         disabled: false,
 
         /**
          * 将实例方法绑定 this
          * 
-         * @protected
          * @param {(Array.<string> | string)} events 类方法名数组
+         * @protected
          */
         bindEvents: function (events) {
             var me = this;
@@ -68,8 +68,8 @@ define(function (require) {
         /**
          * 控件初始化
          * 
-         * @protected
          * @param {Object} options 配置参数
+         * @protected
          */
         initialize: function (options) {
             options = this.setOptions(options);
@@ -82,9 +82,9 @@ define(function (require) {
         /**
          * 渲染控件
          * 
+         * @return {module:Control} 当前实例
          * @abstract
          * @protected
-         * @return {module:Control} 当前实例
          */
         render: function () {
             throw new Error('not implement render');
@@ -93,8 +93,8 @@ define(function (require) {
         /**
          * 将控件添加到页面的某个元素中
          * 
-         * @public
          * @param {HTMLElement} wrap 被添加到的页面元素
+         * @public
          */
         appendTo: function (wrap) {
             this.main = wrap || this.main;
@@ -104,11 +104,11 @@ define(function (require) {
         /**
          * 通过 className 查找控件容器内的元素
          * 
-         * @public
          * @see baidu.dom.q
          * @param {string} className 元素的class，只能指定单一的class，
          * 如果为空字符串或者纯空白的字符串，返回空数组。
          * @return {Array} 获取的元素集合，查找不到或className参数错误时返回空数组
+         * @public
          */
         query: function (className) {
             return lib.q(className, this.main);
@@ -117,8 +117,8 @@ define(function (require) {
         /**
          * 设置控件状态为禁用
          * 
-         * @public
          * @fires module:Control#disable
+         * @public
          */
         disable: function () {
             this.disabled = true;
@@ -132,8 +132,8 @@ define(function (require) {
         /**
          * 设置控件状态为启用
          * 
-         * @public
          * @fires module:Control#enable
+         * @public
          */
         enable: function () {
             this.disabled = false;
@@ -147,8 +147,8 @@ define(function (require) {
         /**
          * 获取控件可用状态
          * 
-         * @public
          * @return {boolean} 控件的可用状态值
+         * @public
          */
         isDisabled: function () {
             return this.disabled;
@@ -158,9 +158,9 @@ define(function (require) {
         /**
          * 添加子控件
          * 
-         * @public
          * @param {module:Control} control 控件实例
          * @param {string} name 子控件名
+         * @public
          */
         addChild: function (control, name) {
             var children = this.children;
@@ -177,8 +177,8 @@ define(function (require) {
         /**
          * 移除子控件
          * 
-         * @public
          * @param {module:Control} control 子控件实例
+         * @public
          */
         removeChild: function (control) {
             var children = this.children;
@@ -194,9 +194,9 @@ define(function (require) {
         /**
          * 获取子控件
          * 
-         * @public
          * @param {string} name 子控件名
          * @return {module:Control} 获取到的子控件
+         * @public
          */
         getChild: function (name) {
             return this.children[name];
@@ -205,8 +205,8 @@ define(function (require) {
         /**
          * 批量初始化子控件
          * 
-         * @public
          * @param {HTMLElement} wrap 容器DOM元素
+         * @public
          */
         initChildren: function (/* wrap */) {
             throw new Error('not implement initChildren');
@@ -215,8 +215,8 @@ define(function (require) {
         /**
          * 销毁控件
          * 
-         * @public
          * @fires module:Control#dispose
+         * @public
          */
         dispose: function () {
 

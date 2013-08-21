@@ -12,6 +12,13 @@ define(function (require) {
     var Control = require('./Control');
 
 
+    /**
+     * 农历数据表
+     * 从 1900 - 2100，16 进制前 12 表示对应年份 12 个月的大小，大月为 1，小月为 0
+     * 最后4位表示是否闰年闰哪个月，或下一年闰的月是大月还是小月，仅当为 0xf 时表示大月
+     * 
+     * @type {Array}
+     */
     var lunarInfo = [
         0x4bd8,0x4ae0,0xa570,0x54d5,0xd260,0xd950,0x5554,0x56af,0x9ad0,0x55d2,
         0x4ae0,0xa5b6,0xa4d0,0xd250,0xd295,0xb54f,0xd6a0,0xada2,0x95b0,0x4977,
@@ -36,7 +43,13 @@ define(function (require) {
         0xd520
     ];
 
-    //====================================== 返回农历 y年的总天数
+    /**
+     * 返回农历 y 年的总天数
+     * 
+     * @param {number} y 年份
+     * @return {number} y 年的总天数
+     * @inner
+     */
     function lYearDays(y) {
         var days = 348
             + (lunarInfo[y-1900] >> 4).toString(2).replace(/0/g, '').length;
@@ -44,24 +57,44 @@ define(function (require) {
         return days + leapDays(y);
     }
 
-    //====================================== 返回农历 y年闰月的天数
+    /**
+     * 返回农历 y 年闰月的天数
+     * 
+     * @param {number} y 年份
+     * @return {number} 闰月的天数（大月30，小月29，无闰月0）
+     * @inner
+     */
     function leapDays(y) {
         return leapMonth(y)
             ? (lunarInfo[y - 1899] & 0xf) === 0xf ? 30 : 29
             : 0;
     }
 
-    //====================================== 返回农历 y年闰哪个月 1-12 , 没闰返回 0
+    /**
+     * 返回农历 y 年闰哪个月 1-12 , 没闰返回 0
+     * 
+     * @param {number} y 年份
+     * @return {number} 闰月月份，0为不闰
+     * @inner
+     */
     function leapMonth(y) {
         var lm = lunarInfo[y - 1900] & 0xf;
         return lm === 0xf ? 0 : lm;
     }
 
-    //====================================== 返回农历 y年m月的总天数
+    /**
+     * 返回农历 y 年 m 月的总天数
+     * 
+     * @param {number} y 年份
+     * @param {number} m 月份
+     * @return {number} 农历 y 年 m 月的天数（大月30，小月29）
+     * @inner
+     */
     function monthDays(y, m) {
         return (lunarInfo[y - 1900] & (0x10000 >> m)) ? 30 : 29;
     }
 
+    // 节气顺序
     var solarTerm = [
         '小寒', '大寒',
         '立春', '雨水', '惊蛰', '春分', '清明', '谷雨',
@@ -69,6 +102,8 @@ define(function (require) {
         '立秋', '处暑', '白露', '秋分', '寒露', '霜降',
         '立冬', '小雪', '大雪', '冬至'
     ];
+
+    // 节气数据表
     var sTermInfo = [
              0,  21208, 
          42467,  63836,  85337, 107014, 128867, 150921, 
@@ -77,14 +112,22 @@ define(function (require) {
         440795, 462224, 483532, 504758
     ];
 
-    //节气例外调整
+    // 节气例外调整
     var solarTermAdjust = {
          19762:  1,  19802: 1,   20092:  1,  20129: -1, 201222: 1,
          20132:  1, 201313: -1, 201323:  1,  20144:  1,  20150: 1, 
         201622:  1, 201713: -1, 201723: -1,  20183:  1,  20185: 1,
          20192: -1, 201911: -1, 202012: -1, 202015: -1, 202022: 1 
     };
-   //===== 某年的第n个节气为几日(从0小寒起算)
+
+    /**
+     * 某年的第 n 个节气为几日（从 0 小寒起算）
+     * 
+     * @param {number} y 年份数字
+     * @param {number} n 节气序号
+     * @return {number} 节气对应的日期（天）
+     * @inner
+     */
     function sTerm(y, n) {
         var offDate = new Date(
             31556925974.7 * (y - 1900)
@@ -95,7 +138,13 @@ define(function (require) {
        return offDate.getUTCDate() + (solarTermAdjust[y + '' + n] || 0);
     }
 
-    //节气
+    /**
+     * 获取节气
+     * 
+     * @param {Date} date 阳历日期对象
+     * @return {string} 节气
+     * @inner
+     */
     function getSolarTerm(date) {
         var y = date.getFullYear();
         var m = date.getMonth();
@@ -108,7 +157,7 @@ define(function (require) {
                 : '');
     }
 
-    //农历节日
+    // 农历节日
     var lFtv = {
         '0100': '除夕',
         '0101': '春节',
@@ -122,7 +171,14 @@ define(function (require) {
         '1208': '腊八节',
         '1223': '小年'
     };
-    //农历节日
+
+    /**
+     * 获取农历节日
+     * 
+     * @param {Object} lunar 农历日期信息
+     * @return {string} 农历节日
+     * @inner
+     */
     function getLunarFestival(lunar) {
         // 处理除夕
         if (lunar.month === 11 && lunar.day > 28) {
@@ -139,7 +195,7 @@ define(function (require) {
     }
 
 
-    //公历节日 *表示放假日
+    // 阳历节日
     var sFtv = {
         '0101': '元旦',
         '0214': '情人节',
@@ -165,20 +221,35 @@ define(function (require) {
         '1224': '平安夜',
         '1225': '圣诞节'
     };
-   //公历节日
+
+    /**
+     * 获取阳历节日
+     * 
+     * @param {Date} date 阳历日期对象
+     * @return {string} 阳历节日
+     * @inner
+     */
     function getSolarFestival(date) {
         return sFtv[pad(date.getMonth() + 1) + pad(date.getDate())] || '';
     }
 
 
-    //某月的第几个星期几。 5,6,7,8 表示到数第 1,2,3,4 个星期几
+    // 某月的第几个星期几。 5,6,7,8 表示到数第 1,2,3,4 个星期几
     var wFtv = {
-        //一月的最后一个星期日（月倒数第一个星期日）
+        // 一月的最后一个星期日（月倒数第一个星期日）
         '0150': '国际麻风节',
         '0520': '母亲节',
         '0630': '父亲节',
         '1144': '感恩节'
     };
+
+    /**
+     * 获取阳历和周相关的节日
+     * 
+     * @param {Date} date 阳历日期对象
+     * @return {string} 阳历的周节日
+     * @inner
+     */
     function getSolarWeakFestival(date) {
         var day = date.getDay();
         var keys = [pad(date.getMonth() + 1), day];
@@ -197,6 +268,14 @@ define(function (require) {
         return wFtv[keys.join(seq)] || wFtv[keys.join(qes)];        
     }
 
+    /**
+     * 获取节日或节气信息
+     * 
+     * @param {Date} date 阳历日期对象
+     * @param {Object} lunar 农历日期信息
+     * @return {string} 节日或节气信息
+     * @inner
+     */
     function getFestival(date, lunar) {
         return getLunarFestival(lunar)
             || getSolarFestival(date) 
@@ -204,6 +283,13 @@ define(function (require) {
             || getSolarTerm(date);
     }
 
+    /**
+     * 获取阳历对应的农历信息
+     * 
+     * @param {Date} date 阳历日期对象
+     * @return {Object} 农历信息
+     * @inner
+     */
     function getLunarInfo(date) {
         var i, leap = 0, temp = 0;
         var offset = (
@@ -269,6 +355,13 @@ define(function (require) {
         };       
     }
 
+    /**
+     * 返回农历的描述（日子、节日、节气等）
+     * 
+     * @param {Date} date 阳历日期对象
+     * @return {string} 农历或节日节气描述
+     * @inner
+     */
     function getLunarDay(date) {
         var lunar = getLunarInfo(date);
         var month = lunar.month;
@@ -317,7 +410,6 @@ define(function (require) {
     /**
      * 每个月的HTML缓存
      * 
-     * @private
      * @type {Object}
      */
     var cache = {};
@@ -325,8 +417,8 @@ define(function (require) {
     /**
      * 1900 - 2100 年间农历控件
      * 
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @exports Lunar
      * @example
@@ -335,20 +427,19 @@ define(function (require) {
      *     main: lib.g('lunar')
      *  }).render();
      */
-    var Lunar = Control.extend({
+    var Lunar = Control.extend(/** @lends module:Lunar.prototype */{
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'Lunar',
 
         /**
          * 控件配置项
          * 
-         * @private
          * @name module:Lunar#options
          * @see module:Popup#options
          * @type {Object}
@@ -366,6 +457,7 @@ define(function (require) {
          * @property {Object} lang 预设模板
          * @property {string} lang.week 对于 '周' 的称呼
          * @property {string} lang.days 一周对应的显示
+         * @private
          */
         options: {
 
@@ -408,17 +500,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @private
          * @type {string}
+         * @private
          */
         binds: 'onClick',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @param {Object} options 控件配置项
          * @see module:Lunar#options
+         * @private
          */
         init: function (options) {
             this.dateFormat = 
@@ -436,10 +528,10 @@ define(function (require) {
         /**
          * 解释日期类型
          * 
-         * @public
          * @param {(string | Date)} value 源日期字符串或对象
          * @param {string} format 日期格式
          * @return {Date} 解释到的日期对象
+         * @public
          */
         from: function (value, format) {
             format = format || this.dateFormat;
@@ -480,10 +572,10 @@ define(function (require) {
         /**
          * 格式化日期
          * 
-         * @public
          * @param {Date} date 源日期对象
          * @param {string=} format 日期格式，默认为当前实例的 dateFormat
          * @return {string} 格式化后的日期字符串
+         * @public
          */
         format: function (date, format) {
             // 控件不包含时间，所以不存在大小写区别
@@ -529,9 +621,9 @@ define(function (require) {
         /**
          * 取得指定日期的 yyyyMM 格式化后字符串值
          * 
-         * @private
          * @param {?Date=} date 待格式化的日期
          * @return {string} 按 yyyyMM格式化后的日期字符串
+         * @private
          */
         getYYYYMM: function (date) {
             return (
@@ -544,8 +636,9 @@ define(function (require) {
         /**
          * 绘制控件
          * 
-         * @public
          * @return {module:Lunar} 当前实例
+         * @override
+         * @public
          */
         render: function () {
             var options = this.options;
@@ -579,8 +672,8 @@ define(function (require) {
         /**
          * 构建HTML
          * 
-         * @private
          * @fires module:Lunar#navigate
+         * @private
          */
         build: function (date) {
 
@@ -603,8 +696,8 @@ define(function (require) {
         /**
          * 更新上下月按钮状态
          * 
-         * @private
          * @param {?Date=} date 当前日期
+         * @private
          */
         updatePrevNextStatus: function (date) {
             var options = this.options;
@@ -775,9 +868,9 @@ define(function (require) {
         /**
          * 处理选单点击事件
          * 
-         * @private
          * @param {Event} event DOM 事件对象
          * @fires module:Lunar#click
+         * @private
          */
         onClick: function (event) {
             var e = event;
@@ -965,10 +1058,10 @@ define(function (require) {
         /**
          * 选择日期
          * 
-         * @private
          * @param {HTMLElement} el 点击的当前事件源对象
          * @param {Event} event DOM 事件对象
          * @fires module:Lunar#pick
+         * @private
          */
         pick: function (el, event) {
             var week  = el.getAttribute('data-week');
@@ -994,8 +1087,8 @@ define(function (require) {
         /**
          * 设置允许选中的日期区间
          * 
-         * @public
          * @param {Object} range 允许选择的日期区间
+         * @public
          */
         setRange: function (range) {
             if (!range) {
@@ -1019,8 +1112,8 @@ define(function (require) {
         /**
          * 设置当前选中的日期
          * 
-         * @public
          * @param {string} value 要设置的日期
+         * @public
          */
         setValue: function (value) {
             this.date = this.from(value);

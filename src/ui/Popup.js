@@ -18,27 +18,26 @@ define(function (require) {
     /**
      * 弹出层控件
      * 
-     * @constructor
      * @extends module:Control
+     * @requires lib
      * @requires Control
      * @exports Popup
      * @see module:City
      * @see module:Calendar
      */
-    var Popup = Control.extend({
+    var Popup = Control.extend(/** @lends module:Popup.prototype */{
 
         /**
          * 控件类型标识
          * 
-         * @private
          * @type {string}
+         * @private
          */
         type: 'Popup',
 
         /**
          * 控件配置项
          * 
-         * @private
          * @name module:Popup#options
          * @type {Object}
          * @property {boolean} disabled 控件的不可用状态
@@ -56,6 +55,7 @@ define(function (require) {
          * @property {Object.<string, number>} offset 弹出层显示的偏移量
          * @property {number} offset.x x 轴方向偏移量
          * @property {number} offset.y y轴方向偏移量
+         * @private
          */
         options: {
 
@@ -152,17 +152,17 @@ define(function (require) {
         /**
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
-         * @private
          * @type {string}
+         * @private
          */
         binds: 'onResize, onShow, onHide',
 
         /**
          * 控件初始化
          * 
-         * @private
          * @params {Object} options 配置项
          * @see module:Popup#options
+         * @private
          */
         init: function (options) {
             this.disabled  = options.disabled;
@@ -218,9 +218,10 @@ define(function (require) {
         /**
          * 绘制控件
          * 
-         * @public
          * @fires module:Popup#click 点击事件
          * @return {module:Popup} 当前实例
+         * @override
+         * @public
          */
         render: function () {
             var main = this.main;
@@ -272,9 +273,9 @@ define(function (require) {
         /**
          * 显示浮层前处理
          * 
-         * @private
          * @param {Event} e DOM 事件对象
          * @fires module:Popup#beforeShow 显示前事件
+         * @private
          */
         onShow: function (e) {
 
@@ -342,8 +343,8 @@ define(function (require) {
         /**
          * 显示浮层
          * 
-         * @public
          * @fires module:Popup#show 显示事件
+         * @public
          */
         show: function () {
             this.computePosition();
@@ -357,8 +358,8 @@ define(function (require) {
         /**
          * 隐藏浮层
          * 
-         * @public
          * @fires module:Popup#hide 隐藏事件
+         * @public
          */
         hide: function () {
             this.main.style.left = '-2000px';
