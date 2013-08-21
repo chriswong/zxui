@@ -130,12 +130,16 @@ define(function (require) {
     /**
      * 图片延迟加载的快捷 API
      * 
-     * @param {string} className 要延迟加载的元素区域的 className
+     * @param {?string=} className 要延迟加载的元素区域的 className
      * @param {?Object=} options 实例化 LazyImg 的配置参数
      * @see module:LazyImg#options
      * @static
      */
     LazyImg.load = function (className, options) {
+        if (lib.isObject(className)) {
+            options = className;
+            className = null;
+        }
         lib.each(lib.q(className || 'lazy-img'), function (el) {
             new LazyImg(lib.extend(options || {}, {main: el}));
         });
