@@ -71,7 +71,7 @@ define(function (require) {
             this.imgs = options.imgs
                 || lib.slice(main.getElementsByTagName('img'));
 
-            this.load = lib.bind(this.load, this)
+            this.load = lib.bind(this.load, this);
             Lazy.add(main, this.load, options.offset);
         },
 
@@ -141,6 +141,7 @@ define(function (require) {
             className = null;
         }
         lib.each(lib.q(className || 'lazy-img'), function (el) {
+            /* jshint -W031 */
             new LazyImg(lib.extend(options || {}, {main: el}));
         });
     };
