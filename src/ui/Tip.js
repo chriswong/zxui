@@ -714,8 +714,8 @@ define(function (require) {
             DOM.setStyles(
                 main, 
                 {
-                    left: Math.min(left, scrollRight - mainWidth) + 'px', 
-                    top: Math.min(top, scrollBottom - mainHeight) + 'px'
+                    left: left + 'px', 
+                    top: top + 'px'
                 }
             );
 
