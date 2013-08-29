@@ -1099,6 +1099,48 @@ define(function (require) {
         },
 
         /**
+         * 获取所有日期的 DOM 节点
+         * 
+         * @return {HTMLCollection} DOM 节点集合
+         * @public
+         */
+        getDayElements: function () {
+            return this.monthElement.getElementsByTagName('a');
+        },
+
+        /**
+         * 获取每天对应的日期和行列信息
+         * 
+         * @return {Object} 以日期为 key，包含日期、DOM、星期、顺序索引和行列信息的数据对象
+         * @public
+         */
+        getDaysInfo: function () {
+            var els = this.getDayElements();
+            var data = {};
+
+            lib.each(els, function (el, i) {
+                var date = el.getAttribute('data-date');
+
+                data[date] = {
+                    // 当天日期（yyyy-MM-dd格式）
+                    date: date,
+                    // 当前 DOM 节点
+                    element: el,
+                    // 星期几
+                    week: el.getAttribute('data-week') | 0,
+                    // 顺序索引
+                    index: i,
+                    // 行信息
+                    rows: i / 7 | 0,
+                    // 列信息
+                    cols: i % 7
+                };
+            });
+
+            return data;
+        },
+
+        /**
          * 设置允许选中的日期区间
          * 
          * @param {Object} range 允许选择的日期区间
