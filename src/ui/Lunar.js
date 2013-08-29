@@ -142,7 +142,7 @@ define(function (require) {
      * 获取节气
      * 
      * @param {Date} date 阳历日期对象
-     * @return {string} 节气
+     * @return {?Object} 节气
      * @inner
      */
     function getSolarTerm(date) {
@@ -150,11 +150,13 @@ define(function (require) {
         var m = date.getMonth();
         var d = date.getDate();
 
-        return d === sTerm(y, m * 2  )
+        var text = d === sTerm(y, m * 2  )
             ? solarTerm[m * 2]
             : (d === sTerm(y, m * 2 + 1)
                 ? solarTerm[m * 2 + 1]
                 : '');
+
+        return text ? { type: 'solar-term', text: text } : null;
     }
 
     // 农历节日
@@ -176,7 +178,7 @@ define(function (require) {
      * 获取农历节日
      * 
      * @param {Object} lunar 农历日期信息
-     * @return {string} 农历节日
+     * @return {?Object} 农历节日
      * @inner
      */
     function getLunarFestival(lunar) {
@@ -189,9 +191,11 @@ define(function (require) {
                 lunar.day = 0;
             }
         }
-        return lunar.leap 
+        var text = lunar.leap 
             ? ''
-            : lFtv[pad(lunar.month + 1) + pad(lunar.day)] || '';       
+            : lFtv[pad(lunar.month + 1) + pad(lunar.day)] || '';
+
+        return text ? { type: 'lunar-festival', text: text } : null;       
     }
 
 
@@ -226,11 +230,12 @@ define(function (require) {
      * 获取阳历节日
      * 
      * @param {Date} date 阳历日期对象
-     * @return {string} 阳历节日
+     * @return {?Object} 阳历节日
      * @inner
      */
     function getSolarFestival(date) {
-        return sFtv[pad(date.getMonth() + 1) + pad(date.getDate())] || '';
+        var text = sFtv[pad(date.getMonth() + 1) + pad(date.getDate())];
+        return text ? { type: 'solar-festival', text: text } : null;       
     }
 
 
@@ -265,7 +270,9 @@ define(function (require) {
         var qes = 4 + Math.floor((day + days - today) / 7)
             + (lastDay < day ? 0 : 1);
 
-        return wFtv[keys.join(seq)] || wFtv[keys.join(qes)];        
+        var text = wFtv[keys.join(seq)] || wFtv[keys.join(qes)];        
+
+        return text ? { type: 'solar-weak-festival', text: text } : null;       
     }
 
     /**
@@ -359,10 +366,11 @@ define(function (require) {
      * 返回农历的描述（日子、节日、节气等）
      * 
      * @param {Date} date 阳历日期对象
+     * @param {string} classPrefix 节日或农历日期的 className 前缀
      * @return {string} 农历或节日节气描述
      * @inner
      */
-    function getLunarDay(date) {
+    function getLunarDay(date, classPrefix) {
         var lunar = getLunarInfo(date);
         var month = lunar.month;
         var day = lunar.day;
@@ -372,19 +380,25 @@ define(function (require) {
         var months = ['正','二','三','四','五','六','七','八','九','十','十一','腊'];
 
         var result = getFestival(date, lunar);
+        var text;
         if (!result) {
             if (day === 1) {
-                result = (lunar.leap ? '闰' : '') + months[month] + '月';
+                text = (lunar.leap ? '闰' : '') + months[month] + '月';
             }
             else if (day % 10 > 0) {
-                result = decimals[day / 10 | 0] +  units[day % 10];      
+                text = decimals[day / 10 | 0] +  units[day % 10];      
             }
             else {
-                result = (day > 10 ? units[day / 10] : decimals[0]) + units[10];
+                text = (day > 10 ? units[day / 10] : decimals[0]) + units[10];
             }
+
+            result = { type: 'lunar', text: text };
         }
 
-        return result;
+        return ''
+            + '<span class="' + classPrefix + '-' + result.type + '">'
+            +   result.text
+            + '</span>';
        
     }
 
@@ -801,7 +815,7 @@ define(function (require) {
                         +   ' data-week="' + week + '"'
                         + '>'
                         +   i + ' '
-                        +   getLunarDay(date)
+                        +   getLunarDay(date, prefix)
                         + '</a>'
                     );
                     week++; 
@@ -826,7 +840,7 @@ define(function (require) {
                     +   ' data-week="' + week + '"'
                     + '>'
                     +   i + ' '
-                    +   getLunarDay(date)
+                    +   getLunarDay(date, prefix)
                     + '</a>'
                 );
                 week++;
@@ -853,7 +867,7 @@ define(function (require) {
                     +   ' data-week="' + week + '"'
                     + '>'
                     +   i + ' '
-                    +   getLunarDay(date)
+                    +   getLunarDay(date, prefix)
                     + '</a>'
                 );
                 week++;
