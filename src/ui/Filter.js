@@ -94,7 +94,7 @@ define(function (require) {
          * 需要绑定 this 的方法名，多个方法以半角逗号分开
          * 
          * @type {string}
-         * @public
+         * @private
          */
         binds: 'onClick',
 
