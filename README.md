@@ -50,3 +50,4 @@ git、nodejs、grunt-cli
 - 下拉选项 [Select](http://chriswong.github.io/zxui/example/Select.html)
 - 农历控件 [Lunar](http://chriswong.github.io/zxui/example/Lunar.html)
 - 延迟加载 [Lazy](http://chriswong.github.io/zxui/example/Lazy.html)
+- 选 项 卡 [Tabs](http://chriswong.github.io/zxui/example/Tabs.html)
