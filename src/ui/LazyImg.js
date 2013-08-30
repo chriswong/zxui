@@ -69,7 +69,7 @@ define(function (require) {
             options = this.setOptions(options);
             main = this.main = lib.g(options.main) || lib.q(options.main)[0];
             this.imgs = options.imgs
-                || lib.slice(main.getElementsByTagName('img'));
+                || lib.toArray(main.getElementsByTagName('img'));
 
             this.load = lib.bind(this.load, this);
             Lazy.add(main, this.load, options.offset);
