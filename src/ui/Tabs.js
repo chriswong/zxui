@@ -9,7 +9,7 @@
 define(function (require) {
 
     var lib = require('./lib');
-    var Control = require('./control');
+    var Control = require('./Control');
     
 
     /**
