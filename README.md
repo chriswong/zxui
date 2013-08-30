@@ -48,5 +48,5 @@ git、nodejs、grunt-cli
 - 点击统计 [Log](http://chriswong.github.io/zxui/example/log.html)
 - 条件过滤 [Filter](http://chriswong.github.io/zxui/example/Filter.html)
 - 下拉选项 [Select](http://chriswong.github.io/zxui/example/Select.html)
-- 农历控件 [Select](http://chriswong.github.io/zxui/example/Lunar.html)
-- 延迟加载 [Select](http://chriswong.github.io/zxui/example/Lazy.html)
+- 农历控件 [Lunar](http://chriswong.github.io/zxui/example/Lunar.html)
+- 延迟加载 [Lazy](http://chriswong.github.io/zxui/example/Lazy.html)
