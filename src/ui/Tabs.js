@@ -136,10 +136,13 @@ define(function (require) {
          * 
          * 主要用于业务逻辑判断是否允许切换选项卡，默认允许，不允许则需要明确返回 false
          * 
+         * @param {number} oldIndex 原选中项索引值
+         * @param {number} newIndex 新选中项索引值
          * @return {boolean} 是否允许切换
          * @public
          */
-        onBeforeChange: function () {
+        /* jshint -W098 */
+        onBeforeChange: function (oldIndex, newIndex) {
             return true;
         },
 
