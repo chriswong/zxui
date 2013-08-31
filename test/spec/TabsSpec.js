@@ -83,16 +83,32 @@ define(function (require) {
             lib.fire(iTag, 'click');
         });
 
-        it('cancel change', function () {
+        it('enable change', function () {
+
+            var onChange = jasmine.createSpy('onChange');
+            var rndIndex = Math.random() * tabs.labels.length | 0;
+
+            tabs.on('change', onChange);
+            lib.fire(tabs.labels[rndIndex], 'click');
+            setTimeout(function () {
+                expect(onChange).toHaveBeenCalled();
+            });
+        });
+
+        it('disabled change', function () {
             tabs.onBeforeChange = function () {
                 return false;
             };
 
-            var onChange = jasmine.createSpy();
+            var onChange = jasmine.createSpy('onChange');
             var rndIndex = Math.random() * tabs.labels.length | 0;
-            lib.fire(tabs.labels[rndIndex], 'click');
 
-            expect(onChange).not.toHaveBeenCalled();
+            tabs.on('change', onChange);
+            lib.fire(tabs.labels[rndIndex], 'click');
+            
+            setTimeout(function () {
+                expect(onChange).not.toHaveBeenCalled();
+            });
         });
     });
 
