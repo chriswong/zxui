@@ -356,6 +356,7 @@ define(function (require) {
 
             if (prev) {
                 lib[!range 
+                    || !range.begin
                     || this.getYYYYMM(range.begin) < this.getYYYYMM(date)
                         ? 'show' : 'hide'
                 ](prev);
@@ -370,6 +371,7 @@ define(function (require) {
             );
             if ( next) {
                 lib[!range
+                    || !range.end
                     || this.getYYYYMM(range.end) > this.getYYYYMM(last)
                         ? 'show' : 'hide'
                 ](next);
