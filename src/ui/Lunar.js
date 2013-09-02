@@ -1190,13 +1190,6 @@ define(function (require) {
      */
     Lunar.DATE_FORMAT = DATE_FORMAT;
 
-    /**
-     * 可选中的日期区间
-     * 
-     * @const
-     * @type {?Object}
-     */
-    Lunar.RANGE = null;
 
     return Lunar;
 });
