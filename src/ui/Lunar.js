@@ -1176,6 +1176,7 @@ define(function (require) {
         setValue: function (value) {
             this.date = this.from(value);
             this.value = this.format(this.date);
+            this.build();
         }
 
 
