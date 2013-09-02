@@ -148,7 +148,7 @@ define(function (require) {
                          && !(isLessLeft || isLessTop )
                     ) {
                         if (!options.trigger) {
-                            data[1](scroll, size, cd, dir);
+                            data[1](scroll, size, cd, dir, data[0]);
                         }
                         visible = true;
                     }
