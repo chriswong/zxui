@@ -462,6 +462,7 @@ define(function (require) {
             }
 
             // 恢复到当前月;
+            date.setDate(1);
             date.setMonth(month);
             date.setDate(0);
 
