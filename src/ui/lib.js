@@ -679,6 +679,42 @@ define(function () {
     );
 
     /** 
+     * 为对象绑定方法和作用域
+     * 
+     * @method module:lib.binds
+     * @param {Object} me 要绑定的 this
+     * @param {(Array.<string> | ...string)} 要绑定的方法名列表
+     */
+    /** 
+     * 为对象绑定方法和作用域
+     * 
+     * @method module:lib.fn.binds
+     * @param {Object} me 要绑定的 this
+     * @param {(Array.<string> | ...string)} 要绑定的方法名列表
+     */
+    lib.binds = lib.fn.binds = function (me, methods) {
+
+        if (typeof methods === 'string') {
+            methods = ~methods.indexOf(',')
+                ? methods.split(/\s*,\s*/)
+                : slice(arguments, 1);
+        }
+
+        if (!methods || !methods.length) {
+            return;
+        }
+
+        var name;
+        var fn;
+        while ((name = methods.pop())) {
+            fn = name && me[name];
+            if (fn) {
+                me[name] = lib.bind(fn, me);
+            }
+        }
+    };
+
+    /** 
      * 为函数提前绑定参数（柯里化）
      * 
      * @see http://en.wikipedia.org/wiki/Currying
