@@ -419,20 +419,20 @@ define(function () {
 
 
     /**
-     * 将字符串解析成json对象。
+     * 将字符串解析成 JSON 对象。
      * 
      * @method module:lib.parse
      * @param {string} source 需要解析的字符串
      * 
-     * @return {JSON} 解析结果json对象
+     * @return {JSON} 解析结果 JSON 对象
      */
     /**
-     * 将字符串解析成json对象。
+     * 将字符串解析成 JSON 对象。
      * 
      * @method module:lib.object.parse
      * @param {string} source 需要解析的字符串
      * 
-     * @return {JSON} 解析结果json对象
+     * @return {JSON} 解析结果 JSON 对象
      */
     lib.parse = lib.object.parse = window.JSON
         && JSON.parse
@@ -446,7 +446,7 @@ define(function () {
      * 将对象解析成 query 字符串
      * 
      * @method module:lib.toQueryString
-     * @param {Object} json 需要解析的json对象
+     * @param {Object} json 需要解析的 JSON 对象
      *             
      * @return {string} 解析结果字符串，其中值将被URI编码
      */
@@ -454,7 +454,7 @@ define(function () {
      * 将对象解析成 query 字符串
      * 
      * @method module:lib.object.toQueryString
-     * @param {Object} json 需要解析的json对象
+     * @param {Object} json 需要解析的 JSON 对象
      *             
      * @return {string} 解析结果字符串，其中值将被URI编码
      */
