@@ -8,7 +8,7 @@
 <script src="../dep/esl.js"></script>
 </head>
 <body>
-    <div class="result-op" data-click="{'a':1, 'srcid': 16873, 'p1':1, 'y':'FD9FFD6B'}">
+    <div id="area1" class="result-op" data-click="{'a':1, 'srcid': 16873, 'p1':1, 'y':'FD9FFD6B'}">
         统计区域一：<br />
         <input type="button" value="无data-click配置" />
         <input type="button" value="无data-click配置" />
@@ -17,7 +17,7 @@
     </div>
 
 
-    <div class="result-op" data-click="{'x':1, 'srcid': 16874, 'p1':2, 'y':'FD9FFD6C'}">
+    <div class="result-op" data-click="{'x':1, 'srcid': 16874, 'p1':2, 'y':'FD9FFD6C', 'mod': 'area2'}">
         统计区域二：<br />
         <input type="button" value="配置data-nolog=1" data-nolog="1" />
         <div data-click="{x:2, y: 2}"><input type="button" value="配置x=2 y=2" /></div>
@@ -35,6 +35,12 @@
     require(['log'], function (log) {
         log.config({data:{a: 0, e: 1, y: 'x'}})
         log.start();
+
+        log.live({
+            area1: function (json) {
+                console.log(json);
+            }
+        })
     });
 
     require(['lib'], function (lib) {
