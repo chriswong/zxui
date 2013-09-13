@@ -163,7 +163,7 @@ define(function (require) {
 
         it('log.send', function () {
             log.on('send', function (json) {
-                expect(json.url).toBe('http://sclick.baidu.com/w.gif?foo=bar');
+                expect(json.url).toBe('http://nsclick.baidu.com/w.gif?foo=bar');
 
                 log.un('send', arguments.callee);
             });
@@ -173,7 +173,7 @@ define(function (require) {
 
         it('xpath - div(other)', function () {
             var onClick = function (json) {
-                expect(json.data['rsv_xpath']).toBe('div(other)');
+                expect(json.data.xpath).toBe('div(other)');
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('div')[0]);
@@ -182,7 +182,7 @@ define(function (require) {
 
         it('xpath - h3-a(title)', function () {
             var onClick = function (json) {
-                expect(json.data['rsv_xpath']).toBe('h3-a(title)');
+                expect(json.data.xpath).toBe('h3-a(title)');
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('a')[0]);
@@ -191,7 +191,7 @@ define(function (require) {
 
         it('xpath - a2(link)', function () {
             var onClick = function (json) {
-                expect(json.data['rsv_xpath']).toBe('a2(link)');
+                expect(json.data.xpath).toBe('a2(link)');
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('a')[2]);
@@ -200,7 +200,7 @@ define(function (require) {
 
         it('xpath - div-span-input(input)', function () {
             var onClick = function (json) {
-                expect(json.data['rsv_xpath']).toBe('div-span-input(input)');
+                expect(json.data.xpath).toBe('div-span-input(input)');
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('input')[2]);
@@ -209,8 +209,8 @@ define(function (require) {
 
         it('title - from img[title]', function () {
             var onClick = function (json) {
-                expect(json.data.title).toBe(json.target.title);
-                expect(json.data['rsv_xpath']).toBe('a-img(link)');
+                expect(json.data.txt).toBe(json.target.title);
+                expect(json.data.xpath).toBe('a-img(link)');
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('img')[0]);
@@ -221,8 +221,8 @@ define(function (require) {
             var target = container.getElementsByTagName('img')[0];
             var title = target.title;
             var onClick = function (json) {
-                expect(json.data.title).not.toBe(title);
-                expect(json.data['rsv_xpath']).toBe('a-img(link)');
+                expect(json.data.txt).not.toBe(title);
+                expect(json.data.xpath).toBe('a-img(link)');
             };
             log.on('click', onClick);
             target.title = '';
@@ -233,8 +233,8 @@ define(function (require) {
 
         it('title - select', function () {
             var onClick = function (json) {
-                expect(json.data.title).toBe(json.target.value);
-                expect(json.data['rsv_xpath']).toMatch(/\(input\)/);
+                expect(json.data.txt).toBe(json.target.value);
+                expect(json.data.xpath).toMatch(/\(input\)/);
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('select')[0]);
@@ -243,8 +243,8 @@ define(function (require) {
 
         it('title - password(btn)', function () {
             var onClick = function (json) {
-                expect(json.data.title).toBe(json.target.parentNode.innerHTML);
-                expect(json.data['rsv_xpath']).toMatch(/\(btn\)/);
+                expect(json.data.txt).toBe(json.target.parentNode.innerHTML);
+                expect(json.data.xpath).toMatch(/\(btn\)/);
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('input')[3]);
@@ -253,8 +253,8 @@ define(function (require) {
 
         it('title - password(input)', function () {
             var onClick = function (json) {
-                expect(json.data.title).toBe('');
-                expect(json.data['rsv_xpath']).toMatch(/\(input\)/);
+                expect(json.data.txt).toBe('');
+                expect(json.data.xpath).toMatch(/\(input\)/);
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('input')[4]);
@@ -263,8 +263,8 @@ define(function (require) {
 
         it('title - button', function () {
             var onClick = function (json) {
-                expect(json.data.title).toBe(json.target.innerHTML);
-                expect(json.data['rsv_xpath']).toMatch(/\(input\)/);
+                expect(json.data.txt).toBe(json.target.innerHTML);
+                expect(json.data.xpath).toMatch(/\(input\)/);
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('button')[1]);
@@ -273,8 +273,8 @@ define(function (require) {
 
         it('title - span-button', function () {
             var onClick = function (json) {
-                expect(json.data.title).toBe(json.target.innerHTML);
-                expect(json.data['rsv_xpath']).toMatch(/\(others\)/);
+                expect(json.data.txt).toBe(json.target.innerHTML);
+                expect(json.data.xpath).toMatch(/\(others\)/);
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('button')[0]);
@@ -283,7 +283,7 @@ define(function (require) {
 
         it('type - btn for default', function () {
             var onClick = function (json) {
-                expect(json.data['rsv_xpath']).toMatch(/\(input\)/);
+                expect(json.data.xpath).toMatch(/\(input\)/);
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('input')[2]);
@@ -292,7 +292,7 @@ define(function (require) {
 
         it('type - other with OP_LOG_OTHERS class', function () {
             var onClick = function (json) {
-                expect(json.data['rsv_xpath']).toMatch(/\(others\)/);
+                expect(json.data.xpath).toMatch(/\(others\)/);
             };
             log.on('click', onClick);
             log.click(container.getElementsByTagName('em')[0]);
@@ -301,7 +301,7 @@ define(function (require) {
 
         it('type - link for OP_LOG_LINK', function () {
             var onClick = function (json) {
-                expect(json.data['rsv_xpath']).toMatch(/\(link\)/);
+                expect(json.data.xpath).toMatch(/\(link\)/);
             };
             var el = container.getElementsByTagName('input')[2];
             T.addClass(el, 'OP_LOG_LINK');
