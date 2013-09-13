@@ -179,7 +179,7 @@ define(function (require) {
         setField(data, from, 'item');
         setField(data, from, 'mod', to.id);
 
-        setTitle(data, from, type, tag, i);
+        setTitle(data, from, type, tag, path, i);
 
         data.xpath = path.join('-').toLowerCase() + '(' + type + ')';
 
@@ -194,10 +194,11 @@ define(function (require) {
      * @param {HTMLElement} from 当前点击的节点
      * @param {string} type 点击的节点类型
      * @param {string} tag 点击的节点标签名
+     * @param {Array} path xpath 从上到下的标签数组
      * @param {number} level 点击的节点到模块间的深度
      * @inner
      */
-    var setTitle = function (data, from, type, tag, level) {
+    var setTitle = function (data, from, type, tag, path, level) {
         var title = '';
 
         // 如果是表单元素
