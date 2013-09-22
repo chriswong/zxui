@@ -680,7 +680,8 @@ define(function (require) {
          * @see module:log~send
          */
         send: function (data) {
-            send(data);
+
+            send(lib.extend(lib.clone(options.data), data));
 
             return this;
         }
