@@ -587,9 +587,17 @@ define(function (require) {
          * 开始监听页面点击日志
          * 
          * @return {module:log} log
+         * @fires module:log#start
          */
         start: function () {
             lib.on(document, 'mousedown', onClick);
+
+            /**
+             * @event module:log#start
+             * @type {Object}
+             * @property {Object} type 事件类型
+             */
+            this.fire('start');
 
             return this;
         },
