@@ -352,7 +352,7 @@ define(function (require) {
     var options = {
 
         // 日志统计服务接口地址
-        action: 'http://nsclick.baidu.com/w.gif?',
+        action: 'http://nsclick.baidu.com/v.gif?',
 
         // 日志统计顶层容器 className
         main: 'result-op',
