@@ -163,7 +163,7 @@ define(function (require) {
 
         it('log.send', function () {
             log.on('send', function (json) {
-                expect(json.url).toBe('http://nsclick.baidu.com/v.gif?foo=bar');
+                expect(json.url.indexOf('foo=bar') > 0).toBe(true);
 
                 log.un('send', arguments.callee);
             });
