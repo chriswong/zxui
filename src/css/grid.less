@@ -8,7 +8,7 @@
 // @param i {number} + {unit} 每格中的间隙像素宽度
 // @param prefix {string=} 生成的样式前缀，默认不带前缀
 //
-.grid(@n: 24, @A: 30px, @i: 10px, @prefix: ~"") when (@n < 100) {
+.grid(@n: 32, @A: 31px, @i: 12px, @prefix: ~"") when (@n < 100) {
     @gap:     @i;
     @solid:   (@A - @i);
     @columns: @n;
@@ -74,7 +74,7 @@
 }
 
 // n >　100 时按总宽度处理，自动计算总列数（不保证适合）
-.grid(@n, @A: 30px, @i: 10px, @prefix: ~"") when (@n >= 100) {
+.grid(@n, @A: 31px, @i: 12px, @prefix: ~"") when (@n >= 100) {
     .grid(((@n + @i) / @A), @A, @i, @prefix);
 }
 
