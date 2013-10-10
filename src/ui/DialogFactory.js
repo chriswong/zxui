@@ -21,12 +21,16 @@ define(function (require) {
      */
     function genDialog(opts) {
         
-        var footer = '';
+        var footer = opts.footer || '';
 
         //设置取消按钮
         if(opts.cancel) {
             var id = Dialog.guid('btn');
-            footer += '<a id="'+ id +'" href="javascript:;">取消</a>';
+            footer += '<a id="'
+                + id 
+                + '" href="javascript:;">'
+                + (opts.cancelTitle || '取消')
+                + '</a>';
             opts.title = opts.title || '确认';
             opts.cancelId = id;
         }
@@ -34,12 +38,17 @@ define(function (require) {
         //设置确定按钮
         if(opts.confirm) {
             var id = Dialog.guid('btn');
-            footer = '<button id="'+ id +'">确定</button>' + footer;
+            footer = '<button id="'
+                + id 
+                + '">'
+                + (opts.confirmTitle || '确定')
+                + '</button>' 
+                + footer;
             opts.title = opts.title || '提示';
             opts.confirmId = id;
         }
 
-        opts.footer = opts.footer + footer;
+        opts.footer = footer;
 
         //创建对话框
         var dlg = new Dialog(opts);
