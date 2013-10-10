@@ -180,7 +180,7 @@ define(function (require) {
 
             if(Mask.curMasks <= 0 && Mask.ie6frame) {
                document.body.removeChild(Mask.ie6frame);
-               Mask.curMasks == 0;
+               Mask.curMasks = 0;
                Mask.ie6frame = null;
             }
         }
@@ -351,7 +351,7 @@ define(function (require) {
          * @return {HTMLElement} 模块的DOM元素
          * @private
          */
-        _getDom: function(name) {
+        getDom: function(name) {
             return lib.q( this.options.prefix + '-' + name, this.main)[0];
         },
 
@@ -362,7 +362,7 @@ define(function (require) {
          * @return {string} 构建的class名称
          * @private
          */
-        _getClass: function(name) {
+        getClass: function(name) {
             name = name ? '-' + name : '';
             var skin = this.options.skin;
             return this.options.prefix + name + (skin ? ' ' + skin + name : '');
@@ -382,11 +382,11 @@ define(function (require) {
                 top: opt.top,
                 position: opt.fixed ? 'fixed' : 'absolute',
                 level: opt.level,
-                dialogClass: this._getClass(),
-                closeClass: this._getClass('close'),
-                headerClass: this._getClass('header'),
-                bodyClass: this._getClass('body'),
-                footerClass: this._getClass('footer'),
+                dialogClass: this.getClass(),
+                closeClass: this.getClass('close'),
+                headerClass: this.getClass('header'),
+                bodyClass: this.getClass('body'),
+                footerClass: this.getClass('footer'),
 
                 title: opt.title,
                 content: opt.content,
@@ -402,7 +402,7 @@ define(function (require) {
             if(this.options.showMask) {
                 this.mask = Mask.create({
                     id: 'mask-' + this.id,
-                    className: this._getClass('mask'),
+                    className: this.getClass('mask'),
                     styles: {
                         zIndex: this.options.level - 1
                     }
@@ -418,7 +418,7 @@ define(function (require) {
         _bind: function() {
             var me = this;
             //绑定关闭按钮
-            lib.on(this._getDom('close'), 'click',
+            lib.on(this.getDom('close'), 'click',
                 me._close_handler = function(e) {
                     me.onHide(e);
                 }
@@ -433,7 +433,7 @@ define(function (require) {
          * @private
          */
         getHeaderDom: function() {
-            return this._getDom('header');
+            return this.getDom('header');
         },
 
         /**
@@ -443,7 +443,7 @@ define(function (require) {
          * @private
          */
         getBodyDom: function() {
-            return this._getDom('body');
+            return this.getDom('body');
         },
 
         /**
@@ -453,7 +453,7 @@ define(function (require) {
          * @private
          */
         getFooterDom: function() {
-            return this._getDom('footer');
+            return this.getDom('footer');
         },
 
         /**
@@ -654,7 +654,7 @@ define(function (require) {
             this.un('show');
             this.un('hide');
             //注销dom事件
-            lib.un(this._getDom('close'), 'click', this._close_handler);
+            lib.un(this.getDom('close'), 'click', this._close_handler);
             lib.un(window, 'resize', this.onResize);
             clearTimeout(this.resizeTimer);
 

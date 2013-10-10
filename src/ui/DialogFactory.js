@@ -12,8 +12,23 @@ define(function (require) {
     var Dialog = require('./Dialog');
 
     /**
+     * 获得同Dialog相同的class创建规则
+     * 
+     * @param {Object} opts 初始化选项
+     * @see module:Dialog.options
+     * 
+     * @param {string} name 名称
+     * @returns {Object} 构建好的dialog对象
+     */
+    function getClass(opts, name) {
+        name = name ? '-' + name : '';
+        var skin = opts.skin;
+        return (opts.prefix || 'ecl-ui-dialog') + name + (skin ? ' ' + skin + name : '');
+    }
+
+    /**
      * 创建Dialog对象
-     * @function
+     * 
      * @param {Object} opts 初始化选项
      * @see module:Dialog.options
      *
@@ -26,9 +41,13 @@ define(function (require) {
         //设置取消按钮
         if(opts.cancel) {
             var id = Dialog.guid('btn');
+            var cls = getClass(opts, 'cancel-btn');
             footer += '<a id="'
                 + id 
-                + '" href="javascript:;">'
+                + '" href="javascript:;"'
+                + ' class="'
+                + cls
+                + '">'
                 + (opts.cancelTitle || '取消')
                 + '</a>';
             opts.title = opts.title || '确认';
@@ -38,9 +57,13 @@ define(function (require) {
         //设置确定按钮
         if(opts.confirm) {
             var id = Dialog.guid('btn');
+            var cls = getClass(opts, 'confirm-btn');
             footer = '<button id="'
                 + id 
-                + '">'
+                + '"'
+                + ' class="'
+                + cls
+                +'">'
                 + (opts.confirmTitle || '确定')
                 + '</button>' 
                 + footer;
