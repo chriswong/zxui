@@ -23,7 +23,9 @@ define(function (require) {
     function getClass(opts, name) {
         name = name ? '-' + name : '';
         var skin = opts.skin;
-        return (opts.prefix || 'ecl-ui-dialog') + name + (skin ? ' ' + skin + name : '');
+        return (opts.prefix || 'ecl-ui-dialog') 
+            + name 
+            + (skin ? ' ' + skin + name : '');
     }
 
     /**
@@ -33,6 +35,8 @@ define(function (require) {
      * @see module:Dialog.options
      *
      * @returns {Object} 构建好的dialog对象
+     * @fires module:Dialog#confirm
+     * @fires module:Dialog#cancel
      */
     function genDialog(opts) {
         
@@ -80,7 +84,10 @@ define(function (require) {
         //绑定确定事件
         if(opts.confirmId) {
             lib.on(lib.g(opts.confirmId), 'click', 
-                opts._confirm_handler = function(e) {
+                opts.confirmHandler = function() {
+                    /**
+                     * @event module:Dialog#confirm
+                     * */
                     dlg.fire('confirm');
                 }
             );
@@ -89,23 +96,34 @@ define(function (require) {
         //绑定取消事件
         if(opts.cancelId) {
             lib.on(lib.g(opts.cancelId), 'click', 
-                opts._cancel_handler =function(e) {
+                opts.cancelHandler =function() {
+                    /**
+                     * @event module:Dialog#cancel
+                     * */
                     dlg.fire('cancel');
                 }
             );
-            dlg.on('hide', function(e) {
+            dlg.on('hide', function() {
                 setTimeout(function() {
                     dlg.fire('cancel');
-                },0)
+                }, 0);
             });
         }
 
         //绑定注销事件
-        dlg.on('dispose', function(e) {
+        dlg.on('dispose', function() {
             dlg.un('confirm');
             dlg.un('cancel');
-            opts.confirmId && lib.un(lib.g(opts.confirmId), 'click', opts._confirm_handler);
-            opts.cancelId && lib.un(lib.g(opts.cancelId), 'click', opts._cancel_handler);
+            opts.confirmId && lib.un(
+                lib.g(opts.confirmId),
+                'click',
+                opts.confirmHandler
+            );
+            opts.cancelId && lib.un(
+                lib.g(opts.cancelId),
+                'click',
+                opts.cancelHandler
+            );
             opts = null;
         });
 

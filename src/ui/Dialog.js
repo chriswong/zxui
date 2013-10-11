@@ -57,8 +57,9 @@ define(function (require) {
         var data = Array.prototype.slice.call(arguments,1), 
             toString = Object.prototype.toString;
         if(data.length){
-            data = data.length == 1 ? 
-                /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
+            data = data.length === 1 ? 
+                /* ie 下 Object.prototype.toString.call(null) 
+                    == '[object Object]' */
                 (opts !== null && (
                     /\[object Array\]|\[object Object\]/
                     .test(toString.call(opts))) ? opts : data) 
@@ -66,10 +67,10 @@ define(function (require) {
             return source.replace(/#\{(.+?)\}/g, function (match, key){
                 var replacer = data[key];
                 // chrome 下 typeof /a/ == 'function'
-                if('[object Function]' == toString.call(replacer)){
+                if('[object Function]' === toString.call(replacer)){
                     replacer = replacer(key);
                 }
-                return ('undefined' == typeof replacer ? '' : replacer);
+                return ('undefined' === typeof replacer ? '' : replacer);
             });
         }
         return source;
@@ -83,7 +84,7 @@ define(function (require) {
      */
     var Mask = function(opts) {
         this._init(opts);
-    }
+    };
 
     Mask.prototype = {
 
@@ -103,7 +104,7 @@ define(function (require) {
             this.mask = div;
             Mask.curMasks++;
 
-            if(lib.browser.ie == 6 && !Mask.ie6frame) {
+            if( 6 === lib.browser.ie && !Mask.ie6frame) {
                 Mask.ie6frame = document.createElement(
                     '<iframe'
                     + ' src="about:blank"'
@@ -163,7 +164,7 @@ define(function (require) {
          * 隐藏一个遮罩层
          * 
          */
-        hide: function(mask) {
+        hide: function() {
             if(Mask.ie6frame) {
                 lib.hide(Mask.ie6frame);
             }
@@ -419,7 +420,7 @@ define(function (require) {
             var me = this;
             //绑定关闭按钮
             lib.on(this.getDom('close'), 'click',
-                me._close_handler = function(e) {
+                me.closeHandler = function(e) {
                     me.onHide(e);
                 }
             );
@@ -557,19 +558,33 @@ define(function (require) {
 
         /**
          * 当触发展示的时候
+         * @fires module:Dialog#beforeshow
          * @private
          */
         onShow: function(e) {
             var me = this;
+
+            /**
+             * @event module:Dialog#beforeshow
+             * @type {Object}
+             * @property {DOMEvent} event 事件源对象
+             */
             me.fire('beforeshow', { event: e });
             me.show();
         },
 
         /**
          * 当触发隐藏的时候
+         * @fires module:Dialog#beforehide
          * @private
          */
         onHide: function(e) {
+
+            /**
+             * @event module:Dialog#beforehide
+             * @type {Object}
+             * @property {DOMEvent} event 事件源对象
+             */
             this.fire('beforehide', { event: e });
             this.hide();
         },
@@ -577,6 +592,7 @@ define(function (require) {
         /**
          * 显示组件
          * @public
+         * @fires module:Dialog#show
          */
         show: function() {
             var me = this;
@@ -589,6 +605,10 @@ define(function (require) {
 
             lib.show(me.main);
             me.adjustPos();
+
+            /**
+             * @event module:Dialog#show
+             */
             me.fire('show');
 
             return this;
@@ -598,12 +618,18 @@ define(function (require) {
         /**
          * 隐藏组件
          * @public
+         * 
+         * @fires module:Dialog#hide
          */
         hide: function() {
 
             this.mask && this.mask.hide();
 
             lib.hide(this.main);
+
+            /**
+             * @event module:Dialog#hide
+             */
             this.fire('hide');
 
             //注销resize
@@ -623,7 +649,7 @@ define(function (require) {
             if (!this.rendered) {
 
                 //TODO IE6浏览器不支持fixed定位
-                if(options.fixed  && lib.browser.ie == 6) {
+                if(options.fixed  && 6 === lib.browser.ie) {
                    options.fixed = 0;
                 }
 
@@ -644,9 +670,15 @@ define(function (require) {
 
         /**
          * 销毁，注销事件，解除引用
+         * 
          * @public
+         * @fires module:Dialog#dispose
          */
         dispose: function() {
+
+            /**
+             * @event module:Dialog#dispose
+             */
             this.fire('dispose');
 
             this.un('beforeshow');
@@ -654,7 +686,7 @@ define(function (require) {
             this.un('show');
             this.un('hide');
             //注销dom事件
-            lib.un(this.getDom('close'), 'click', this._close_handler);
+            lib.un(this.getDom('close'), 'click', this.closeHandler);
             lib.un(window, 'resize', this.onResize);
             clearTimeout(this.resizeTimer);
 
