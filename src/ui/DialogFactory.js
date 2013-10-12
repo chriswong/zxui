@@ -125,7 +125,6 @@ define(function (require) {
                 opts.cancelHandler
             );
             opts = null;
-            dlg = null;
         });
         return dlg;
     }

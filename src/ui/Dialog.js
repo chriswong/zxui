@@ -30,7 +30,7 @@ define(function (require) {
     /**
      * 移除当前的元素
      * 
-     * @param {[type]} domElement 当前元素
+     * @param {HTMLDomElement} domElement 当前元素
      */
     function remove(domElement) {
         domElement && domElement.parentNode.removeChild(domElement);
@@ -680,23 +680,17 @@ define(function (require) {
             /**
              * @event module:Dialog#dispose
              */
-            this.fire('dispose');
+            Control.prototype.dispose.apply(this);
 
-            this.un('beforeshow');
-            this.un('beforehide');
-            this.un('show');
-            this.un('hide');
             //注销dom事件
             lib.un(this.getDom('close'), 'click', this.closeHandler);
             lib.un(window, 'resize', this.onResize);
-            clearTimeout(this.resizeTimer);
 
+            clearTimeout(this.resizeTimer);
             remove(this.main);
             this.main = null;
 
             this.mask && this.mask.dispose();
-
-            this.un('dispose');
         }
     });
 

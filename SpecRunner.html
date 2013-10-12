@@ -52,6 +52,8 @@
   
   <script src="./dep/common-2.3.js"></script>
   
+  <script src="./test/spec/logHelper.js"></script>
+  
   
 
   <script>
@@ -59,8 +61,8 @@
 
     
       require.config({
-  "baseUrl": ".grunt/grunt-contrib-jasmine/src/ui/",
-  "urlArgs": "?hmof580o"
+  "baseUrl": "./src/ui/",
+  "urlArgs": "?hmop18u1"
 });
     
   </script>
@@ -70,56 +72,56 @@
     require([
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Calendar' ,
+        'Calendar' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/City' ,
+        'City' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Control' ,
+        'Control' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Dialog' ,
+        'Dialog' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/DialogFactory' ,
+        'DialogFactory' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Filter' ,
+        'Filter' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Lazy' ,
+        'Lazy' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/LazyImg' ,
+        'LazyImg' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Lunar' ,
+        'Lunar' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Pager' ,
+        'Pager' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Popup' ,
+        'Popup' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Select' ,
+        'Select' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Tabs' ,
+        'Tabs' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/Tip' ,
+        'Tip' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/lib' ,
+        'lib' ,
       
         
-        '.grunt/grunt-contrib-jasmine/src/ui/log' 
+        'log' 
       
     ],
     function(){
-      require(['./test/spec/CalendarSpec.js','./test/spec/CitySpec.js','./test/spec/DialogFactorySpec.js','./test/spec/DialogSpec.js','./test/spec/FilterSpec.js','./test/spec/LazyImgSpec.js','./test/spec/LazySpec.js','./test/spec/LunarSpec.js','./test/spec/PagerSpec.js','./test/spec/SelectSpec.js','./test/spec/TabsSpec.js','./test/spec/TipSpec.js','./test/spec/libSpec.js','./test/spec/logSpec.js','.grunt\grunt-contrib-jasmine\grunt-template-jasmine-istanbul\reporter.js','./.grunt/grunt-contrib-jasmine/reporter.js'], function(){
+      require(['./test/spec/CalendarSpec.js','./test/spec/CitySpec.js','./test/spec/DialogFactorySpec.js','./test/spec/DialogSpec.js','./test/spec/FilterSpec.js','./test/spec/LazyImgSpec.js','./test/spec/LazySpec.js','./test/spec/LunarSpec.js','./test/spec/PagerSpec.js','./test/spec/SelectSpec.js','./test/spec/TabsSpec.js','./test/spec/TipSpec.js','./test/spec/libSpec.js','./test/spec/logSpec.js','./.grunt/grunt-contrib-jasmine/reporter.js'], function(){
         require(['./.grunt/grunt-contrib-jasmine/jasmine-helper.js'], function(){
           // good to go! Our tests should already be running.
         })
