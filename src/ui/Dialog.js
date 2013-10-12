@@ -87,6 +87,7 @@ define(function (require) {
     };
 
     Mask.prototype = {
+        constructor: Mask,
 
         /**
          * 初始化函数
@@ -265,7 +266,7 @@ define(function (require) {
          * @property {string} options.fixed 是否固定，不随视窗滚动
          * @property {string} options.showMask 是否显示覆盖层
          * @property {string} options.level 当前dialog的z-index
-         * @property {string} options.dragable 是否可以拖动
+         * @property {string} options.dragable 是否可以拖动,暂未实现
          * @property {string} options.tpl 默认的框架模板
          * @property {string} options.footer 控件脚注
 
@@ -309,7 +310,7 @@ define(function (require) {
             //当前dialog的z-index
             level: 10,
 
-            //是否可以拖动
+            //是否可以拖动,暂未实现
             dragable: 1,
 
             //模板框架
@@ -484,7 +485,7 @@ define(function (require) {
          * @public
          */
         setFooter: function(content) {
-            this.getBodyDom().innerHTML = content;
+            this.getFooterDom().innerHTML = content;
         },
 
         /**

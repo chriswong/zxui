@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Jasmine Spec Runner</title>
+
+  
+  <link rel="stylesheet" type="text/css" href=".grunt/grunt-contrib-jasmine/jasmine.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/Calendar.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/City.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/Dialog.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/Filter.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/Lunar.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/Pager.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/Select.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/Tabs.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/Tip.css">
+  
+  <link rel="stylesheet" type="text/css" href="./asset/css/grid.css">
+  
+
+  <script src=".grunt/grunt-contrib-jasmine/require.js"></script>
+  <script>
+    require.onError = function(error) {
+      var message = error.requireType + ': ';
+      if (error.requireType === 'scripterror' || error.requireType === 'notloaded' && error.requireModules) {
+        message += 'Illegal path or script error: ' + '[\'' + error.requireModules.join("', '") + '\']';
+      } else {
+        message += error.message;
+      }
+
+      throw Error(message);
+    };
+  </script>
+
+  
+  
+  <script src="./.grunt/grunt-contrib-jasmine/jasmine.js"></script>
+  
+  <script src="./.grunt/grunt-contrib-jasmine/jasmine-html.js"></script>
+  
+  <script src="./dep/vars.js"></script>
+  
+  <script src="./dep/common-2.3.js"></script>
+  
+  
+
+  <script>
+    
+
+    
+      require.config({
+  "baseUrl": ".grunt/grunt-contrib-jasmine/src/ui/",
+  "urlArgs": "?hmof580o"
+});
+    
+  </script>
+
+  <script>
+    function launchTest() {
+    require([
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Calendar' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/City' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Control' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Dialog' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/DialogFactory' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Filter' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Lazy' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/LazyImg' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Lunar' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Pager' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Popup' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Select' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Tabs' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/Tip' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/lib' ,
+      
+        
+        '.grunt/grunt-contrib-jasmine/src/ui/log' 
+      
+    ],
+    function(){
+      require(['./test/spec/CalendarSpec.js','./test/spec/CitySpec.js','./test/spec/DialogFactorySpec.js','./test/spec/DialogSpec.js','./test/spec/FilterSpec.js','./test/spec/LazyImgSpec.js','./test/spec/LazySpec.js','./test/spec/LunarSpec.js','./test/spec/PagerSpec.js','./test/spec/SelectSpec.js','./test/spec/TabsSpec.js','./test/spec/TipSpec.js','./test/spec/libSpec.js','./test/spec/logSpec.js','.grunt\grunt-contrib-jasmine\grunt-template-jasmine-istanbul\reporter.js','./.grunt/grunt-contrib-jasmine/reporter.js'], function(){
+        require(['./.grunt/grunt-contrib-jasmine/jasmine-helper.js'], function(){
+          // good to go! Our tests should already be running.
+        })
+      })
+    }
+    )
+  }
+  </script>
+
+  
+  <script>
+  launchTest();
+  </script>
+  
+</head>
+<body>
+</body>
+</html>

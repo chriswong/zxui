@@ -84,10 +84,10 @@ define(function (require) {
         //绑定确定事件
         if(opts.confirmId) {
             lib.on(lib.g(opts.confirmId), 'click', 
+                /**
+                 * @event module:Dialog#confirm
+                 * */
                 opts.confirmHandler = function() {
-                    /**
-                     * @event module:Dialog#confirm
-                     * */
                     dlg.fire('confirm');
                 }
             );
@@ -96,10 +96,10 @@ define(function (require) {
         //绑定取消事件
         if(opts.cancelId) {
             lib.on(lib.g(opts.cancelId), 'click', 
+                /**
+                 * @event module:Dialog#cancel
+                 * */
                 opts.cancelHandler =function() {
-                    /**
-                     * @event module:Dialog#cancel
-                     * */
                     dlg.fire('cancel');
                 }
             );
@@ -125,9 +125,9 @@ define(function (require) {
                 opts.cancelHandler
             );
             opts = null;
+            dlg = null;
         });
-
-        return dlg.show();
+        return dlg;
     }
 
     /**
