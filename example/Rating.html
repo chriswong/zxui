@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Rating</title>
+<script src="../dep/esl.js"></script>
+<link rel="stylesheet/less" type="text/css" href="../src/css/Rating.less" />
+</head>
+<body>
+    <div class="ecl-ui-rating" id="rating"></div>
+<script>
+(function () {
+    require.config({
+      baseUrl: '../src/ui'
+    });
+    require(['Rating'], function (Rating) {
+        var rating = new Rating({
+            main: document.getElementById('rating'),
+            value: 1,
+            onRated: function (e) {
+                console.debug(e);
+            }
+        }).render();
+
+        // rating.disable();
+    });
+
+})();
+</script>
+ 
+<script src="../dep/less-1.3.3.min.js"></script>
+</body>
+</html>
