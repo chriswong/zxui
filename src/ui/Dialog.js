@@ -674,13 +674,14 @@ define(function (require) {
          * 
          * @public
          * @fires module:Dialog#dispose
+         * @fires module:Dialog#beforedispose
          */
         dispose: function() {
 
             /**
-             * @event module:Dialog#dispose
+             * @event module:Dialog#beforedispose
              */
-            Control.prototype.dispose.apply(this);
+            this.fire('beforedispose');
 
             //注销dom事件
             lib.un(this.getDom('close'), 'click', this.closeHandler);
@@ -691,6 +692,12 @@ define(function (require) {
             this.main = null;
 
             this.mask && this.mask.dispose();
+
+            /**
+             * @event module:Dialog#dispose
+             */
+            this.parent('dispose');
+
         }
     });
 

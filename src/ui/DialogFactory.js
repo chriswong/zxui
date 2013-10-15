@@ -111,7 +111,7 @@ define(function (require) {
         }
 
         //绑定注销事件
-        dlg.on('dispose', function() {
+        dlg.on('beforedispose', function() {
             dlg.un('confirm');
             dlg.un('cancel');
             opts.confirmId && lib.un(
