@@ -22,7 +22,7 @@
 
 
         afterEach(function () {
-            dialog.dispose();
+            
         });
       
         describe('基本接口', function () {
@@ -37,21 +37,14 @@
                 dialog.on('show', function() {
                     expect(dialog.main.style.display).toBe('');
                 });
+                dialog.show();
             });
 
             it('event:hide', function () {
-                dialog.on('show', function() {
+                dialog.on('hide', function() {
                     expect(dialog.main.style.display).toBe('none');
                 });
                 dialog.hide();
-            });
-
-            it('event:dispose', function () {
-                dialog.on('dispose', function() {
-                    setTimeout(function(){
-                        expect(dialog.main).toBeFalsy();
-                    }, 0);
-                });
             });
 
             it('title check', function () {
@@ -74,6 +67,13 @@
 
             it('mask check', function () {
                 expect(dialog.mask).toBeTruthy();
+            });
+
+            it('event:dispose', function () {
+                dialog.on('dispose', function() {
+                    expect(dialog.main).toBeFalsy();
+                });
+                dialog.dispose();
             });
 
         });
