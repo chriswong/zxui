@@ -118,7 +118,7 @@ define(
             enable: function() {
                 lib.removeClass(this.main, this.options.prefix + '-disabled');
 
-                Control.prototype.enable.apply(this, arguments);
+                this.parent('enable');
             },
             /**
              * 不启用组件
@@ -128,7 +128,7 @@ define(
             disable: function() {
                 lib.addClass(this.main, this.options.prefix + '-disabled');
 
-                Control.prototype.disable.apply(this, arguments);
+                this.parent('disable');
             },
             /**
              * 清洗点亮的星星
@@ -290,7 +290,7 @@ define(
                 delete this.stars;
                 delete this.main;
 
-                Control.prototype.dispose.apply(this, arguments);
+                this.parent('dispose');
             }
         });
 
