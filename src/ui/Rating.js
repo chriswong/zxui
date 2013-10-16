@@ -14,7 +14,6 @@ define(
         /**
          * 评分组件
          * 
-         * @constructor
          * @extends module:Control
          * @requires Control
          * @exports Rating
@@ -55,6 +54,7 @@ define(
              * @type {string}
              */
             binds: 'onClick, onMouseEnter, onMouseLeave',
+
             /**
              * 初始化控件
              *
@@ -66,6 +66,7 @@ define(
                 this.main = lib.g(options.main);
                 this.disabled = options.disabled;
             },
+
             /**
              * 绘制控件
              *
@@ -110,6 +111,7 @@ define(
 
                 return this;
             },
+
             /**
              * 启用组件
              *
@@ -120,6 +122,7 @@ define(
 
                 this.parent('enable');
             },
+
             /**
              * 不启用组件
              *
@@ -130,6 +133,7 @@ define(
 
                 this.parent('disable');
             },
+
             /**
              * 清洗点亮的星星
              *
@@ -148,6 +152,7 @@ define(
                     }
                 );
             },
+
             /**
              * 按给定星级，从左往右点亮星星
              *
@@ -170,6 +175,7 @@ define(
 
                 return result;
             },
+
             /**
              * 重置星级，避开常用词reset，将方法命名为resetRating
              *
@@ -191,6 +197,7 @@ define(
 
                 return result;
             },
+
             /**
              * click事件处理
              *
@@ -237,6 +244,7 @@ define(
                     );
                 }
             },
+
             /**
              * mouseenter事件处理
              *
@@ -257,6 +265,7 @@ define(
                     this.fill(target.getAttribute('data-value'));
                 }
             },
+
             /**
              * mouseleave事件处理
              *
@@ -277,6 +286,7 @@ define(
                     this.resetRating();
                 }
             },
+            
             /**
              * 销毁控件
              *

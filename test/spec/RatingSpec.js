@@ -82,19 +82,6 @@ define(
                     0
                 );
             });
-
-            // // 单击星星
-            // it('event:onRated', function() {
-            //     var rndIndex = 1;
-
-            //     var onRated = function(e) {
-            //         expect(e.value).toBe(rndIndex + 1);
-            //     };
-
-            //     rating.on('rated', onRated);
-            //     lib.fire(rating.stars[rndIndex], 'click');
-            //     rating.un('rated');
-            // });
         });
     }
 );

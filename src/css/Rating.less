@@ -1,19 +1,20 @@
-.ecl-ui-rating {}
-.ecl-ui-rating-stars {
+@rating-prefix: ecl-ui-rating;
+.@{rating-prefix} {}
+.@{rating-prefix}-stars {
     
 }
-.ecl-ui-rating-star {
+.@{rating-prefix}-star {
     display: inline-block;
-    zoom: 1;
+    *zoom: 1;
     list-style: none;
     cursor: pointer;
 }
-.ecl-ui-rating-star-on {
+.@{rating-prefix}-star-on {
     color: red;
 }
 
-.ecl-ui-rating-disabled {
-    .ecl-ui-rating-star {
+.@{rating-prefix}-disabled {
+    .@{rating-prefix}-star {
         cursor: default;
     }
 }
