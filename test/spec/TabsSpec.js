@@ -24,6 +24,8 @@ define(function (require) {
             main: lib.q('ecl-ui-tabs')[0],
             selectedIndex: 0
         }).render();
+
+        jasmine.Clock.useMock();
     });
 
 
@@ -84,15 +86,18 @@ define(function (require) {
         });
 
         it('enable change', function () {
+            tabs.onBeforeChange = function () {
+                return true;
+            };
 
             var onChange = jasmine.createSpy('onChange');
-            var rndIndex = Math.random() * tabs.labels.length | 0;
+            var rndIndex = 1 + Math.floor(Math.random() * tabs.labels.length);
 
             tabs.on('change', onChange);
             lib.fire(tabs.labels[rndIndex], 'click');
-            setTimeout(function () {
-                expect(onChange).toHaveBeenCalled();
-            });
+
+            // jasmine.Clock.tick(100);
+            expect(onChange).toHaveBeenCalled();
         });
 
         it('disabled change', function () {
@@ -106,9 +111,8 @@ define(function (require) {
             tabs.on('change', onChange);
             lib.fire(tabs.labels[rndIndex], 'click');
             
-            setTimeout(function () {
-                expect(onChange).not.toHaveBeenCalled();
-            });
+            // jasmine.Clock.tick(100);
+            expect(onChange).not.toHaveBeenCalled();
         });
     });
 
