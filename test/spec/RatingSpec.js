@@ -46,10 +46,10 @@ define(
             });
 
             // 鼠标移进星星，预览星级
-            it('preview rating when mouseenter', function() {
+            it('preview rating when mouseover', function() {
                 var rndIndex = 1;
 
-                lib.fire(rating.stars[rndIndex], 'mouseenter');
+                lib.fire(rating.stars[rndIndex], 'mouseover');
 
                 setTimeout(
                     function() {
@@ -65,10 +65,10 @@ define(
             });
 
             // // 鼠标移出星星，重置星级为value所指定的星级
-            it('reset rating when mouseleave', function() {
+            it('reset rating when mouseout', function() {
                 var rndIndex = 1;
 
-                lib.fire(rating.stars[rndIndex], 'mouseleave');
+                lib.fire(rating.stars[rndIndex], 'mouseout');
 
                 setTimeout(
                     function() {
@@ -83,18 +83,18 @@ define(
                 );
             });
 
-            // // 单击星星
-            // it('event:onRated', function() {
-            //     var rndIndex = 1;
+            // 单击星星
+            it('event:onRated', function() {
+                var rndIndex = 1;
 
-            //     var onRated = function(e) {
-            //         expect(e.value).toBe(rndIndex + 1);
-            //     };
+                var onRated = function(e) {
+                    expect(e.value).toBe(rndIndex + 1);
+                };
 
-            //     rating.on('rated', onRated);
-            //     lib.fire(rating.stars[rndIndex], 'click');
-            //     rating.un('rated');
-            // });
+                rating.on('rated', onRated);
+                lib.fire(rating.stars[rndIndex], 'click');
+                rating.un('rated');
+            });
         });
     }
 );

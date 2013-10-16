@@ -13,6 +13,7 @@ define(
 
         /**
          * 评分组件
+         * TODO: 半星支持
          * 
          * @constructor
          * @extends module:Control
@@ -49,12 +50,12 @@ define(
             type: 'Rating',
             
             /**
-             * 需要绑定`this`的方法明，多个方法以半角逗号分开
+             * 需要绑定`this`的方法名，多个方法以半角逗号分开
              *
              * @const
              * @type {string}
              */
-            binds: 'onClick, onMouseEnter, onMouseLeave',
+            binds: 'onClick, onMouseOver, onMouseOut',
             /**
              * 初始化控件
              *
@@ -99,9 +100,13 @@ define(
                     this.stars = this.query(prefix + '-star');
 
                     // 绑定事件
-                    lib.on(this.main, 'mouseenter', this.onMouseEnter);
-                    lib.on(this.main, 'mouseleave', this.onMouseLeave);
-                    lib.on(this.main, 'click', this.onClick);
+                    var me = this;
+
+                    lib.each(this.stars, function(star) {
+                        lib.on(star, 'mouseover', me.onMouseOver);
+                        lib.on(star, 'mouseout', me.onMouseOut);
+                        lib.on(star, 'click', me.onClick);
+                    });
                 }
 
                 this.resetRating();
@@ -238,12 +243,12 @@ define(
                 }
             },
             /**
-             * mouseenter事件处理
+             * mouseover事件处理
              *
              * @param {?Event} e DOM事件对象
              * @private
              */
-            onMouseEnter: function(e) {
+            onMouseOver: function(e) {
                 var options = this.options;
                 var prefix = options.prefix;
                 var target = lib.getTarget(e);
@@ -258,12 +263,12 @@ define(
                 }
             },
             /**
-             * mouseleave事件处理
+             * mouseout事件处理
              *
              * @param {?Event} e DOM事件处理
              * @private
              */
-            onMouseLeave: function(e) {
+            onMouseOut: function(e) {
                 var options = this.options;
                 var prefix = options.prefix;
                 var target = lib.getTarget(e);
@@ -283,9 +288,14 @@ define(
              * @public
              */
             dispose: function() {
-                lib.un(this.main, 'click', this.onClick);
-                lib.un(this.main, 'mouseenter', this.onMouseEnter);
-                lib.un(this.main, 'mouseleave', this.onMouseLeave);
+                var me = this;
+
+                // 释放事件
+                lib.each(this.stars, function(star) {
+                    lib.un(star, 'click', me.onClick);
+                    lib.un(star, 'mouseover', me.onMouseOver);
+                    lib.un(star, 'mouseout', me.onMouseOut);
+                });
 
                 delete this.stars;
                 delete this.main;
