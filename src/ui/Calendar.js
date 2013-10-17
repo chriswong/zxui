@@ -572,7 +572,7 @@ define(function (require) {
                         stopPropagation(e);
                     }
                     else if (!hasClass(el, disClass)) {
-                        this.pick(el);
+                        el.getAttribute('data-date') && this.pick(el);
                     }
 
                     break;
