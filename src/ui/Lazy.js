@@ -176,6 +176,7 @@ define(function (require) {
          * @param {HTMLElement} el 用于判断是否在可视区域的的参考元素
          * @param {Function} callback 判断到元素在可视区域后执行的回调
          * @param {Object} options 用于调整判断是否在可视区域的配置
+         * @return {module:Lazy} 当前实例
          * @public
          */
         add: function (el, callback, options) {
@@ -188,21 +189,27 @@ define(function (require) {
             if (!this.scrolled) {
                 this.onScroll();
             }
+            return this;
         },
 
         /**
          * 移除延迟操作的元素
          * 
          * @param {HTMLElement} el 用于判断是否在可视区域的的参考元素
+         * @return {module:Lazy} 当前实例
          * @public
          */
         remove: function (el) {
-            delete this.els[lib.guid(el)];
-            this.count--;
-            if (!this.count) {
-                lib.un(window, 'scroll', this.onScroll);
-                lib.un(window, 'resize', this.onScroll);
+            var guid = lib.guid(el);
+            if (guid in this.els) {
+                delete this.els[guid];
+                this.count--;
+                if (!this.count) {
+                    lib.un(window, 'scroll', this.onScroll);
+                    lib.un(window, 'resize', this.onScroll);
+                }
             }
+            return this;
         }
     });
 
