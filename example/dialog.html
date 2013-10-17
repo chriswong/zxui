@@ -96,16 +96,19 @@
         });
 
         dlg.on('confirm', function() {
-          dlg.hide();
           dlg.dispose();
           console && console.log('confirm');
         });
 
         dlg.on('cancel', function() {
-          dlg.hide();
-          dlg.dispose();
           console && console.log('cancel');
         });
+
+        dlg.on('hide', function() {
+          console && console.log('hide');
+          dlg.dispose();
+        });
+
         dlg.show();
       });
 
