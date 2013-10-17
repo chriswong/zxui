@@ -122,9 +122,9 @@ define(function (require) {
         init: function (options) {
 
             this.disabled  = options.disabled;
-            this.showCount = options.showCount || Pager.SHOW_COUNT;
-            this.total     = options.total;
-            this.padding   = options.padding;
+            this.showCount = (options.showCount || Pager.SHOW_COUNT) | 0;
+            this.total     = options.total | 0;
+            this.padding   = options.padding | 0;
             this.page      = 0;
 
             this.setPage(options.page | 0);
