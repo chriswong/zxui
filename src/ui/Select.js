@@ -406,7 +406,7 @@ define(function (require) {
             }
 
             var klass = options.prefix + '-checked';
-            T[value ? 'addClass' : 'removeClass'](target, klass);
+            lib[value ? 'addClass' : 'removeClass'](target, klass);
 
             if (!isSilent) {
 

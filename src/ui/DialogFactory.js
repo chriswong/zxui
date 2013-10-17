@@ -101,13 +101,9 @@ define(function (require) {
                  * */
                 opts.cancelHandler =function() {
                     dlg.fire('cancel');
+                    dlg.hide();
                 }
             );
-            dlg.on('hide', function() {
-                setTimeout(function() {
-                    dlg.fire('cancel');
-                }, 0);
-            });
         }
 
         //绑定注销事件

@@ -1,6 +1,6 @@
     define(function (require) {
         var DialogFactory = require('DialogFactory');
-        
+        var lib = require('lib');
         var alertDialog, confirmDialog;
 
         beforeEach(function () {
@@ -42,8 +42,28 @@
                 confirmDialog.on('cancel', function() {
                     expect(1).toBe(1);
                 });
+
+                confirmDialog.on('hide', function() {
+                    expect(1).toBe(1);
+                });
+
                 confirmDialog.show();
-                confirmDialog.hide();
+                
+                expect(
+                    lib.q(
+                        'ecl-ui-dialog-cancel-btn', 
+                        confirmDialog.main
+                    )[0]
+                    ).toBeTruthy();
+
+                lib.fire(
+                    lib.q(
+                    'ecl-ui-dialog-cancel-btn', 
+                    confirmDialog.main
+                    )[0], 
+                    'click'
+                );
+
             });
 
         });
