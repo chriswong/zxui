@@ -91,6 +91,7 @@ define(function (require) {
          * @property {Object} lang 预设模板
          * @property {string} lang.week 对于 '周' 的称呼
          * @property {string} lang.days 一周对应的显示
+         * @property {string} lang.title 每月显示的标题文字
          * @private
          */
         options: {
@@ -135,7 +136,10 @@ define(function (require) {
                 week: '周',
 
                 // 星期对应的顺序表示
-                days: '日,一,二,三,四,五,六'
+                days: '日,一,二,三,四,五,六',
+
+                // 每月显示的标题文字
+                title: '{year}年{month}日'
 
             }
         },
@@ -164,6 +168,8 @@ define(function (require) {
 
             this.days  = options.lang.days.split(',');
             this.value = this.format(this.from(options.value));
+            var key = this.cacheKey = options.first + '-' + options.lang.title;
+            cache[key] = cache[key] || {};
             
             this.setRange(options.range || Calendar.RANGE);
         },
@@ -388,10 +394,11 @@ define(function (require) {
             var month    = date.getMonth() + 1;
             var today    = date.getDate();
             var day      = date.getDay();
+            var cached = cache[this.cacheKey];
             var cacheKey = year + pad(month);
 
-            if (cache[cacheKey]) {
-                return cache[cacheKey];
+            if (cached[cacheKey]) {
+                return cached[cacheKey];
             }
 
             var weeks     = 7;
@@ -402,7 +409,14 @@ define(function (require) {
             var prefix  = options.prefix;
             var html    = ['<div class="' + prefix + '-month">'];
 
-            html.push('<h3>' + year + '年' + month + '月</h3>');
+            var json = { year: year, month: month, prefix: prefix};
+            var title = options.lang.title.replace(
+                /\{([^\}]+)\}/g, 
+                function ($, key) {
+                    return json[key] || '';
+                }
+            );
+            html.push('<h3>' + title + '</h3>');
 
             var i;
             var len;
@@ -508,8 +522,8 @@ define(function (require) {
             html.push('</p>');
             html.push('</div>');
 
-            cache[cacheKey] = html.join('');
-            return cache[cacheKey];
+            cached[cacheKey] = html.join('');
+            return cached[cacheKey];
         },
 
         /**
