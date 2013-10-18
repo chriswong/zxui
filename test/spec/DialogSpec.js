@@ -1,6 +1,6 @@
     define(function (require) {
         var Dialog = require('Dialog');
-        
+        var lib = require('lib');
         var dialog;
 
         beforeEach(function () {
@@ -14,7 +14,8 @@
                 left: '',
                 fixed: 1,
                 showMask: 1,
-                leve: 10
+                leve: 10,
+                skin: 'xxx-dlg'
               });
             dialog.render();
             
@@ -35,14 +36,27 @@
 
             it('event:show', function () {
                 dialog.on('show', function() {
-                    expect(dialog.main.style.display).toBe('');
+
+                    expect(dialog.main).toBeTruthy();
+
+                    expect( 
+                        lib.hasClass(
+                            dialog.main, 
+                            'ecl-ui-dialog-hide'
+                        )
+                    ).toBeFalsy();
                 });
                 dialog.show();
             });
 
             it('event:hide', function () {
                 dialog.on('hide', function() {
-                    expect(dialog.main.style.display).toBe('none');
+                    expect( 
+                        lib.hasClass(
+                            dialog.main, 
+                            'ecl-ui-dialog-hide'
+                        )
+                    ).toBeTruthy();
                 });
                 dialog.hide();
             });
