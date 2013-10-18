@@ -509,8 +509,10 @@ define(function (require) {
                 }
 
                 if(!top) {
-                    cssOpt.top = '35%';
-                    cssOpt.marginTop = (-this.main.offsetHeight/2) + 'px';
+                    //这里固定为0.35的位置
+                    cssOpt.top = (
+                            lib.getViewHeight() - this.main.offsetHeight
+                        ) * 0.35 + 'px';
                 }
 
                 lib.setStyles(this.main, cssOpt);
@@ -526,10 +528,12 @@ define(function (require) {
                 }
 
                 if(!top) {
+                    //这里固定为0.35的位置
                     top = (
                             document.body.scrollTop 
-                            + (lib.getViewHeight() * 0.41
-                            - this.main.offsetHeight)
+                            + (
+                                lib.getViewHeight() - this.main.offsetHeight
+                            ) * 0.35
                         ) + 'px';
                 }
 
