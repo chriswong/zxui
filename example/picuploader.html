@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>dialog</title>
+<title>picuploader</title>
 <script src="../dep/esl.js"></script>
 <link rel="stylesheet/less" type="text/css" href="../src/css/PicUploader.less" />
 </head>
@@ -13,6 +13,10 @@
 <button id="uploader-dispose">注销</button>
 
 <button id="uploader-del">删除第一个</button>
+
+<button id="uploader-enable">启用</button>
+
+<button id="uploader-disable">禁用</button>
 
 <script>
 (function () {
@@ -43,6 +47,15 @@
           var files = uploader.getFileList();
           uploader.remove(files[0]);
       })
+
+      lib.on( lib.g('uploader-enable'), 'click', function() {
+          uploader.enable();
+      })
+
+      lib.on( lib.g('uploader-disable'), 'click', function() {
+          uploader.disable();
+      })
+
 
     });
 

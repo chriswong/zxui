@@ -55,7 +55,9 @@ define(function (require) {
      * 创建一个file节点
      * 
      * @param {Object} options 选项设置
-     * @return {HTMLElement} file节点
+     * options.className {string} 类名
+     * 
+     * @return {HTMLElement} dom节点
      */
     function createFileNode( options ) {
         var node = document.createElement('input');
@@ -75,6 +77,12 @@ define(function (require) {
      * @exports PicUploader
      * @example
      *  
+     * var uploader = new PicUploader({
+     *    main: lib.g('uploader-container'),
+     *    maxCount: 3,
+     *    fileType: /\.(jpg|png|gif|jpeg)$/
+     * });
+     * 
      */
     var PicUploader = Control.extend(/** @lends module:PicUploader.prototype */{
 
@@ -116,7 +124,7 @@ define(function (require) {
 
             //模板框架
             tpl:  ''
-                + '<div id="#{id}" class="#{pickerClass}">'
+                + '<div id="#{id}" class="#{pickerClass} #{curClass}">'
                 +   '<div class="#{closeClass}" title="关闭">×</div>'
                 +   '<div class="#{picClass}"></div>'
                 +   '<div class="#{titleClass}">点击上传</div>'
@@ -253,6 +261,7 @@ define(function (require) {
                 this.getDom('title', picker).innerHTML = fileName;
 
                 //修改class
+                lib.removeClass(picker, this.getClass('cur'));
                 lib.removeClass(picker, this.getClass('error'));
                 lib.addClass(picker, this.getClass('picked'));
 
@@ -358,6 +367,7 @@ define(function (require) {
                 picClass: this.getClass( 'pic' ),
                 titleClass: this.getClass( 'title' ),
                 fileClass: this.getClass( 'file' ),
+                curClass: this.getClass( 'cur' ),
                 wrapperClass: this.getClass( 'wrapper' )
             };
 
@@ -390,8 +400,12 @@ define(function (require) {
             if(!options.main && 1 !== options.main.nodeType) {
                 throw new Error('invalid main');
             }
-
+            
             this.disabled  = options.disabled;
+
+            if(this.disabled) {
+                this.disable();
+            }
         },
 
 
@@ -442,7 +456,7 @@ define(function (require) {
          * 根据文件路径移除图片框
          * 
          * @param {string} filePath 文件路径
-         * @return {[type]} [return description]
+         * @return {PicUploader} 本对象
          */
         remove: function(filePath, checker) {
             var me = this;
@@ -484,6 +498,38 @@ define(function (require) {
                 } 
             );
             return files;
+        },
+
+        /**
+         * 启用组件
+         * 
+         * @return {PicUploader} 本对象
+         */
+        enable: function() {
+
+            if(this.curPicker) {
+                lib.removeClass(this.options.main, this.getClass('disabled') );
+            }
+
+            this.disabled = 0;
+
+            return this;
+        },
+
+        /**
+         * 禁用组件
+         * 
+         * @return {PicUploader} 本对象
+         */
+        disable: function() {
+
+            if(this.curPicker) {
+                lib.addClass(this.options.main, this.getClass('disabled') );
+            }
+
+            this.disabled = 1;
+
+            return this;
         },
 
         /**

@@ -43,6 +43,19 @@
 
             });
 
+            it('disable,enable', function () {
+
+                picUploader.disable();
+
+                expect(picUploader.options.main.className)
+                    .toBe('ecl-ui-picuploader-disabled');
+
+                picUploader.enable();
+
+                expect(picUploader.options.main.className)
+                    .toBe('');
+            });
+
             it('event:remove', function () {
 
                 picUploader.on('remove', function() {
@@ -59,7 +72,7 @@
                 )[0];
 
                 expect(closeBtn).toBeTruthy();
-
+                //FIXME 这个case总是跑不过，不知道什么原因
                 // lib.fire(
                 //     closeBtn, 
                 //     'click'
