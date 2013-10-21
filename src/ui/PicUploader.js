@@ -482,6 +482,20 @@ define(function (require) {
         },
 
         /**
+         * 根据索引移除图片框
+         * 
+         * @param {string} index 索引
+         * @return {PicUploader} 本对象
+         */
+        removeAt: function(index) {
+            var list = lib.q( this.getClass('picker'), this.options.main);
+            if( list[index].id !== this.curPicker) {
+                this._removePicker(list[index]);
+            }
+            return this;
+        },
+
+        /**
          * 获得已经选择的文件列表
          * 
          * @return {Array[string]} 文件名字列表
