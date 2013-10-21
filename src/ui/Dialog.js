@@ -602,9 +602,7 @@ define(function (require) {
         show: function() {
             var me = this;
 
-            if(!me.options.fixed) {
-                lib.on(window, 'resize', me.onResize);
-            }
+            lib.on(window, 'resize', me.onResize);
 
             me.mask && me.mask.show();
 
