@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>picuploader</title>
+<script src="../dep/esl.js"></script>
+<link rel="stylesheet/less" type="text/css" href="../src/css/PicUploader.less" />
+</head>
+<body>
+<div id="uploader-container">
+</div>
+
+<button id="uploader-dispose">注销</button>
+
+<button id="uploader-del">删除第一个</button>
+
+<button id="uploader-enable">启用</button>
+
+<button id="uploader-disable">禁用</button>
+
+<script>
+(function () {
+    require.config({
+      baseUrl: '../src/ui'
+    });
+    require(['lib', 'PicUploader'], function (lib, PicUploader) {
+      var uploader = new PicUploader({
+        main: lib.g('uploader-container')
+      });
+
+
+      uploader.on('pickerror', function(e) {
+        console.log(e.fileName);
+      }).on('pick', function(e) {
+        console.log(e.fileName);
+      }).on('remove', function(e) {
+        console.log(e.fileName);
+      })
+
+      uploader.render();
+
+      lib.on( lib.g('uploader-dispose'), 'click', function() {
+        uploader.dispose();
+      })
+
+      lib.on( lib.g('uploader-del'), 'click', function() {
+          var files = uploader.getFileList();
+          uploader.remove(files[0]);
+      })
+
+      lib.on( lib.g('uploader-enable'), 'click', function() {
+          uploader.enable();
+      })
+
+      lib.on( lib.g('uploader-disable'), 'click', function() {
+          uploader.disable();
+      })
+
+
+    });
+
+})();
+</script>
+ 
+<script src="../dep/less-1.3.3.min.js"></script>
+</body>
+</html>

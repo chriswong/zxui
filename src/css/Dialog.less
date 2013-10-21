@@ -5,14 +5,19 @@
     border: 2px solid #EEE;
     z-index: 10;
     background:#FFF;
+    width: 600px;
+
+    &-hide {
+        display:none;
+    }
 
     &-mask {
         position: absolute;
         top: 0;
         left: 0;
         background: #333;
-        opacity: .2;
-        filter: alpha(opacity=20);
+        opacity: .8;
+        filter: alpha(opacity=80);
     }
 
     &-header {
@@ -37,7 +42,7 @@
         cursor: pointer;
         overflow: hidden;
         text-indent: 100px;
-        _text-indent: 2px;
+        *text-indent: 2px;
         font: bold 12px/16px '宋体';
     }
 

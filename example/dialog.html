@@ -11,6 +11,7 @@
   <button id="newDialog">新窗口</button>
   <button id="newAlertDialog">新确定</button>
   <button id="newConfirmDialog">新确定和取消</button>
+  <button id="newConfirmDialogNoFixed">新确定和取消not fixed</button>
 </div>
 
 <div id="xxxx">
@@ -56,9 +57,15 @@
     });
     require(['lib', 'DialogFactory'], function (lib, DialogFactory) {
 
+      var newdlg; 
       lib.on( lib.g('newDialog'), 'click', function() {
-        var dlg = DialogFactory.create({
+        if(newdlg) {
+          newdlg.show();
+          return;
+        }
+        newdlg = DialogFactory.create({
             main: '',
+            skin: 'xxx',
             content: '内容',
             footer: '底部',
             width: '600px',
@@ -70,12 +77,10 @@
             leve: 10
         });
 
-        dlg.on('hide', function() {
-          dlg.dispose();
-          console && console.log('hide');
-        });
-        dlg.show();
+        newdlg.show();
       });
+
+
 
       lib.on( lib.g('newAlertDialog'), 'click', function() {
         var dlg = DialogFactory.alert({
@@ -92,20 +97,44 @@
       lib.on( lib.g('newConfirmDialog'), 'click', function() {
 
         var dlg = DialogFactory.confirm({
-          content: 'hello dialog!'
+          content: 'hello dialog!',
+          height: '400px'
         });
 
         dlg.on('confirm', function() {
           dlg.dispose();
-          console && console.log('confirm');
+          console.log('confirm');
         });
 
         dlg.on('cancel', function() {
-          console && console.log('cancel');
+          console.log('cancel');
         });
 
         dlg.on('hide', function() {
-          console && console.log('hide');
+          console.log('hide');
+          dlg.dispose();
+        });
+
+        dlg.show();
+      });
+
+      lib.on( lib.g('newConfirmDialogNoFixed'), 'click', function() {
+
+        var dlg = DialogFactory.confirm({
+          content: 'hello dialog!',
+          height: '400px',
+          fixed: 0,
+          onConfirm: function() {
+            dlg.dispose();
+            console.log('onconfirm');
+          },
+          onCancel: function() {
+            console.log('oncancel');
+          }
+        });
+
+        dlg.on('hide', function() {
+          console.log('hide');
           dlg.dispose();
         });
 

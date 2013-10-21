@@ -83,6 +83,9 @@ define(function (require) {
 
         //绑定确定事件
         if(opts.confirmId) {
+
+            dlg.onConfirm && dlg.on('confirm', dlg.onConfirm);
+
             lib.on(lib.g(opts.confirmId), 'click', 
                 /**
                  * @event module:Dialog#confirm
@@ -95,6 +98,9 @@ define(function (require) {
 
         //绑定取消事件
         if(opts.cancelId) {
+
+            dlg.onCancel && dlg.on('cancel', dlg.onCancel);
+
             lib.on(lib.g(opts.cancelId), 'click', 
                 /**
                  * @event module:Dialog#cancel
@@ -139,6 +145,9 @@ define(function (require) {
          * 
          * @param {Object} opts 初始化选项
          * @see module:Dialog.options
+         * 
+         * options.onConfirm {Function} 在确认时的回调函数
+         * 
          * @returns {Object} 构建好的dialog对象
          * @public
          */
@@ -164,6 +173,10 @@ define(function (require) {
          * 
          * @param {Object} opts 初始化选项
          * @see module:Dialog.options
+         * 
+         * options.onConfirm {Function} 在确认时的回调函数
+         * options.onCancel {Function} 在取消时的回调函数
+         * 
          * @returns {Object} 构建好的dialog对象
          * @public
          */

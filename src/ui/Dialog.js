@@ -293,7 +293,7 @@ define(function (require) {
             skin: '',
 
             //控件的默认宽度
-            width: '600px',
+            width: '',
 
             //控件距视窗上边缘的高度，默认为auto，会使组件相对于视窗垂直居中
             top: '',
@@ -316,7 +316,7 @@ define(function (require) {
             //模板框架
             tpl:  ''
                 + '<div id="#{id}" ui-type="#{type}" '
-                +   'style="display:none;width:#{width};'
+                +   'style="width:#{width};'
                 + 'position:#{position};top:#{top};z-index:#{level}" '
                 +   'class="#{dialogClass}">'
                 +   '<div class="#{closeClass}">×</div>'
@@ -509,8 +509,10 @@ define(function (require) {
                 }
 
                 if(!top) {
-                    cssOpt.top = '50%';
-                    cssOpt.marginTop = (-this.main.offsetHeight/2) + 'px';
+                    //这里固定为0.35的位置
+                    cssOpt.top = (
+                            lib.getViewHeight() - this.main.offsetHeight
+                        ) * 0.35 + 'px';
                 }
 
                 lib.setStyles(this.main, cssOpt);
@@ -524,12 +526,14 @@ define(function (require) {
                             + (lib.getViewWidth() - this.main.offsetWidth)/2
                         ) + 'px';
                 }
-                
+
                 if(!top) {
+                    //这里固定为0.35的位置
                     top = (
                             document.body.scrollTop 
-                            + (lib.getViewHeight() 
-                            - this.main.offsetHeight)/2
+                            + (
+                                lib.getViewHeight() - this.main.offsetHeight
+                            ) * 0.35
                         ) + 'px';
                 }
 
@@ -602,9 +606,15 @@ define(function (require) {
                 lib.on(window, 'resize', me.onResize);
             }
 
-            this.mask && this.mask.show();
+            me.mask && me.mask.show();
 
-            lib.show(me.main);
+            //移除hide状态的class
+            lib.each(me.getClass('hide').split(' '), 
+                function(className) {
+                    lib.removeClass(me.main, className);
+                }
+            );
+
             me.adjustPos();
 
             /**
@@ -612,7 +622,7 @@ define(function (require) {
              */
             me.fire('show');
 
-            return this;
+            return me;
         },
 
 
@@ -623,20 +633,26 @@ define(function (require) {
          * @fires module:Dialog#hide
          */
         hide: function() {
+            var me = this;
+            me.mask && me.mask.hide();
 
-            this.mask && this.mask.hide();
-
-            lib.hide(this.main);
+            //添加hide的class
+            lib.each(me.getClass('hide').split(' '), 
+                function(className) {
+                    lib.addClass(me.main, className);
+                }
+            );
+            
 
             /**
              * @event module:Dialog#hide
              */
-            this.fire('hide');
+            me.fire('hide');
 
             //注销resize
-            lib.un(window, 'resize', this.onResize);
-            clearTimeout(this.resizeTimer);
-            return this;
+            lib.un(window, 'resize', me.onResize);
+            clearTimeout(me.resizeTimer);
+            return me;
         },
 
         /**
