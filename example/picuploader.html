@@ -12,7 +12,9 @@
 
 <button id="uploader-dispose">注销</button>
 
-<button id="uploader-del">删除第一个</button>
+<button id="uploader-del">根据路径删除</button>
+
+<button id="uploader-del-index">删除第一个</button>
 
 <button id="uploader-enable">启用</button>
 
@@ -46,6 +48,10 @@
       lib.on( lib.g('uploader-del'), 'click', function() {
           var files = uploader.getFileList();
           uploader.remove(files[0]);
+      })
+
+      lib.on( lib.g('uploader-del-index'), 'click', function() {
+          uploader.removeAt(0);
       })
 
       lib.on( lib.g('uploader-enable'), 'click', function() {

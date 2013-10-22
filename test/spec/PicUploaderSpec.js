@@ -80,6 +80,15 @@
 
             });
 
+            it('event:removeAt', function () {
+
+                picUploader.on('remove', function() {
+                    removeEventCount++;
+                });
+
+                picUploader.removeAt(0);
+                
+            });
 
         });
 
