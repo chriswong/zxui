@@ -521,16 +521,22 @@ define(function (require) {
             //absolute则需要动态计算left，top使dialog在视窗的指定位置
             else {
                 if(!left) {
+                    var scrollLeft = window.pageXOffset
+                        || document.documentElement.scrollLeft 
+                        || document.body.scrollLeft;
                     left = (
-                            document.body.scrollLeft 
+                            scrollLeft
                             + (lib.getViewWidth() - this.main.offsetWidth)/2
                         ) + 'px';
                 }
 
                 if(!top) {
+                    var scrollTop = window.pageYOffset
+                        || document.documentElement.scrollTop
+                        || document.body.scrollTop;
                     //这里固定为0.35的位置
                     top = (
-                            document.body.scrollTop 
+                            scrollTop
                             + (
                                 lib.getViewHeight() - this.main.offsetHeight
                             ) * 0.35
