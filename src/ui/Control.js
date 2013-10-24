@@ -168,7 +168,7 @@ define(function (require) {
             name = name || control.childName;
 
             if (name) {
-                children[nane] = control;
+                children[name] = control;
             }
 
             children.push(control);
