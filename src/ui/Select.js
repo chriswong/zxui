@@ -427,6 +427,21 @@ define(function (require) {
         },
 
         /**
+         * 获取控件当前值
+         * 
+         * @param {bool} isNumber 是否需要返回数字类型的值
+         * @return {(string | number)} 返回当前选中项的值
+         */
+        getValue: function (isNumber) {
+            var options = this.optioins;
+            var klass = optioins.prefix + '-' + options.selectedClass;
+            var selected = this.popup.query(klass)[0];
+            var value = selected ? selected.getAttribute('data-value'): '';
+
+            return isNumber ? (value | 0) : value;
+        },
+
+        /**
          * 重置选项
          * 
          * 将选项恢复到初始值，依赖于第一个选项，其值为 0 或空
