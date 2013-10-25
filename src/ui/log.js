@@ -251,7 +251,7 @@ define(function (require) {
             }
         }
         
-        data.txt = lib.trim(title);
+        data.txt = lib.trim(title).replace(/<[^>]+?>/g, '');
     };
 
     /**
