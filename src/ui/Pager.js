@@ -246,24 +246,8 @@ define(function (require) {
             var wing = (showCount - showCount % 2) / 2;
 
             function setNum(i) {
-                var cls = '';
-                if( i == 1 ) {
-                    cls = prefix + 'first ';
-                }
-
-                if( i == total) {
-                    cls = prefix + 'last';
-                }
-
-                if(cls) {
-                    cls = 'class="' + cls + '" ';
-                }
-
-                html[htmlLength ++] = '<a href="#" '
-                                    + cls
-                                    + 'data-page="' 
-                                    + (i - 1) + '">'
-                                    + i + '</a>';
+                html[htmlLength ++] = '<a href="#" data-page="' + (i - 1) + '">'
+                                      + i + '</a>';
             }
 
             function setSpecial(i, name, disabled) {
@@ -271,15 +255,6 @@ define(function (require) {
                 if (disabled) {
                     klass += ' ' + prefix + 'disabled';
                 }
-
-                if(i == 0) {
-                    klass += ' ' + prefix  +'first';
-                }
-
-                if(i + 1 == total) {
-                    klass += ' ' + prefix  +'last';
-                }
-
                 html[htmlLength ++] = '<a href="#" data-page="'
                                       + i + '" class="' + klass + '">' 
                                       + (lang[name] || i + 1)

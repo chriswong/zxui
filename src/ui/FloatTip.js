@@ -95,7 +95,10 @@ define(function (require) {
 
             //模板框架
             tpl:  ''
-                + '<div id="#{id}" type="#{type}" class="#{tipClass}" style="width:#{width};position:#{position};top:#{top};z-index:#{level}">'
+                + '<div id="#{id}" type="#{type}"'
+                +   ' class="#{tipClass}"'
+                +   ' style="width:#{width};position:#{position};'
+                +       'top:#{top};z-index:#{level}">'
                 +   '<i class="#{iconClass}"></i>'
                 +   '<div class="#{contentClass}">#{content}</div>'
                 + '</div>'
@@ -116,7 +119,7 @@ define(function (require) {
          * @see module:Control#options
          * @private
          */
-        init: function (options) {
+        init: function () {
         },
 
 
@@ -162,7 +165,7 @@ define(function (require) {
                 tipClass: this.getClass() + ' ' + this.getClass('hide'),
                 iconClass: this.getClass('icon'),
                 contentClass: this.getClass('content')
-            }
+            };
 
             //获取HTML
             var html = this.options.tpl.replace( 
@@ -232,10 +235,10 @@ define(function (require) {
                 }
 
                 if(!top) {
-                    //这里固定为0.35的位置
+                    //这里固定为0.4的位置
                     cssOpt.top = (
                             lib.getViewHeight() - this.main.offsetHeight
-                        ) * 0.35 + 'px';
+                        ) * 0.4 + 'px';
                 }
 
                 lib.setStyles(this.main, cssOpt);
@@ -262,7 +265,7 @@ define(function (require) {
                             scrollTop
                             + (
                                 lib.getViewHeight() - this.main.offsetHeight
-                            ) * 0.35
+                            ) * 0.4
                         ) + 'px';
                 }
 
