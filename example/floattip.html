@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>picuploader</title>
+<script src="../dep/esl.js"></script>
+<link rel="stylesheet/less" type="text/css" href="../src/css/FloatTip.less" />
+</head>
+<body>
+
+<button id="floattip-show">显示</button>
+<button id="floattip-hide">隐藏</button>
+<button id="floattip-dispose">销毁</button>
+<script>
+(function () {
+    require.config({
+      baseUrl: '../src/ui'
+    });
+    require(['lib', 'FloatTip'], function (lib, FloatTip) {
+      var floattip = new FloatTip({
+          content: '弹出提示层'
+      });
+      floattip.render();
+
+      lib.on( lib.g('floattip-show'), 'click', function() {
+          floattip.show();
+      });
+
+      lib.on( lib.g('floattip-hide'), 'click', function() {
+          floattip.hide();
+      });
+
+      lib.on( lib.g('floattip-dispose'), 'click', function() {
+          floattip.dispose();
+      });
+
+    });
+
+})();
+</script>
+ 
+<script src="../dep/less-1.3.3.min.js"></script>
+</body>
+</html>
