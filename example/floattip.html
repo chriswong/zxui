@@ -18,7 +18,10 @@
     });
     require(['lib', 'FloatTip'], function (lib, FloatTip) {
       var floattip = new FloatTip({
-          content: '弹出提示层'
+          content: '弹出提示层',
+          left: '20px',
+          top: '40px',
+          fixed: 0
       });
       floattip.render();
 
