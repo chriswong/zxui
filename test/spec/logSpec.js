@@ -243,7 +243,9 @@ define(function (require) {
 
         it('title - password(btn)', function () {
             var onClick = function (json) {
-                expect(json.data.txt).toBe(json.target.parentNode.innerHTML);
+                var el = json.target.parentNode;
+                var text = el.textContent || el.innerText;
+                expect(json.data.txt).toBe(text);
                 expect(json.data.xpath).toMatch(/\(btn\)/);
             };
             log.on('click', onClick);
