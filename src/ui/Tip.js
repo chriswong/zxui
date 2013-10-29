@@ -458,7 +458,7 @@ define(function (require) {
             elements.title.innerHTML = this.title || '';
             elements.body.innerHTML  = this.content;
 
-            T[this.title ? 'show' : 'hide'](elements.title);
+            lib[this.title ? 'show' : 'hide'](elements.title);
 
             if (!options.arrow) {
                 lib.hide(elements.arrow);
@@ -534,7 +534,7 @@ define(function (require) {
 
             var elements = this.elements;
             elements.title.innerHTML = this.title;
-            T[this.title ? 'show' : 'hide'](elements.title);
+            lib[this.title ? 'show' : 'hide'](elements.title);
         },
 
         /**

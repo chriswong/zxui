@@ -245,7 +245,7 @@ define(function (require) {
                     input.checked =  isChecked;
                 }, 0);
 
-                T[isChecked ? 'addClass' : 'removeClass'](target, checkedClass);
+                lib[isChecked ? 'addClass' : 'removeClass'](target, checkedClass);
 
                 var checkedData = isRadio
                     ? {key: input.name, value: [input.value]}
