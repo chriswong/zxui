@@ -209,7 +209,7 @@ define(function (require) {
                 lib.on(
                     main,
                     'click',
-                    function (e) {
+                    this.onClick = function (e) {
 
                         /**
                          * @event module:Tip#click
@@ -224,7 +224,7 @@ define(function (require) {
                     lib.on(
                         main,
                         'mouseenter',
-                        function () {
+                        this.onMouseEnter = function () {
                             me.clear();
                         }
                     );
@@ -232,7 +232,7 @@ define(function (require) {
                     lib.on(
                         main,
                         'mouseleave',
-                        function () {
+                        this.onMouseLeave = function () {
                             me.clear();
                             me.timer = setTimeout(me.hide, options.hideDelay);
                         }
@@ -719,6 +719,39 @@ define(function (require) {
                 }
             );
 
+        },
+
+        /**
+         * 销毁控件
+         * 
+         */
+        dispose: function () {
+            var options = this.options;
+            var events  = this.events;
+
+            if (events) {
+                var me   = this;
+                var flag = options.flag;
+                lib.each(
+                    this.triggers || [],
+                    function (trigger) {
+                        if (lib.hasClass(trigger, flag)) {
+                            lib.removeClass(trigger, flag);
+                            lib.un(trigger, events.on, me.onShow);
+                        }
+                    }
+                );
+            }
+
+            var main = this.main;
+            if (options.mode === 'over') {
+                lib.un(main, this.onMouseEnter);
+                lib.un(main, this.onMouseLeave);
+            }
+
+            this.parent('dispose');
+
+            this.main.parentNode.removeChild(this.main);
         }
 
     });
