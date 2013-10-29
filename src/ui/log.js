@@ -228,7 +228,7 @@ define(function (require) {
 
             // title为空，遍历父节点
             if (!title) {
-                el = from;
+                var el = from;
 
                 var i = level;
                 while (i > 0) {
