@@ -284,6 +284,54 @@ define(function () {
     /* ========================== lib.object ========================== */
 
     /**
+     * 无法枚举到的对象属性
+     * 
+     * ie sucks!
+     * @type {?Array.<string>}
+     */
+    var enumerables = {valueOf: 1}.propertyIsEnumerable('valueOf')
+        ? null
+        : [
+            'hasOwnProperty', 
+            'valueOf', 
+            'isPrototypeOf', 
+            'propertyIsEnumerable', 
+            'toLocaleString', 
+            'toString', 
+            'constructor'
+        ];
+
+
+    /**
+     * 枚举对象属性
+     * 
+     * @method module:lib.forIn
+     * @param {Object} object 要枚举的目标对象
+     * @param {Function} iterator 迭代器方法
+     */
+    /**
+     * 枚举对象属性
+     * 
+     * @method module:lib.object.each
+     * @param {Object} object 要枚举的目标对象
+     * @param {Function} iterator 迭代器方法
+     */
+    var forIn = lib.forIn = lib.object.each = function (object, iterator) {
+        for (var key in object) {
+            if (hasOwnProperty.call(object, key)) {
+                iterator(object[key], key);
+            }
+        }
+        if (enumerables) {
+            for (var i = enumerables.length - 1, key; key = enumerables[i--];) {
+                if (hasOwnProperty.call(object, key)) {
+                    iterator(object[key], key);
+                }
+            }
+        }        
+    };
+
+    /**
      * 扩展对象
      * 
      * @method module:lib.extend
@@ -302,16 +350,14 @@ define(function () {
      * @return {Object} 被扩展后的 `target` 对象
      */
     var extend = lib.extend = lib.object.extend = function (target, source) {
-        for (var name in source) {
-            if (hasOwnProperty.call(source, name)) {
-                if (lib.isObject(target[name])) {
-                    extend(target[name], source[name]);
-                }
-                else {
-                     target[name] = source[name];
-                }
+        forIn(source, function (value, key) {
+            if (lib.isObject(target[key])) {
+                extend(target[key], value);
             }
-        }
+            else {
+                 target[key] = value;
+            }
+        });
         return target;
     };
 
@@ -343,11 +389,9 @@ define(function () {
         }
         else if (lib.isObject(source) && 'isPrototypeOf' in source) {
             cloned = {};
-            for (var key in source) {
-                if (hasOwnProperty.call(source, key)) {
-                    cloned[key] = clone(source[key]);
-                }
-            }
+            forIn(source, function (value, key) {
+                cloned[key] = clone(value);
+            });
         }
 
         return cloned;
@@ -400,14 +444,12 @@ define(function () {
                     return '[' + map(obj, stringify) + ']';
                 case 'object':
                     var string = [];
-                    for (var key in obj) {
-                        if (hasOwnProperty.call(obj)) {
-                            var json = stringify(value);
-                            if (json) {
-                                string.push(stringify(key) + ':' + json);
-                            }
+                    forIn(obj, function (value, key) {
+                        var json = stringify(value);
+                        if (json) {
+                            string.push(stringify(key) + ':' + json);
                         }
-                    }
+                    });
                     return '{' + string + '}';
                 case 'number': case 'boolean': return '' + obj;
                 case 'null': return 'null';
@@ -461,35 +503,31 @@ define(function () {
     lib.toQueryString = lib.object = function toQueryString(object, base){
         var queryString = [];
 
-        var value;
-        var result;
-        for (var key in object) {
-            if (hasOwnProperty.call(object, key)) {
-                value = object[key]; 
-                if (base) {
-                    key = base + '[' + key + ']';
-                }
-                switch (typeOf(value)){
-                    case 'object':
-                        result = toQueryString(value, key);
-                        break;
-                    case 'array':
-                        var qs = {};
-                        var i = value.length;
-                        while (i --) {
-                            qs[i] = value[i];
-                        }
-                        result = toQueryString(qs, key);
-                    break;
-                    default: 
-                        result = key + '=' + encodeURIComponent(value);
-                        break;
-                }
-                if (value != null) {
-                    queryString.push(result);
-                }
+        forIn(object, function (value, key) {
+            if (base) {
+                key = base + '[' + key + ']';
             }
-        }
+            var result;
+            switch (typeOf(value)){
+                case 'object':
+                    result = toQueryString(value, key);
+                    break;
+                case 'array':
+                    var qs = {};
+                    var i = value.length;
+                    while (i --) {
+                        qs[i] = value[i];
+                    }
+                    result = toQueryString(qs, key);
+                break;
+                default: 
+                    result = key + '=' + encodeURIComponent(value);
+                    break;
+            }
+            if (value != null) {
+                queryString.push(result);
+            }
+        });
 
         return queryString.join('&');
     };
