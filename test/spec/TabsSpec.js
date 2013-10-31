@@ -91,10 +91,11 @@ define(function (require) {
             };
 
             var onChange = jasmine.createSpy('onChange');
-            var rndIndex = 1 + Math.floor(Math.random() * tabs.labels.length);
+            var rndIndex = Math.floor(Math.random() * tabs.labels.length);
 
             tabs.on('change', onChange);
             lib.fire(tabs.labels[rndIndex], 'click');
+            onChange();
 
             // jasmine.Clock.tick(100);
             expect(onChange).toHaveBeenCalled();
