@@ -745,8 +745,8 @@ define(function (require) {
 
             var main = this.main;
             if (options.mode === 'over') {
-                lib.un(main, this.onMouseEnter);
-                lib.un(main, this.onMouseLeave);
+                lib.un(main, 'mouseenter', this.onMouseEnter);
+                lib.un(main, 'mouseleave', this.onMouseLeave);
             }
 
             this.parent('dispose');
