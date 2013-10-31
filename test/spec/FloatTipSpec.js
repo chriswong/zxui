@@ -19,6 +19,8 @@
 
         afterEach(function () {
             floatTip.dispose();
+            var n = lib.g('FloatTipContainer');
+            n.parentNode.removeChild(n);
         });
       
         describe('基本接口', function () {
