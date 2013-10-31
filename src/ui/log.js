@@ -637,7 +637,7 @@ define(function (require) {
                 clickData = element.getAttribute('data-click');
                 if (clickData) {
 
-                    // 就近原则，自定义属性比能用配置具有更高优先级
+                    // 就近原则，自定义属性比通用配置具有更高优先级
                     data = lib.extend(parseJSON(clickData), data);
                 }
                 element.setAttribute('data-click', lib.stringify(data));
