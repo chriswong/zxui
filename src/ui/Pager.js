@@ -382,12 +382,13 @@ define(function (require) {
                 && current !== page
             ) {
 
+                this.setPage(current);
                 /**
                  * @event module:Pager#change
                  * @type {Object}
                  * @property {number} page 新的页码
                  */
-                this.fire('change', { page: current });
+                this.fire('change', { page: this.page });
             }
         }
     });
