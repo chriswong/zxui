@@ -21,6 +21,8 @@
 
         afterEach(function () {
             picUploader.dispose();
+            var n = lib.g('picUploaderContainer');
+            n.parentNode.removeChild(n);
         });
       
         describe('基本接口', function () {
