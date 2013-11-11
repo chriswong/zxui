@@ -105,6 +105,7 @@ define(function (require) {
          * 相对位置的目标对象
          * @property {number} options.cols 选项显示的列数，默认为 1 列
          * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
+         * @property {string} options.isNumber 控件值的类型是否限制为数字
          */
         options: {
 
@@ -126,10 +127,14 @@ define(function (require) {
             // 显示列数
             cols: 1,
 
+            // 选中项的 class
             selectedClass: 'cur',
 
             // 控件class前缀，同时将作为main的class之一
-            prefix: 'ecl-ui-sel'
+            prefix: 'ecl-ui-sel',
+
+            // 控件值的类型是否为数字
+            isNumber: true
         },
 
         /**
@@ -353,7 +358,9 @@ define(function (require) {
             var lastValue = this.lastValue | 0;
             var selectedClass = options.prefix + '-' + options.selectedClass;
 
-            var value  = el.getAttribute('data-value') | 0;
+            var value  = el.getAttribute('data-value');
+            value = options.isNumber ? (value | 0) : value;
+
             var text = value ? el.innerHTML : this.defaultValue;
             var shortText = value
                 ? textOverflow(text, options.maxLength, options.ellipsis)
@@ -437,6 +444,9 @@ define(function (require) {
             var klass = optioins.prefix + '-' + options.selectedClass;
             var selected = this.popup.query(klass)[0];
             var value = selected ? selected.getAttribute('data-value'): '';
+            isNumber = lib.typeOf(isNumber) === 'boolean'
+                ? isNumber
+                : options.isNumber;
 
             return isNumber ? (value | 0) : value;
         },
