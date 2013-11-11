@@ -438,6 +438,7 @@ define(function (require) {
          * 
          * @param {bool} isNumber 是否需要返回数字类型的值
          * @return {(string | number)} 返回当前选中项的值
+         * @public
          */
         getValue: function (isNumber) {
             var options = this.optioins;
