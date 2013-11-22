@@ -17,7 +17,7 @@
                     + '</div>'
             );
 
-            triggers = T.q('city-trigger');
+            triggers = lib.q('city-trigger');
             city = new City({
                 prefix: 'ecl-ui-city',
                 index: 2,
@@ -36,7 +36,7 @@
         afterEach(function () {
             triggers = null;
             city.dispose();
-            T.dom.remove(T.g('cityContainer'));
+            document.body.removeChild(lib.g('cityContainer'));
         });
       
         describe('基本接口', function () {
@@ -103,7 +103,7 @@
 
                     if (el.tagName === 'LI') {
                         expect(el.getAttribute('data-idx') | 0).toBe(1);
-                        expect(T.dom.hasClass(el, 'ecl-ui-city-active'))
+                        expect(lib.dom.hasClass(el, 'ecl-ui-city-active'))
                             .toBeTruthy();
                     }
                     else if (el.tagName === 'A') {
@@ -174,7 +174,7 @@
            
             it('setTarget', function () {
                 expect(function () {
-                    city.setTarget(T.q('city-trigger')[0]);
+                    city.setTarget(lib.q('city-trigger')[0]);
                 }).not.toThrow();
                 expect(city.setTarget).toThrow();
             });

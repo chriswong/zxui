@@ -86,7 +86,7 @@
 
             filter = new Filter({
               prefix: 'ecl-ui-filter',
-              main: T.q('ecl-ui-filter')[0],
+              main: lib.q('ecl-ui-filter')[0],
               groups: 'p'
             });
             filter.render();
@@ -95,7 +95,7 @@
 
 
         afterEach(function () {
-            T.dom.remove(T.g('filterContainer'));
+            document.body.removeChild(lib.g('filterContainer'));
             filter.dispose();
         });
       
@@ -167,7 +167,7 @@
                 filter.un('click', onClick);
                 filter.un('change', onChange);
 
-                expect(T.q('checked', target.parentNode.parentNode).length)
+                expect(lib.q('checked', target.parentNode.parentNode).length)
                     .toBe(1);
             });
 
@@ -183,7 +183,7 @@
 
                     expect(json.key).toBe(target.name);
 
-                    T.each(json.value, function (v) {
+                    lib.each(json.value, function (v) {
                         v && expect(inputs[v].checked).toBe(true);
                     });
                 };
@@ -202,7 +202,7 @@
                 lib.fire(event.target, 'click');
                 expect(changeCount).toBe(2);
 
-                expect(T.q('checked', target.parentNode.parentNode).length)
+                expect(lib.q('checked', target.parentNode.parentNode).length)
                     .toBe(1);
 
                 target = inputs[1];

@@ -1,4 +1,5 @@
     define(function (require) {
+        var lib = require('lib');
         var Pager = require('Pager');
         
         var pager;
@@ -15,7 +16,7 @@
 
             pager = new Pager({
                 prefix: 'ecl-ui-pager',
-                main: T.q('ecl-ui-pager')[0],
+                main: lib.q('ecl-ui-pager')[0],
                 page: 0,
                 total: 18
               });
@@ -25,7 +26,7 @@
 
 
         afterEach(function () {
-            T.dom.remove(T.g('pagerContainer'));
+            document.body.removeChild(lib.g('pagerContainer'));
             pager.dispose();
         });
       

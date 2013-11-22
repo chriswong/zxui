@@ -31,7 +31,7 @@ define(function (require) {
 
     afterEach(function () {
         tabs.dispose();
-        T.dom.remove(tabs.main);
+        document.body.removeChild(tabs.main);
         tabs = null;
     });
     

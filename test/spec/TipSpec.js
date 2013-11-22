@@ -1,4 +1,5 @@
     define(function (require) {
+        var lib = require('lib');
         var Tip = require('Tip');
         
         var tip;
@@ -29,9 +30,8 @@
 
 
         afterEach(function () {
-            T.dom.remove(T.g('tipContainer'));
             tip.dispose();
-            T.dom.remove(tip.main);
+            document.body.removeChild(lib.g('tipContainer'));
         });
       
         describe('基本接口', function () {

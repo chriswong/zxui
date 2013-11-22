@@ -51,12 +51,12 @@ define(function (require) {
                 +   '<p data-click="abc"></p>'
                 + '</div>'
         );
-        container = T.g('logContainer');
+        container = lib.g('logContainer');
     });
 
     afterEach(function () {
         log.stop();
-        T.dom.remove(container);
+        container.parentNode.removeChild(container);
     });
 
     describe('属性继承', function () {
@@ -306,11 +306,11 @@ define(function (require) {
                 expect(json.data.xpath).toMatch(/\(link\)/);
             };
             var el = container.getElementsByTagName('input')[2];
-            T.addClass(el, 'OP_LOG_LINK');
+            lib.addClass(el, 'OP_LOG_LINK');
             log.on('click', onClick);
             log.click(el);
             log.un('click', onClick);
-            T.removeClass(el, 'OP_LOG_LINK');
+            lib.removeClass(el, 'OP_LOG_LINK');
         });
     });
 

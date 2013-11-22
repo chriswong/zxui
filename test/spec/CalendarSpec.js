@@ -17,7 +17,7 @@
                     + '</div>'
             );
 
-            var triggers = T.q('calendar-trigger');
+            var triggers = lib.q('calendar-trigger');
             calendar = new Calendar({
                 triggers: triggers,
                 target: triggers[0]
@@ -27,7 +27,7 @@
 
 
         afterEach(function () {
-            T.dom.remove(T.g('calendarContainer'));
+            document.body.removeChild(lib.g('calendarContainer'));
             calendar.dispose();
         });
       
@@ -99,7 +99,7 @@
                         calendar.format(date, 'yyyy-MM-dd')
                     );
 
-                    var el = T.dom.next(checked)
+                    var el = lib.dom.next(checked)
                         || dom._matchNode(
                             target,
                             'previousSibling',
@@ -170,7 +170,7 @@
             
             it('setTarget', function () {
                 expect(function () {
-                    calendar.setTarget(T.q('calendar-trigger')[0]);
+                    calendar.setTarget(lib.q('calendar-trigger')[0]);
                 }).not.toThrow();
                 expect(calendar.setTarget).toThrow();
             });

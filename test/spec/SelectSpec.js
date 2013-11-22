@@ -26,8 +26,8 @@
 
             select = new Select({
                 prefix: 'ecl-ui-sel',
-                main: T.q('ecl-ui-sel')[0],
-                target: T.q('ecl-ui-sel-target')[0],
+                main: lib.q('ecl-ui-sel')[0],
+                target: lib.q('ecl-ui-sel-target')[0],
                 maxLength: 8,
                 cols: 2,
                 offset: {
@@ -40,7 +40,7 @@
 
 
         afterEach(function () {
-            T.dom.remove(T.g('selectContainer'));
+            document.body.removeChild(lib.g('selectContainer'));
             select.dispose();
         });
       

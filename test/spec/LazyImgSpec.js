@@ -1,5 +1,6 @@
     define(function (require) {
         
+        var lib = require('lib');
         var Lazy = require('Lazy');
         var LazyImg = require('LazyImg');
         
@@ -15,7 +16,7 @@
                     + '</div>'
             );
 
-            main = document.getElementById('lazyImgContainer');
+            main = lib.g('lazyImgContainer');
 
             lazyImg = new LazyImg({
                 main: main
