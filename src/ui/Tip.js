@@ -750,8 +750,6 @@ define(function (require) {
             }
 
             this.parent('dispose');
-
-            this.main.parentNode.removeChild(this.main);
         }
 
     });
