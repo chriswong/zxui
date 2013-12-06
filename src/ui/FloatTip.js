@@ -293,18 +293,6 @@ define(function (require) {
         hide: function() {
             lib.addClass(this.main, this.getClass('hide') );
             return this;
-        },
-
-        /**
-         * 销毁，注销事件，解除引用
-         * 
-         * @public
-         * @fires module:FloatTip#dispose
-         */
-        dispose: function() {
-            this.main.parentNode.removeChild(this.main);
-            this.main = null;
-            this.parent('dispose');
         }
     });
 

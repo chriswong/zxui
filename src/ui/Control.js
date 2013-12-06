@@ -220,11 +220,6 @@ define(function (require) {
          */
         dispose: function () {
 
-            /**
-             * @event module:Control#dispose
-             */
-            this.fire('dispose');
-
             var child;
             while ((child = this.children.pop())) {
                 child.dispose();
@@ -233,6 +228,17 @@ define(function (require) {
             for (var type in this._listners) {
                 this.un(type);
             }
+
+            var main = this.main;
+            if (main && main.parentNode) {
+                main.parentNode.removeChild(main);
+                delete this.main;
+            }
+
+            /**
+             * @event module:Control#dispose
+             */
+            this.fire('dispose');
         }
 
     }).implement(lib.observable).implement(lib.configurable);

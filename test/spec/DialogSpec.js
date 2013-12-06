@@ -23,7 +23,7 @@
 
 
         afterEach(function () {
-            
+            dialog.dispose();          
         });
       
         describe('基本接口', function () {
@@ -85,9 +85,8 @@
 
             it('event:dispose', function () {
                 dialog.on('dispose', function() {
-                    expect(dialog.main).toBeFalsy();
+                    expect(!!dialog.main).toBeFalsy();
                 });
-                dialog.dispose();
             });
 
         });

@@ -308,7 +308,6 @@ define(
                 });
 
                 delete this.stars;
-                delete this.main;
 
                 this.parent('dispose');
             }

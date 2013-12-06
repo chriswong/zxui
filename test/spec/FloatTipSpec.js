@@ -32,8 +32,9 @@
 
             it('hide', function () {
                 floatTip.hide();
+                floatTip.offsetWidth;
                 expect( 
-                    lib.getStyle( floatTip.main, 'display') 
+                    lib.getStyle(floatTip.main, 'display') 
                 ).toBe('none');
             });
 

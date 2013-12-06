@@ -33,7 +33,9 @@ define(function (require) {
      * @param {HTMLDomElement} domElement 当前元素
      */
     function remove(domElement) {
-        domElement && domElement.parentNode.removeChild(domElement);
+        if (domElement && domElement.parentNode) {
+            domElement.parentNode.removeChild(domElement);
+        }
     }
 
     /**
@@ -177,11 +179,11 @@ define(function (require) {
          * 
          */
         dispose: function() {
-            document.body.removeChild(this.mask);
+            remove(this.mask);
             Mask.curMasks--;
 
             if(Mask.curMasks <= 0 && Mask.ie6frame) {
-               document.body.removeChild(Mask.ie6frame);
+               remove(Mask.ie6frame);
                Mask.curMasks = 0;
                Mask.ie6frame = null;
             }
@@ -708,8 +710,6 @@ define(function (require) {
             lib.un(window, 'resize', this.onResize);
 
             clearTimeout(this.resizeTimer);
-            remove(this.main);
-            this.main = null;
 
             this.mask && this.mask.dispose();
 

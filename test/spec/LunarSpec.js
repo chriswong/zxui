@@ -19,7 +19,6 @@
 
 
         afterEach(function () {
-            lunar.main.parentNode.removeChild(lunar.main);
             lunar.dispose();
         });
       
