@@ -89,7 +89,7 @@ module.exports = function (grunt) {
                     styles: '<%= csslint.src %>',
                     specs: 'test/spec/*Spec.js',
                     helpers: 'test/spec/*Helper.js',
-                    vendor: ['./dep/vars.js', './dep/common-2.3.js'],
+                    vendor: [],
                     host: 'http://localhost:<%= connect.test.options.port %>',
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
@@ -104,7 +104,7 @@ module.exports = function (grunt) {
                 src: './<%=meta.src.main%>/*.js',
                 options: {
                     specs: ['test/spec/*Spec.js'],
-                    vendor: ['./dep/vars.js', './dep/common-2.3.js'],
+                    vendor: [],
                     outfile: 'SpecRunner.html',
                     keepRunner: true,
                     styles: '<%= csslint.src %>',
