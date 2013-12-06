@@ -664,9 +664,9 @@ define(function (require) {
             // 提示层在目标上部或下部显示时的定位处理
             if ({t: 1, b: 1}[first]) {
                 left = {
-                    l: left,
+                    l: left + offset.x,
                     c: center - (mainWidth / 2),
-                    r: right - mainWidth
+                    r: right - mainWidth - offset.x
                 }[second];
 
                 top = {
@@ -679,8 +679,8 @@ define(function (require) {
                 // 在目标宽于提示层或 dir 为 tc 或 bc 时，箭头相对提示层水平居中
                 arrow.style.left = {
                     c: (mainWidth - arrowWidth) / 2,
-                    l: middleX,
-                    r: mainWidth - Math.max(arrowWidth, middleX)
+                    l: middleX - offset.x,
+                    r: mainWidth - Math.max(arrowWidth, middleX) + offset.x
                 }[width > mainWidth ? 'c' : second] + 'px';
                 arrow.style.top = '';
 
@@ -689,9 +689,9 @@ define(function (require) {
             // 提示层在目标左边或右边显示时的定位处理
             else if ({l: 1, r: 1}[first]) {
                 top = {
-                    t: top,
+                    t: top + offset.y,
                     c: middle - (mainHeight / 2),
-                    b: bottom - mainHeight
+                    b: bottom - mainHeight - offset.y
                 }[second];
 
                 left = {
@@ -704,8 +704,8 @@ define(function (require) {
                 // 在目标高于提示层或 dir 为 lc 或 rc 时，箭头相对提示层垂直居中
                 arrow.style.top = {
                     c: (mainHeight - arrowHeight) / 2,
-                    t: middleY,
-                    b: mainHeight - Math.max(arrowHeight, middleY)
+                    t: middleY - offset.y,
+                    b: mainHeight - Math.max(arrowHeight, middleY) + offset.y
                 }[height > mainHeight ? 'c' : second] + 'px';
                 arrow.style.left = '';
 
