@@ -691,7 +691,7 @@ define(function () {
     lib.bind = lib.fn.bind = fallback(
         Function.bind,
         function (fn, scope) {
-            var args = arguments.length > 2 ? slice(arguments, 1) : null,
+            var args = arguments.length > 2 ? slice(arguments, 2) : null,
                 F = function(){};
 
             var bound = function(){
