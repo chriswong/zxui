@@ -1118,7 +1118,7 @@ define(function () {
      *             
      * @return {(HTMLElement | window)} 目标元素
      */
-    lib.un = lib.event.on = document.removeEventListener
+    lib.un = lib.event.un = document.removeEventListener
         ? function (element, type, listener) {
             var condition = listener;
             var custom = eventFix.custom[type];
