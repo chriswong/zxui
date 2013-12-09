@@ -379,7 +379,7 @@ define(function (require) {
         data: {
 
             // 不允许为默认值 -
-            url: location.href,
+            url: (window.location || document.location || {href: '-'}).href,
 
             // 对应 nsclick 的 pid 概念。Nsclick 用 pid 将不同产品线的日志进行分割。
             // 不允许为默认值 -
