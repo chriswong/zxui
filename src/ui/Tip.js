@@ -74,7 +74,8 @@ define(function (require) {
          * 可以初始化时通过指定arrow属性为“1”开启箭头模式，也可以手动指定箭头方向：
          * tr | rt | rb | br | bl | lb | lt | tl | tc | rc | bc | lc
          * 也可通过在 triggers 上设置 data-tooltips来指定
-         * @property {number=} hideDelay 提示框消失的延迟时间，默认值为Tip.HIDE_DELAY
+         * @property {number=} showDelay 提示框显示的延迟时间，默认值为 100 毫秒
+         * @property {number=} hideDelay 提示框消失的延迟时间，默认值为 300 毫秒
          * @property {string=} mode 提示的显示模式，over|click|auto。默认为over
          * @property {string=} title 提示的标题信息，默认为null
          * @property {string} content 提示的内容信息
@@ -102,8 +103,11 @@ define(function (require) {
             // 也可通过在 triggers 上设置 data-tooltips来指定
             arrow: false,
 
-            // 提示框消失的延迟时间，默认值为Tip.HIDE_DELAY
-            hideDelay: 0,
+            // 提示框显示的延迟时间，默认值为 100 毫秒
+            showDelay: 100,
+
+            // 提示框消失的延迟时间，默认值为 300 毫秒
+            hideDelay: 300,
 
             // 提示的显示模式，over|click|auto。默认为over
             mode: 'over',
@@ -234,7 +238,15 @@ define(function (require) {
                         'mouseleave',
                         this.onMouseLeave = function () {
                             me.clear();
-                            me.timer = setTimeout(me.hide, options.hideDelay);
+                            if (options.hideDelay) {
+                                me.hideTimer = setTimeout(
+                                    me.hide,
+                                    options.hideDelay
+                                );
+                            }
+                            else {
+                                me.hide();
+                            }
                         }
                     );
                 }
@@ -254,7 +266,14 @@ define(function (require) {
             }
 
             if (!events && this.triggers) {
-                this.show(this.triggers[0]);
+                if (options.showDelay) {
+                    this.showTimer = setTimeout(function (){
+                        me.show(me.triggers[0]);
+                    });
+                }
+                else {
+                    this.show(this.triggers[0]);
+                }
             }
 
             return this;
@@ -332,7 +351,8 @@ define(function (require) {
          * @private
          */
         clear: function () {
-            clearTimeout(this.timer);
+            clearTimeout(this.showTimer);
+            clearTimeout(this.hideTimer);
             clearTimeout(this.resizeTimer);
         },
 
@@ -416,7 +436,16 @@ define(function (require) {
              */
             this.fire('beforeShow', { target: target, event: e});
 
-            this.show(target);
+            var delay = this.options.showDelay;
+            if (delay) {
+                var me = this;
+                this.showTimer = setTimeout(function () {
+                    me.show(target);
+                }, delay);
+            }
+            else {
+                this.show(target);
+            }
         },
 
 
@@ -431,7 +460,7 @@ define(function (require) {
             this.clear();
             
             if (options.hideDelay) {
-                this.timer = setTimeout(this.hide, options.hideDelay);
+                this.hideTimer = setTimeout(this.hide, options.hideDelay);
             }
             else {
                 this.hide();
@@ -753,16 +782,6 @@ define(function (require) {
         }
 
     });
-
-    /**
-     * 提示框消失的延迟时间，单位毫秒
-     * 
-     * @type {number}
-     * @const
-     * @static
-     */
-    Tip.HIDE_DELAY = 500;
-
 
     return Tip;
 });
