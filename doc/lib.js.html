@@ -85,7 +85,7 @@ define(function () {
      */
     var typeOf = lib.typeOf = function (obj) {
         var type = toString.call(obj).slice(8, -1).toLowerCase();
-        return typeof obj === 'object' && 'nodeType' in obj
+        return obj && typeof obj === 'object' && ('nodeType' in obj)
             ? 'dom'
             : (obj == null ? null : type);
     };
@@ -311,6 +311,54 @@ define(function () {
     /* ========================== lib.object ========================== */
 
     /**
+     * 无法枚举到的对象属性
+     * 
+     * ie sucks!
+     * @type {?Array.&lt;string>}
+     */
+    var enumerables = {valueOf: 1}.propertyIsEnumerable('valueOf')
+        ? null
+        : [
+            'hasOwnProperty', 
+            'valueOf', 
+            'isPrototypeOf', 
+            'propertyIsEnumerable', 
+            'toLocaleString', 
+            'toString', 
+            'constructor'
+        ];
+
+
+    /**
+     * 枚举对象属性
+     * 
+     * @method module:lib.forIn
+     * @param {Object} object 要枚举的目标对象
+     * @param {Function} iterator 迭代器方法
+     */
+    /**
+     * 枚举对象属性
+     * 
+     * @method module:lib.object.each
+     * @param {Object} object 要枚举的目标对象
+     * @param {Function} iterator 迭代器方法
+     */
+    var forIn = lib.forIn = lib.object.each = function (object, iterator) {
+        for (var key in object) {
+            if (hasOwnProperty.call(object, key)) {
+                iterator(object[key], key);
+            }
+        }
+        if (enumerables) {
+            for (var i = enumerables.length - 1, key; key = enumerables[i--];) {
+                if (hasOwnProperty.call(object, key)) {
+                    iterator(object[key], key);
+                }
+            }
+        }        
+    };
+
+    /**
      * 扩展对象
      * 
      * @method module:lib.extend
@@ -329,16 +377,14 @@ define(function () {
      * @return {Object} 被扩展后的 `target` 对象
      */
     var extend = lib.extend = lib.object.extend = function (target, source) {
-        for (var name in source) {
-            if (hasOwnProperty.call(source, name)) {
-                if (lib.isObject(target[name])) {
-                    extend(target[name], source[name]);
-                }
-                else {
-                     target[name] = source[name];
-                }
+        forIn(source, function (value, key) {
+            if (lib.isObject(target[key])) {
+                extend(target[key], value);
             }
-        }
+            else {
+                 target[key] = value;
+            }
+        });
         return target;
     };
 
@@ -370,11 +416,9 @@ define(function () {
         }
         else if (lib.isObject(source) && 'isPrototypeOf' in source) {
             cloned = {};
-            for (var key in source) {
-                if (hasOwnProperty.call(source, key)) {
-                    cloned[key] = clone(source[key]);
-                }
-            }
+            forIn(source, function (value, key) {
+                cloned[key] = clone(value);
+            });
         }
 
         return cloned;
@@ -427,14 +471,12 @@ define(function () {
                     return '[' + map(obj, stringify) + ']';
                 case 'object':
                     var string = [];
-                    for (var key in obj) {
-                        if (hasOwnProperty.call(obj)) {
-                            var json = stringify(value);
-                            if (json) {
-                                string.push(stringify(key) + ':' + json);
-                            }
+                    forIn(obj, function (value, key) {
+                        var json = stringify(value);
+                        if (json) {
+                            string.push(stringify(key) + ':' + json);
                         }
-                    }
+                    });
                     return '{' + string + '}';
                 case 'number': case 'boolean': return '' + obj;
                 case 'null': return 'null';
@@ -446,20 +488,20 @@ define(function () {
 
 
     /**
-     * 将字符串解析成json对象。
+     * 将字符串解析成 JSON 对象。
      * 
      * @method module:lib.parse
      * @param {string} source 需要解析的字符串
      * 
-     * @return {JSON} 解析结果json对象
+     * @return {JSON} 解析结果 JSON 对象
      */
     /**
-     * 将字符串解析成json对象。
+     * 将字符串解析成 JSON 对象。
      * 
      * @method module:lib.object.parse
      * @param {string} source 需要解析的字符串
      * 
-     * @return {JSON} 解析结果json对象
+     * @return {JSON} 解析结果 JSON 对象
      */
     lib.parse = lib.object.parse = window.JSON
         && JSON.parse
@@ -473,7 +515,7 @@ define(function () {
      * 将对象解析成 query 字符串
      * 
      * @method module:lib.toQueryString
-     * @param {Object} json 需要解析的json对象
+     * @param {Object} json 需要解析的 JSON 对象
      *             
      * @return {string} 解析结果字符串，其中值将被URI编码
      */
@@ -481,42 +523,38 @@ define(function () {
      * 将对象解析成 query 字符串
      * 
      * @method module:lib.object.toQueryString
-     * @param {Object} json 需要解析的json对象
+     * @param {Object} json 需要解析的 JSON 对象
      *             
      * @return {string} 解析结果字符串，其中值将被URI编码
      */
     lib.toQueryString = lib.object = function toQueryString(object, base){
         var queryString = [];
 
-        var value;
-        var result;
-        for (var key in object) {
-            if (hasOwnProperty.call(object, key)) {
-                value = object[key]; 
-                if (base) {
-                    key = base + '[' + key + ']';
-                }
-                switch (typeOf(value)){
-                    case 'object':
-                        result = toQueryString(value, key);
-                        break;
-                    case 'array':
-                        var qs = {};
-                        var i = value.length;
-                        while (i --) {
-                            qs[i] = value[i];
-                        }
-                        result = toQueryString(qs, key);
-                    break;
-                    default: 
-                        result = key + '=' + encodeURIComponent(value);
-                        break;
-                }
-                if (value != null) {
-                    queryString.push(result);
-                }
+        forIn(object, function (value, key) {
+            if (base) {
+                key = base + '[' + key + ']';
             }
-        }
+            var result;
+            switch (typeOf(value)){
+                case 'object':
+                    result = toQueryString(value, key);
+                    break;
+                case 'array':
+                    var qs = {};
+                    var i = value.length;
+                    while (i --) {
+                        qs[i] = value[i];
+                    }
+                    result = toQueryString(qs, key);
+                break;
+                default: 
+                    result = key + '=' + encodeURIComponent(value);
+                    break;
+            }
+            if (value != null) {
+                queryString.push(result);
+            }
+        });
 
         return queryString.join('&');
     };
@@ -680,7 +718,7 @@ define(function () {
     lib.bind = lib.fn.bind = fallback(
         Function.bind,
         function (fn, scope) {
-            var args = arguments.length > 2 ? slice(arguments, 1) : null,
+            var args = arguments.length > 2 ? slice(arguments, 2) : null,
                 F = function(){};
 
             var bound = function(){
@@ -704,6 +742,42 @@ define(function () {
             return bound;
         }
     );
+
+    /** 
+     * 为对象绑定方法和作用域
+     * 
+     * @method module:lib.binds
+     * @param {Object} me 要绑定的 this
+     * @param {(Array.&lt;string> | ...string)} 要绑定的方法名列表
+     */
+    /** 
+     * 为对象绑定方法和作用域
+     * 
+     * @method module:lib.fn.binds
+     * @param {Object} me 要绑定的 this
+     * @param {(Array.&lt;string> | ...string)} 要绑定的方法名列表
+     */
+    lib.binds = lib.fn.binds = function (me, methods) {
+
+        if (typeof methods === 'string') {
+            methods = ~methods.indexOf(',')
+                ? methods.split(/\s*,\s*/)
+                : slice(arguments, 1);
+        }
+
+        if (!methods || !methods.length) {
+            return;
+        }
+
+        var name;
+        var fn;
+        while ((name = methods.pop())) {
+            fn = name && me[name];
+            if (fn) {
+                me[name] = lib.bind(fn, me);
+            }
+        }
+    };
 
     /** 
      * 为函数提前绑定参数（柯里化）
@@ -1071,7 +1145,7 @@ define(function () {
      *             
      * @return {(HTMLElement | window)} 目标元素
      */
-    lib.un = lib.event.on = document.removeEventListener
+    lib.un = lib.event.un = document.removeEventListener
         ? function (element, type, listener) {
             var condition = listener;
             var custom = eventFix.custom[type];
@@ -1903,13 +1977,13 @@ define(function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarExtension.html">CalendarExtension</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Dialog.html">Dialog</a></li><li><a href="module-DialogFactory.html">DialogFactory</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FloatTip.html">FloatTip</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-PicUploader.html">PicUploader</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Rating.html">Rating</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tabs.html">Tabs</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="CalendarExtension-Menu.html#event:beforeShow">beforeShow</a></li><li><a href="CalendarExtension-Menu.html#event:click">click</a></li><li><a href="CalendarExtension-Menu.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Dialog.html#event:beforedispose">beforedispose</a></li><li><a href="module-Dialog.html#event:beforehide">beforehide</a></li><li><a href="module-Dialog.html#event:beforeshow">beforeshow</a></li><li><a href="module-Dialog.html#event:cancel">cancel</a></li><li><a href="module-Dialog.html#event:confirm">confirm</a></li><li><a href="module-Dialog.html#event:dispose">dispose</a></li><li><a href="module-Dialog.html#event:hide">hide</a></li><li><a href="module-Dialog.html#event:show">show</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-log.html#event:start">start</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="global.html#event:module:PicUploader:error">module:PicUploader:error</a></li><li><a href="global.html#event:module:PicUploader:remove">module:PicUploader:remove</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Rating.html#event:rated">rated</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tabs.html#event:change">change</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Aug 21 2013 23:25:02 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Dec 11 2013 21:58:44 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

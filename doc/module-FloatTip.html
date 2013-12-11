@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Namespace: browser</title>
+    <title>JSDoc: Module: FloatTip</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Namespace: browser</h1>
+    <h1 class="page-title">Module: FloatTip</h1>
     
     
 
@@ -27,9 +27,7 @@
     
 <header>
     <h2>
-        <span class="ancestors"><a href="module-lib.html">lib</a>.</span>
-    
-    browser
+    FloatTip
     </h2>
     
 </header>  
@@ -40,10 +38,107 @@
     
     
         
-            <div class="description">浏览器信息</div>
+            <div class="description">对话框</div>
         
         
         
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="FloatTip.js.html">FloatTip.js</a>, <a href="FloatTip.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+        
+        
+            <h3>Example</h3>
+            
+    <pre class="prettyprint"><code>FloatTip.show('上传成功', 2000, function(e) {     console.log('隐藏了');});</code></pre>
+
+        
+    
+    </div>
+    
+    
+        <h3 class="subsection-title">Extends</h3>
+        
+        <ul>
+            <li><a href="module-Control.html">module:Control</a></li>
+        </ul>
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Requires</h3>
+        
+        <ul>
+            <li><a href="module-lib.html">module:lib</a></li>
+        
+            <li><a href="module-Control.html">module:Control</a></li>
+        </ul>
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="options"><span class="type-signature">&lt;private> </span>options<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        控件配置项
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
 <dl class="details">
     
         
@@ -73,7 +168,7 @@
 	
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>options.prefix</code></td>
             
             
             <td class="type">
@@ -89,21 +184,20 @@
             
             
             
-            <td class="description last">浏览器名称，
-如 ( opera | ie | firefox | chrome | safari )</td>
+            <td class="description last">class默认前缀</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>version</code></td>
+                <td class="name"><code>options.content</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">int</span>
 
 
             
@@ -113,20 +207,20 @@
             
             
             
-            <td class="description last">浏览器版本</td>
+            <td class="description last">提示内容</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>(browser.name)</code></td>
+                <td class="name"><code>options.level</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">int</span>
 
 
             
@@ -136,21 +230,20 @@
             
             
             
-            <td class="description last">是否指定浏览器，
-如 ie 6 时为 lib.browser.ie = 6</td>
+            <td class="description last">提示框层级</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>(browser.name+browser.version)</code></td>
+                <td class="name"><code>options.width</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">string</span>
 
 
             
@@ -160,8 +253,76 @@
             
             
             
-            <td class="description last">是否指定浏览器及版本，
-如 ie 6 时为 lib.browser.ie6 = true</td>
+            <td class="description last">控件的默认宽度</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.top</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">控件距视窗上边缘的高度，默认为auto，会使组件相对于视窗垂直居中</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.left</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">控件距视窗左边缘的宽度，默认为auto，会使组件相对于视窗水平居中</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.fixed</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">是否固定，不随视窗滚动</td>
         </tr>
 	
 	
@@ -189,7 +350,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line1282">line 1282</a>
+        <a href="FloatTip.js.html">FloatTip.js</a>, <a href="FloatTip.js.html#line58">line 58</a>
     </li></ul></dd>
     
     
@@ -200,21 +361,11 @@
     
 </dl>
 
-        
-        
-    
-    </div>
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+</dd>
+
+        </dl>
     
     
     

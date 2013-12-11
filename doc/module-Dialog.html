@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Calendar</title>
+    <title>JSDoc: Module: Dialog</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Module: Calendar</h1>
+    <h1 class="page-title">Module: Dialog</h1>
     
     
 
@@ -27,7 +27,7 @@
     
 <header>
     <h2>
-    Calendar
+    Dialog
     </h2>
     
 </header>  
@@ -38,7 +38,7 @@
     
     
         
-            <div class="description">比PC-UI WCal好用的日历控件</div>
+            <div class="description">对话框</div>
         
         
         
@@ -64,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line60">line 60</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line228">line 228</a>
     </li></ul></dd>
     
     
@@ -79,13 +79,7 @@
         
             <h3>Example</h3>
             
-    <pre class="prettyprint"><code>&lt;input type="text" class="input triggers" /&gt;
-&lt;input type="button" value="click" class="triggers" /&gt;
-new Calendar({
-    dateFormat: 'yyyy-MM-dd(WW)',    // W为星期几，WW带周作前缀
-    triggers: '.triggers',
-    target: '.input'
- }).render();</code></pre>
+    <pre class="prettyprint"><code>new Dialog({    main: '',    content: '内容',    footer: '底部',    width: '600px',    title: '标题',    top: '50px',    left: '',    fixed: 1,    showMask: 1,    leve: 10 }).render();    </code></pre>
 
         
     
@@ -108,8 +102,6 @@ new Calendar({
             <li><a href="module-lib.html">module:lib</a></li>
         
             <li><a href="module-Control.html">module:Control</a></li>
-        
-            <li><a href="module-Popup.html">module:Popup</a></li>
         </ul>
     
     
@@ -123,14 +115,14 @@ new Calendar({
         <dl>
             
 <dt>
-    <h4 class="name" id="DATE_FORMAT"><span class="type-signature">&lt;static, constant> </span>DATE_FORMAT<span class="type-signature"> :string</span></h4>
+    <h4 class="name" id="guid"><span class="type-signature">&lt;static> </span>guid<span class="type-signature"> :string</span></h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        全局日期格式
+        获得guid的函数
     </div>
     
     
@@ -169,71 +161,7 @@ new Calendar({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line978">line 978</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="RANGE"><span class="type-signature">&lt;static, constant> </span>RANGE<span class="type-signature"> :Object</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        可选中的日期区间
-    </div>
-    
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line986">line 986</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line723">line 723</a>
     </li></ul></dd>
     
     
@@ -297,7 +225,71 @@ new Calendar({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line153">line 153</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line330">line 330</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="Mask 遮罩层管理类"><span class="type-signature"></span>Mask 遮罩层管理类<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        对话框的遮罩层管理类
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line230">line 230</a>
     </li></ul></dd>
     
     
@@ -356,8 +348,6 @@ new Calendar({
 		<th>Type</th>
 		
 		
-		<th>Argument</th>
-		
 		
 		
 		
@@ -370,36 +360,7 @@ new Calendar({
 	
         <tr>
             
-                <td class="name"><code>disabled</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">控件的不可用状态</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>main</code></td>
+                <td class="name"><code>options.main</code></td>
             
             
             <td class="type">
@@ -414,12 +375,6 @@ new Calendar({
             
             </td>
             
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
             
             
             
@@ -431,7 +386,7 @@ new Calendar({
 	
         <tr>
             
-                <td class="name"><code>prefix</code></td>
+                <td class="name"><code>options.prefix</code></td>
             
             
             <td class="type">
@@ -443,12 +398,6 @@ new Calendar({
             
             </td>
             
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
             
             
             
@@ -460,39 +409,7 @@ new Calendar({
 	
         <tr>
             
-                <td class="name"><code>target</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-|
-
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">计算日历显示时相对位置的目标对象</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>triggers</code></td>
+                <td class="name"><code>options.title</code></td>
             
             
             <td class="type">
@@ -505,252 +422,17 @@ new Calendar({
             </td>
             
             
-                <td class="attributes">
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">点击显示日历的节点</td>
+            <td class="description last">控件标题</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>dateFormat</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">日期显示的格式化方式</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>range</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">可选中的日期区间</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">当前选中的日期</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>process</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Function</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">处理当前显示日历中的每一天，多用于节日样式
-process(el, classList, dateString)
-执行时 this 指向当前实例，el 为当前日的dom节点(A标签)，
-classList 为 el 即将要应用的class数组引用，dateString 为
-yyyy-MM-dd格式的当前日期字符串</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>monthes</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">同时显示几个月</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>first</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">一周的起始日，0为周日，1为周一</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>lang</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">预设模板
-                <h6>Properties</h6>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>week</code></td>
+                <td class="name"><code>options.content</code></td>
             
             
             <td class="type">
@@ -766,14 +448,14 @@ yyyy-MM-dd格式的当前日期字符串</td>
             
             
             
-            <td class="description last">对于 '周' 的称呼</td>
+            <td class="description last">控件内容</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>days</code></td>
+                <td class="name"><code>options.skin</code></td>
             
             
             <td class="type">
@@ -789,14 +471,14 @@ yyyy-MM-dd格式的当前日期字符串</td>
             
             
             
-            <td class="description last">一周对应的显示</td>
+            <td class="description last">控件的皮肤</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>title</code></td>
+                <td class="name"><code>options.width</code></td>
             
             
             <td class="type">
@@ -812,13 +494,191 @@ yyyy-MM-dd格式的当前日期字符串</td>
             
             
             
-            <td class="description last">每月显示的标题文字</td>
+            <td class="description last">控件的默认宽度</td>
         </tr>
 	
 	
-	</tbody>
-</table>
+	
+        <tr>
+            
+                <td class="name"><code>options.top</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
             </td>
+            
+            
+            
+            
+            
+            <td class="description last">控件距视窗上边缘的高度，默认为auto，会使组件相对于视窗垂直居中</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.left</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">控件距视窗左边缘的宽度，默认为auto，会使组件相对于视窗水平居中</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.fixed</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">是否固定，不随视窗滚动</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.showMask</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">是否显示覆盖层</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.level</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">当前dialog的z-index</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.dragable</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">是否可以拖动,暂未实现</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.tpl</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">默认的框架模板</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.footer</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">控件脚注</td>
         </tr>
 	
 	
@@ -846,19 +706,222 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line70">line 70</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line248">line 248</a>
     </li></ul></dd>
     
     
     
     
     
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="options"><span class="type-signature">&lt;private> </span>options<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        控件配置项
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
         <ul>
-            <li><a href="module-Popup.html#options">module:Popup#options</a></li>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
         </ul>
-    </dd>
+    
+
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.main</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">控件渲染容器</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.prefix</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">class默认前缀</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.maxCount</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">最多选择的图片个数</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.fileType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Regexp</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">图片类型正则</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options.tpl</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">使用的模板</td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PicUploader.js.html">PicUploader.js</a>, <a href="PicUploader.js.html#line98">line 98</a>
+    </li></ul></dd>
+    
+    
+    
+    
     
     
     
@@ -917,7 +980,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line68">line 68</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line246">line 246</a>
     </li></ul></dd>
     
     
@@ -941,7 +1004,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         <dl>
             
 <dt>
-    <h4 class="name" id="build"><span class="type-signature">&lt;private> </span>build<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_bind"><span class="type-signature">&lt;private> </span>_bind<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -949,7 +1012,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        构建HTML
+        绑定组件相关的dom事件
     </div>
     
 
@@ -982,7 +1045,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line321">line 321</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line415">line 415</a>
     </li></ul></dd>
     
     
@@ -1010,7 +1073,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         
             
 <dt>
-    <h4 class="name" id="buildMonth"><span class="type-signature">&lt;private> </span>buildMonth<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_renderDOM"><span class="type-signature">&lt;private> </span>_renderDOM<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1018,7 +1081,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        构建指定日期所在月的HTML
+        渲染主框架
     </div>
     
 
@@ -1051,7 +1114,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line392">line 392</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line373">line 373</a>
     </li></ul></dd>
     
     
@@ -1079,7 +1142,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         
             
 <dt>
-    <h4 class="name" id="checkValidity"><span class="type-signature"></span>checkValidity<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="adjustPos"><span class="type-signature">&lt;private> </span>adjustPos<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1087,7 +1150,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        验证控件输入状态
+        调整弹窗位置
     </div>
     
 
@@ -1120,7 +1183,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line869">line 869</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line490">line 490</a>
     </li></ul></dd>
     
     
@@ -1141,28 +1204,6 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    是否为指定格式的日期值
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">boolean</span>
-
-
-	</dd>
-</dl>
-
-        
     
     
 </dd>
@@ -1170,7 +1211,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         
             
 <dt>
-    <h4 class="name" id="format"><span class="type-signature"></span>format<span class="signature">(date, <span class="optional">format</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="dispose"><span class="type-signature"></span>dispose<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1178,7 +1219,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        格式化日期
+        销毁，注销事件，解除引用
     </div>
     
 
@@ -1186,97 +1227,6 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>date</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">源日期对象</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>format</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">日期格式，默认为当前实例的dateFormat</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
@@ -1302,7 +1252,83 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line229">line 229</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line694">line 694</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="module-Dialog.html#event:dispose">module:Dialog#event:dispose</a></li>
+    
+        <li><a href="module-Dialog.html#event:beforedispose">module:Dialog#event:beforedispose</a></li>
+    </ul>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getBodyDom"><span class="type-signature">&lt;private> </span>getBodyDom<span class="signature">()</span><span class="type-signature"> &rarr; {HTMLElement}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        获得内容区域的dom元素
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line442">line 442</a>
     </li></ul></dd>
     
     
@@ -1327,7 +1353,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
             
 <div class="param-desc">
-    格式化后的日期字符串
+    模块的DOM元素
 </div>
 
 
@@ -1338,7 +1364,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
 	</dt>
 	<dd>
 		
-<span class="param-type">string</span>
+<span class="param-type">HTMLElement</span>
 
 
 	</dd>
@@ -1352,7 +1378,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         
             
 <dt>
-    <h4 class="name" id="from"><span class="type-signature"></span>from<span class="signature">(value, format)</span><span class="type-signature"> &rarr; {Date}</span></h4>
+    <h4 class="name" id="getClass"><span class="type-signature">&lt;private> </span>getClass<span class="signature">(name)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
     
 </dt>
@@ -1360,7 +1386,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        解释日期类型
+        根据名字构建的css class名称
     </div>
     
 
@@ -1394,33 +1420,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
 	
         <tr>
             
-                <td class="name"><code>value</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-|
-
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">源日期字符串或对象</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>format</code></td>
+                <td class="name"><code>name</code></td>
             
             
             <td class="type">
@@ -1436,7 +1436,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
             
             
             
-            <td class="description last">日期格式</td>
+            <td class="description last">模块名字</td>
         </tr>
 	
 	
@@ -1467,7 +1467,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line185">line 185</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line362">line 362</a>
     </li></ul></dd>
     
     
@@ -1492,98 +1492,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
             
 <div class="param-desc">
-    解释到的日期对象
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Date</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="getValue"><span class="type-signature"></span>getValue<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        获取当前选中的日期
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line879">line 879</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    当前日期格式化值
+    构建的class名称
 </div>
 
 
@@ -1608,7 +1517,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         
             
 <dt>
-    <h4 class="name" id="getValueAsDate"><span class="type-signature"></span>getValueAsDate<span class="signature">()</span><span class="type-signature"> &rarr; {Date}</span></h4>
+    <h4 class="name" id="getDom"><span class="type-signature">&lt;private> </span>getDom<span class="signature">(name)</span><span class="type-signature"> &rarr; {HTMLElement}</span></h4>
     
     
 </dt>
@@ -1616,98 +1525,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        获取当前选中的日期
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line891">line 891</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    获取到的日期
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Date</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="getYYYYMM"><span class="type-signature">&lt;private> </span>getYYYYMM<span class="signature">(<span class="optional">date</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        取得指定日期的 yyyyMM 格式化后字符串值
+        获得指定dialog模块的dom元素
     </div>
     
 
@@ -1729,8 +1547,6 @@ yyyy-MM-dd格式的当前日期字符串</td>
 		<th>Type</th>
 		
 		
-		<th>Argument</th>
-		
 		
 		
 		
@@ -1743,35 +1559,23 @@ yyyy-MM-dd格式的当前日期字符串</td>
 	
         <tr>
             
-                <td class="name"><code>date</code></td>
+                <td class="name"><code>name</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Date</span>
+<span class="param-type">string</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">待格式化的日期</td>
+            <td class="description last">模块名字</td>
         </tr>
 	
 	
@@ -1802,7 +1606,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line277">line 277</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line351">line 351</a>
     </li></ul></dd>
     
     
@@ -1827,7 +1631,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
             
 <div class="param-desc">
-    按 yyyyMM格式化后的日期字符串
+    模块的DOM元素
 </div>
 
 
@@ -1838,7 +1642,189 @@ yyyy-MM-dd格式的当前日期字符串</td>
 	</dt>
 	<dd>
 		
-<span class="param-type">string</span>
+<span class="param-type">HTMLElement</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getFooterDom"><span class="type-signature">&lt;private> </span>getFooterDom<span class="signature">()</span><span class="type-signature"> &rarr; {HTMLElement}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        获得尾部区域的dom元素
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line452">line 452</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    模块的DOM元素
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HTMLElement</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getHeaderDom"><span class="type-signature">&lt;private> </span>getHeaderDom<span class="signature">()</span><span class="type-signature"> &rarr; {HTMLElement}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        获得头部区域的dom元素
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line432">line 432</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    模块的DOM元素
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HTMLElement</span>
 
 
 	</dd>
@@ -1860,7 +1846,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        隐藏浮层
+        隐藏组件
     </div>
     
 
@@ -1893,7 +1879,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line859">line 859</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line634">line 634</a>
     </li></ul></dd>
     
     
@@ -1905,6 +1891,11 @@ yyyy-MM-dd格式的当前日期字符串</td>
 </dl>
 
     
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="module-Dialog.html#event:hide">module:Dialog#event:hide</a></li>
+    </ul>
     
 
     
@@ -2010,7 +2001,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line162">line 162</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line339">line 339</a>
     </li></ul></dd>
     
     
@@ -2020,248 +2011,9 @@ yyyy-MM-dd格式的当前日期字符串</td>
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="module-Calendar.html#options">module:Calendar#options</a></li>
+            <li>module:Control#options</li>
         </ul>
     </dd>
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="onBeforeShow"><span class="type-signature">&lt;private> </span>onBeforeShow<span class="signature">(arg)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        转发Popup的onBeforeShow事件
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>arg</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">事件参数</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line713">line 713</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    <h5>Fires:</h5>
-    <ul>
-        <li><a href="module-Calendar.html#event:beforeShow">module:Calendar#event:beforeShow</a></li>
-    </ul>
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="onClick"><span class="type-signature">&lt;private> </span>onClick<span class="signature">(args)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        处理选单点击事件
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>args</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">从 Popup 传来的事件对象</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line535">line 535</a>
-    </li></ul></dd>
-    
-    
-    
-    
     
     
     
@@ -2292,7 +2044,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        监听 module:Popup 的隐藏事件
+        当触发隐藏的时候
     </div>
     
 
@@ -2325,7 +2077,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line846">line 846</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line587">line 587</a>
     </li></ul></dd>
     
     
@@ -2340,7 +2092,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <h5>Fires:</h5>
     <ul>
-        <li>module:Calendar#event:hide 隐藏事件</li>
+        <li><a href="module-Dialog.html#event:beforehide">module:Dialog#event:beforehide</a></li>
     </ul>
     
 
@@ -2358,7 +2110,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         
             
 <dt>
-    <h4 class="name" id="pick"><span class="type-signature">&lt;private> </span>pick<span class="signature">(el)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="onResize"><span class="type-signature">&lt;private> </span>onResize<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2366,7 +2118,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        选择日期
+        当视窗大小改变的时候，调整窗口位置
     </div>
     
 
@@ -2374,54 +2126,6 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>el</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">点击的当前事件源对象</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
@@ -2447,7 +2151,76 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line786">line 786</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line557">line 557</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="onShow"><span class="type-signature">&lt;private> </span>onShow<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        当触发展示的时候
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line570">line 570</a>
     </li></ul></dd>
     
     
@@ -2462,7 +2235,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <h5>Fires:</h5>
     <ul>
-        <li><a href="module-Calendar.html#event:pick">module:Calendar#event:pick</a></li>
+        <li><a href="module-Dialog.html#event:beforeshow">module:Dialog#event:beforeshow</a></li>
     </ul>
     
 
@@ -2480,7 +2253,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         
             
 <dt>
-    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="module-Calendar.html">module:Calendar</a>}</span></h4>
+    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2521,7 +2294,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line292">line 292</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line663">line 663</a>
     </li></ul></dd>
     
     
@@ -2542,28 +2315,6 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    当前实例
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="module-Calendar.html">module:Calendar</a></span>
-
-
-	</dd>
-</dl>
-
-        
     
     
 </dd>
@@ -2571,7 +2322,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         
             
 <dt>
-    <h4 class="name" id="setRange"><span class="type-signature"></span>setRange<span class="signature">(range)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setContent"><span class="type-signature"></span>setContent<span class="signature">(content)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2579,7 +2330,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        设置允许选中的日期区间
+        设置dialog的主体内容，可以是HTML内容
     </div>
     
 
@@ -2613,241 +2364,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
 	
         <tr>
             
-                <td class="name"><code>range</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">允许选择的日期区间</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line901">line 901</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setTarget"><span class="type-signature"></span>setTarget<span class="signature">(target)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        动态更新 target
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>target</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">新的 target 节点</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line767">line 767</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setValue"><span class="type-signature"></span>setValue<span class="signature">(value)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        设置当前选中的日期
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>content</code></td>
             
             
             <td class="type">
@@ -2863,7 +2380,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
             
             
             
-            <td class="description last">要设置的日期</td>
+            <td class="description last">内容字符串</td>
         </tr>
 	
 	
@@ -2894,7 +2411,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line926">line 926</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line472">line 472</a>
     </li></ul></dd>
     
     
@@ -2922,7 +2439,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
         
             
 <dt>
-    <h4 class="name" id="show"><span class="type-signature"></span>show<span class="signature">(<span class="optional">target</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setFooter"><span class="type-signature"></span>setFooter<span class="signature">(content)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2930,7 +2447,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     <div class="description">
-        显示浮层
+        设置dialog的页脚内容
     </div>
     
 
@@ -2952,8 +2469,6 @@ yyyy-MM-dd格式的当前日期字符串</td>
 		<th>Type</th>
 		
 		
-		<th>Argument</th>
-		
 		
 		
 		
@@ -2966,35 +2481,23 @@ yyyy-MM-dd格式的当前日期字符串</td>
 	
         <tr>
             
-                <td class="name"><code>target</code></td>
+                <td class="name"><code>content</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">string</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">触发显示浮层的节点</td>
+            <td class="description last">内容字符串</td>
         </tr>
 	
 	
@@ -3025,7 +2528,193 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line827">line 827</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line482">line 482</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setTitle"><span class="type-signature"></span>setTitle<span class="signature">(title)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        设置dialog的标题
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">对话框的标题</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line462">line 462</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="show"><span class="type-signature"></span>show<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        显示组件
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line603">line 603</a>
     </li></ul></dd>
     
     
@@ -3040,7 +2729,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <h5>Fires:</h5>
     <ul>
-        <li>module:Calendar#event:show 显示事件</li>
+        <li><a href="module-Dialog.html#event:show">module:Dialog#event:show</a></li>
     </ul>
     
 
@@ -3051,435 +2740,6 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
     
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="showNextMonth"><span class="type-signature">&lt;private> </span>showNextMonth<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        切换到下个月
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line608">line 608</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="showPreMonth"><span class="type-signature">&lt;private> </span>showPreMonth<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        切换到上个月
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line597">line 597</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="updatePrevNextStatus"><span class="type-signature">&lt;private> </span>updatePrevNextStatus<span class="signature">(<span class="optional">date</span>)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        更新上下月按钮状态
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>date</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">当前日期</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line354">line 354</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="updateStatus"><span class="type-signature">&lt;private> </span>updateStatus<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        根据选择的日期和当前日期更新每个日期的状态
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line623">line 623</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="validate"><span class="type-signature"></span>validate<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        验证控件
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line939">line 939</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    验证结果
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">boolean</span>
-
-
-	</dd>
-</dl>
-
-        
     
     
 </dd>
@@ -3495,7 +2755,72 @@ yyyy-MM-dd格式的当前日期字符串</td>
         <dl>
             
 <dt>
-    <h4 class="name" id="event:beforeShow">beforeShow</h4>
+    <h4 class="name" id="event:beforedispose">beforedispose</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line696">line 696</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:beforehide">beforehide</h4>
     
     
 </dt>
@@ -3593,7 +2918,328 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line715">line 715</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line589">line 589</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:beforeshow">beforeshow</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">DOMEvent</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">事件源对象</td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line573">line 573</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:cancel">cancel</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DialogFactory.js.html">DialogFactory.js</a>, <a href="DialogFactory.js.html#line105">line 105</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:confirm">confirm</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DialogFactory.js.html">DialogFactory.js</a>, <a href="DialogFactory.js.html#line90">line 90</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:dispose">dispose</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line709">line 709</a>
     </li></ul></dd>
     
     
@@ -3658,179 +3304,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line848">line 848</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="event:pick">pick</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">选中日期的格式化</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>week</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">选中日期的格式化星期</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>date</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">选中的日期对象</td>
-        </tr>
-	
-	
-	</tbody>
-</table></dl>
-        
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line805">line 805</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line646">line 646</a>
     </li></ul></dd>
     
     
@@ -3867,16 +3341,6 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">object</span>
-
-
-            </li>
-        </ul>
-    
     
     
     
@@ -3884,69 +3348,6 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     
 <dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>target</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    &lt;nullable><br>
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">触发显示浮层的节点</td>
-        </tr>
-	
-	
-	</tbody>
-</table></dl>
-        
     
         
     
@@ -3968,7 +3369,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Calendar.js.html">Calendar.js</a>, <a href="Calendar.js.html#line831">line 831</a>
+        <a href="Dialog.js.html">Dialog.js</a>, <a href="Dialog.js.html#line619">line 619</a>
     </li></ul></dd>
     
     
@@ -4011,7 +3412,7 @@ yyyy-MM-dd格式的当前日期字符串</td>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Dec 11 2013 21:58:45 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Dec 11 2013 21:58:46 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

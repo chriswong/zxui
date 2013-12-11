@@ -169,7 +169,7 @@ define(function (require) {
      * 获取节气
      * 
      * @param {Date} date 阳历日期对象
-     * @return {string} 节气
+     * @return {?Object} 节气
      * @inner
      */
     function getSolarTerm(date) {
@@ -177,11 +177,13 @@ define(function (require) {
         var m = date.getMonth();
         var d = date.getDate();
 
-        return d === sTerm(y, m * 2  )
+        var text = d === sTerm(y, m * 2  )
             ? solarTerm[m * 2]
             : (d === sTerm(y, m * 2 + 1)
                 ? solarTerm[m * 2 + 1]
                 : '');
+
+        return text ? { type: 'solar-term', text: text } : null;
     }
 
     // 农历节日
@@ -203,7 +205,7 @@ define(function (require) {
      * 获取农历节日
      * 
      * @param {Object} lunar 农历日期信息
-     * @return {string} 农历节日
+     * @return {?Object} 农历节日
      * @inner
      */
     function getLunarFestival(lunar) {
@@ -216,9 +218,11 @@ define(function (require) {
                 lunar.day = 0;
             }
         }
-        return lunar.leap 
+        var text = lunar.leap 
             ? ''
-            : lFtv[pad(lunar.month + 1) + pad(lunar.day)] || '';       
+            : lFtv[pad(lunar.month + 1) + pad(lunar.day)] || '';
+
+        return text ? { type: 'lunar-festival', text: text } : null;       
     }
 
 
@@ -253,11 +257,12 @@ define(function (require) {
      * 获取阳历节日
      * 
      * @param {Date} date 阳历日期对象
-     * @return {string} 阳历节日
+     * @return {?Object} 阳历节日
      * @inner
      */
     function getSolarFestival(date) {
-        return sFtv[pad(date.getMonth() + 1) + pad(date.getDate())] || '';
+        var text = sFtv[pad(date.getMonth() + 1) + pad(date.getDate())];
+        return text ? { type: 'solar-festival', text: text } : null;       
     }
 
 
@@ -292,7 +297,9 @@ define(function (require) {
         var qes = 4 + Math.floor((day + days - today) / 7)
             + (lastDay &lt; day ? 0 : 1);
 
-        return wFtv[keys.join(seq)] || wFtv[keys.join(qes)];        
+        var text = wFtv[keys.join(seq)] || wFtv[keys.join(qes)];        
+
+        return text ? { type: 'solar-weak-festival', text: text } : null;       
     }
 
     /**
@@ -386,10 +393,11 @@ define(function (require) {
      * 返回农历的描述（日子、节日、节气等）
      * 
      * @param {Date} date 阳历日期对象
+     * @param {string} classPrefix 节日或农历日期的 className 前缀
      * @return {string} 农历或节日节气描述
      * @inner
      */
-    function getLunarDay(date) {
+    function getLunarDay(date, classPrefix) {
         var lunar = getLunarInfo(date);
         var month = lunar.month;
         var day = lunar.day;
@@ -399,19 +407,25 @@ define(function (require) {
         var months = ['正','二','三','四','五','六','七','八','九','十','十一','腊'];
 
         var result = getFestival(date, lunar);
+        var text;
         if (!result) {
             if (day === 1) {
-                result = (lunar.leap ? '闰' : '') + months[month] + '月';
+                text = (lunar.leap ? '闰' : '') + months[month] + '月';
             }
             else if (day % 10 > 0) {
-                result = decimals[day / 10 | 0] +  units[day % 10];      
+                text = decimals[day / 10 | 0] +  units[day % 10];      
             }
             else {
-                result = (day > 10 ? units[day / 10] : decimals[0]) + units[10];
+                text = (day > 10 ? units[day / 10] : decimals[0]) + units[10];
             }
+
+            result = { type: 'lunar', text: text };
         }
 
-        return result;
+        return ''
+            + '&lt;span class="' + classPrefix + '-' + result.type + '">'
+            +   result.text
+            + '&lt;/span>';
        
     }
 
@@ -739,6 +753,7 @@ define(function (require) {
 
             if (prev) {
                 lib[!range 
+                    || !range.begin
                     || this.getYYYYMM(range.begin) &lt; dateYYYYMM
                         ? 'show' : 'hide'
                 ](prev);
@@ -747,6 +762,7 @@ define(function (require) {
 
             if ( next) {
                 lib[!range
+                    || !range.end
                     || this.getYYYYMM(range.end) > dateYYYYMM
                         ? 'show' : 'hide'
                 ](next);
@@ -828,7 +844,7 @@ define(function (require) {
                         +   ' data-week="' + week + '"'
                         + '>'
                         +   i + ' '
-                        +   getLunarDay(date)
+                        +   getLunarDay(date, prefix)
                         + '&lt;/a>'
                     );
                     week++; 
@@ -838,6 +854,7 @@ define(function (require) {
             }
 
             // 恢复到当前月;
+            date.setDate(1);
             date.setMonth(month);
             date.setDate(0);
 
@@ -853,7 +870,7 @@ define(function (require) {
                     +   ' data-week="' + week + '"'
                     + '>'
                     +   i + ' '
-                    +   getLunarDay(date)
+                    +   getLunarDay(date, prefix)
                     + '&lt;/a>'
                 );
                 week++;
@@ -880,7 +897,7 @@ define(function (require) {
                     +   ' data-week="' + week + '"'
                     + '>'
                     +   i + ' '
-                    +   getLunarDay(date)
+                    +   getLunarDay(date, prefix)
                     + '&lt;/a>'
                 );
                 week++;
@@ -1112,6 +1129,48 @@ define(function (require) {
         },
 
         /**
+         * 获取所有日期的 DOM 节点
+         * 
+         * @return {HTMLCollection} DOM 节点集合
+         * @public
+         */
+        getDayElements: function () {
+            return this.monthElement.getElementsByTagName('a');
+        },
+
+        /**
+         * 获取每天对应的日期和行列信息
+         * 
+         * @return {Object} 以日期为 key，包含日期、DOM、星期、顺序索引和行列信息的数据对象
+         * @public
+         */
+        getDaysInfo: function () {
+            var els = this.getDayElements();
+            var data = {};
+
+            lib.each(els, function (el, i) {
+                var date = el.getAttribute('data-date');
+
+                data[date] = {
+                    // 当天日期（yyyy-MM-dd格式）
+                    date: date,
+                    // 当前 DOM 节点
+                    element: el,
+                    // 星期几
+                    week: el.getAttribute('data-week') | 0,
+                    // 顺序索引
+                    index: i,
+                    // 行信息
+                    rows: i / 7 | 0,
+                    // 列信息
+                    cols: i % 7
+                };
+            });
+
+            return data;
+        },
+
+        /**
          * 设置允许选中的日期区间
          * 
          * @param {Object} range 允许选择的日期区间
@@ -1145,6 +1204,7 @@ define(function (require) {
         setValue: function (value) {
             this.date = this.from(value);
             this.value = this.format(this.date);
+            this.build();
         }
 
 
@@ -1158,13 +1218,6 @@ define(function (require) {
      */
     Lunar.DATE_FORMAT = DATE_FORMAT;
 
-    /**
-     * 可选中的日期区间
-     * 
-     * @const
-     * @type {?Object}
-     */
-    Lunar.RANGE = null;
 
     return Lunar;
 });
@@ -1178,13 +1231,13 @@ define(function (require) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarExtension.html">CalendarExtension</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Dialog.html">Dialog</a></li><li><a href="module-DialogFactory.html">DialogFactory</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FloatTip.html">FloatTip</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-PicUploader.html">PicUploader</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Rating.html">Rating</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tabs.html">Tabs</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="CalendarExtension-Menu.html#event:beforeShow">beforeShow</a></li><li><a href="CalendarExtension-Menu.html#event:click">click</a></li><li><a href="CalendarExtension-Menu.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Dialog.html#event:beforedispose">beforedispose</a></li><li><a href="module-Dialog.html#event:beforehide">beforehide</a></li><li><a href="module-Dialog.html#event:beforeshow">beforeshow</a></li><li><a href="module-Dialog.html#event:cancel">cancel</a></li><li><a href="module-Dialog.html#event:confirm">confirm</a></li><li><a href="module-Dialog.html#event:dispose">dispose</a></li><li><a href="module-Dialog.html#event:hide">hide</a></li><li><a href="module-Dialog.html#event:show">show</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-log.html#event:start">start</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="global.html#event:module:PicUploader:error">module:PicUploader:error</a></li><li><a href="global.html#event:module:PicUploader:remove">module:PicUploader:remove</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Rating.html#event:rated">rated</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tabs.html#event:change">change</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Aug 21 2013 23:25:02 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Dec 11 2013 21:58:44 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
