@@ -143,10 +143,9 @@ define(function (require) {
         /**
          * 创建一个基本对话框对象
          * 
+         * @see module:Dialog#options
          * @param {Object} opts 初始化选项
-         * @see module:Dialog.options
-         * 
-         * options.onConfirm {Function} 在确认时的回调函数
+         * @param {Function} opts.onConfirm 在确认时的回调函数
          * 
          * @returns {Object} 构建好的dialog对象
          * @public
@@ -158,8 +157,8 @@ define(function (require) {
         /**
          * 创建一个带确定按钮的对话框对象
          * 
+         * @see module:Dialog#options
          * @param {Object} opts 初始化选项
-         * @see module:Dialog.options
          * @returns {Object} 构建好的dialog对象
          * @public
          */
@@ -171,12 +170,10 @@ define(function (require) {
         /**
          * 创建一个带确定和取消按钮的对话框对象
          * 
+         * @see module:Dialog#options
          * @param {Object} opts 初始化选项
-         * @see module:Dialog.options
-         * 
-         * options.onConfirm {Function} 在确认时的回调函数
-         * options.onCancel {Function} 在取消时的回调函数
-         * 
+         * @param {Function} opts.onConfirm 在确认时的回调函数
+         * @param {Function} opts.onCancel 在取消时的回调函数
          * @returns {Object} 构建好的dialog对象
          * @public
          */

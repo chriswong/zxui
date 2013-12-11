@@ -43,15 +43,8 @@ define(function (require) {
      * @see tangram#baidu.string.format
      * 
      * @function
-     * @grammar baidu.string.format(source, opts)
      * @param {string} source 目标字符串
-     * @param {Object|string...} opts 提供相应数据的对象或多个字符串
-     * @remark
-     * 
-        opts参数为“Object”时，替换目标字符串中的#{property name}部分。<br>
-        opts为“string...”时，替换目标字符串中的#{0}、#{1}...部分。
-     * @meta standard
-     *  
+     * @param {(Object|...string)} opts 提供相应数据的对象或多个字符串
      * @returns {string} 格式化后的字符串
      */
     function format(source, opts) {

@@ -498,7 +498,7 @@ define(function (require) {
         /**
          * 获得已经选择的文件列表
          * 
-         * @return {Array[string]} 文件名字列表
+         * @return {Array.<string>} 文件名字列表
          */
         getFileList: function() {
             var me = this;
