@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: DialogFactory.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: DialogFactory.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/**
+ * ZXUI (Zhixin UI)
+ * Copyright 2013 Baidu Inc. All rights reserved.
+ * 
+ * @file 弹框组件库，产生常用的组件
+ * @author mengke(mengke01@baidu.com)
+ */
+
+define(function (require) {
+
+    var lib = require('./lib');
+    var Dialog = require('./Dialog');
+
+    /**
+     * 获得同Dialog相同的class创建规则
+     * 
+     * @param {Object} opts 初始化选项
+     * @see module:Dialog.options
+     * 
+     * @param {string} name 名称
+     * @returns {Object} 构建好的dialog对象
+     */
+    function getClass(opts, name) {
+        name = name ? '-' + name : '';
+        var skin = opts.skin;
+        return (opts.prefix || 'ecl-ui-dialog') 
+            + name 
+            + (skin ? ' ' + skin + name : '');
+    }
+
+    /**
+     * 创建Dialog对象
+     * 
+     * @param {Object} opts 初始化选项
+     * @see module:Dialog.options
+     *
+     * @returns {Object} 构建好的dialog对象
+     * @fires module:Dialog#confirm
+     * @fires module:Dialog#cancel
+     */
+    function genDialog(opts) {
+        
+        var footer = opts.footer || '';
+
+        //设置取消按钮
+        if(opts.cancel) {
+            var id = Dialog.guid('btn');
+            var cls = getClass(opts, 'cancel-btn');
+            footer += '&lt;a id="'
+                + id 
+                + '" href="javascript:;"'
+                + ' class="'
+                + cls
+                + '">'
+                + (opts.cancelTitle || '取消')
+                + '&lt;/a>';
+            opts.title = opts.title || '确认';
+            opts.cancelId = id;
+        }
+
+        //设置确定按钮
+        if(opts.confirm) {
+            var id = Dialog.guid('btn');
+            var cls = getClass(opts, 'confirm-btn');
+            footer = '&lt;button id="'
+                + id 
+                + '"'
+                + ' class="'
+                + cls
+                +'">'
+                + (opts.confirmTitle || '确定')
+                + '&lt;/button>' 
+                + footer;
+            opts.title = opts.title || '提示';
+            opts.confirmId = id;
+        }
+
+        opts.footer = footer;
+
+        //创建对话框
+        var dlg = new Dialog(opts);
+        dlg.render();
+
+        //绑定确定事件
+        if(opts.confirmId) {
+
+            dlg.onConfirm && dlg.on('confirm', dlg.onConfirm);
+
+            lib.on(lib.g(opts.confirmId), 'click', 
+                /**
+                 * @event module:Dialog#confirm
+                 * */
+                opts.confirmHandler = function() {
+                    dlg.fire('confirm');
+                }
+            );
+        }
+
+        //绑定取消事件
+        if(opts.cancelId) {
+
+            dlg.onCancel && dlg.on('cancel', dlg.onCancel);
+
+            lib.on(lib.g(opts.cancelId), 'click', 
+                /**
+                 * @event module:Dialog#cancel
+                 * */
+                opts.cancelHandler =function() {
+                    dlg.fire('cancel');
+                    dlg.hide();
+                }
+            );
+        }
+
+        //绑定注销事件
+        dlg.on('beforedispose', function() {
+            dlg.un('confirm');
+            dlg.un('cancel');
+            opts.confirmId && lib.un(
+                lib.g(opts.confirmId),
+                'click',
+                opts.confirmHandler
+            );
+            opts.cancelId && lib.un(
+                lib.g(opts.cancelId),
+                'click',
+                opts.cancelHandler
+            );
+            opts = null;
+        });
+        return dlg;
+    }
+
+    /**
+     * 对话框工厂，提供对话框创建方法
+     *
+     * @requires lib
+     * @requires Dialog
+     * @exports DialogFactory
+     */
+    var DialogFactory = {
+
+        /**
+         * 创建一个基本对话框对象
+         * 
+         * @see module:Dialog#options
+         * @param {Object} opts 初始化选项
+         * @param {Function} opts.onConfirm 在确认时的回调函数
+         * 
+         * @returns {Object} 构建好的dialog对象
+         * @public
+         */
+        create: function(opts) {
+            return genDialog(opts);
+        },
+
+        /**
+         * 创建一个带确定按钮的对话框对象
+         * 
+         * @see module:Dialog#options
+         * @param {Object} opts 初始化选项
+         * @returns {Object} 构建好的dialog对象
+         * @public
+         */
+        alert: function(opts) {
+            opts.confirm = 1;
+            return genDialog(opts);
+        },
+
+        /**
+         * 创建一个带确定和取消按钮的对话框对象
+         * 
+         * @see module:Dialog#options
+         * @param {Object} opts 初始化选项
+         * @param {Function} opts.onConfirm 在确认时的回调函数
+         * @param {Function} opts.onCancel 在取消时的回调函数
+         * @returns {Object} 构建好的dialog对象
+         * @public
+         */
+        confirm: function(opts) {
+            opts.confirm = 1;
+            opts.cancel = 1;
+            return genDialog(opts);
+        }
+    };
+
+    return DialogFactory;
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarExtension.html">CalendarExtension</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Dialog.html">Dialog</a></li><li><a href="module-DialogFactory.html">DialogFactory</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FloatTip.html">FloatTip</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-PicUploader.html">PicUploader</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Rating.html">Rating</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tabs.html">Tabs</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="CalendarExtension-Menu.html#event:beforeShow">beforeShow</a></li><li><a href="CalendarExtension-Menu.html#event:click">click</a></li><li><a href="CalendarExtension-Menu.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Dialog.html#event:beforedispose">beforedispose</a></li><li><a href="module-Dialog.html#event:beforehide">beforehide</a></li><li><a href="module-Dialog.html#event:beforeshow">beforeshow</a></li><li><a href="module-Dialog.html#event:cancel">cancel</a></li><li><a href="module-Dialog.html#event:confirm">confirm</a></li><li><a href="module-Dialog.html#event:dispose">dispose</a></li><li><a href="module-Dialog.html#event:hide">hide</a></li><li><a href="module-Dialog.html#event:show">show</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-log.html#event:start">start</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="global.html#event:module:PicUploader:error">module:PicUploader:error</a></li><li><a href="global.html#event:module:PicUploader:remove">module:PicUploader:remove</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Rating.html#event:rated">rated</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tabs.html#event:change">change</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Dec 11 2013 21:58:44 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

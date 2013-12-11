@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Pager</title>
+<link rel="stylesheet" href="../src/css/common.css" />
+<script src="../dep/vars.js"></script>
+<script src="../dep/common-2.3.js"></script>
+<script src="../dep/esl.js"></script>
+<link rel="stylesheet/less" type="text/css" href="../src/css/Pager.less" />
+</head>
+<body>
+<div id='content_left'><!--左侧最外层div-->
+    <div class="result-op" srcid="16873" id="1" mu="http://baike.baidu.com/view/1758.htm" data-op="{'y':'FD9FFD6B'}">
+
+<div style="text-align:center"><div class="ecl-ui-pager c-clearfix"></div></div>
+<script>
+A.init(function () {
+
+    var me = this;
+    require.config({
+      baseUrl: '../src/ui'
+    });
+
+    require(['Pager'], function (Pager) {
+
+        var pager = new Pager({
+            main: me.qq('ecl-ui-pager'),
+            page: 0,
+            total: 10,
+            onChange: function (e) {
+              //console.log(e);
+            }
+        });
+
+        pager.on('change', function (e) {
+            // load content
+            this.setPage(e.page);
+            this.render();
+        });
+
+        pager.render();
+    });
+
+});
+</script>
+</div>
+</div>
+ 
+<script src="../dep/less-1.3.3.min.js"></script>
+</body>
+</html>

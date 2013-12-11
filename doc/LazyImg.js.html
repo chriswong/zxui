@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: LazyImg.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: LazyImg.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/**
+ * ZXUI (Zhixin UI)
+ * Copyright 2013 Baidu Inc. All rights reserved.
+ * 
+ * @file 图片延迟加载
+ * @author chris(wfsr@foxmail.com)
+ */
+ 
+define(function (require) {
+
+    var lib = require('./lib');
+    var Lazy = require('./Lazy');
+
+    /**
+     * 图片延迟加载
+     * 
+     * @requires lib
+     * @requires Lazy
+     * @exports LazyImg
+     */
+    LazyImg = lib.newClass(/** @lends module:LazyImg.prototype*/{
+
+        /**
+         * 控件类型标识
+         * 
+         * @type {string}
+         * @private
+         */
+        type: 'LazyImg',
+
+        /**
+         * 控件配置项
+         * 
+         * @name module:LazyImg#options
+         * @type {Object}
+         * @property {(string | HTMLElement)} options.main 控件渲染容器
+         * @property {string} options.src 图片的真实地址属性
+         * @property {?Array.&lt;HTMLElement>} options.src 需要延迟加载的图片元素数组
+         * @property {Object} options.offset 调整判断是否在可视区域的偏移量
+         * @property {number} options.offset.x 调整判断是否在可视区域的水平偏移量
+         * @property {number} options.offset.y 调整判断是否在可视区域的垂直偏移量
+         * @private
+         */
+        options: {
+
+            // 控件渲染主容器
+            main: '',
+
+            // 图片的真实地址属性
+            src: '_src',
+
+            // 需要延迟加载的图片元素数组
+            imgs: null,
+
+            // 调整判断是否在可视区域的偏移量
+            offset: {
+                y: 32
+            }
+        },
+
+        /**
+         * 控件初始化
+         * 
+         * @param {Object} options 控件配置项
+         * @see module:LazyImg#options
+         * @private
+         */
+        initialize: function(options, main) {
+            options = this.setOptions(options);
+            main = this.main = lib.g(options.main) || lib.q(options.main)[0];
+            this.imgs = options.imgs
+                || lib.toArray(main.getElementsByTagName('img'));
+
+            this.load = lib.bind(this.load, this);
+            Lazy.add(main, this.load, options.offset);
+        },
+
+        /**
+         * 加载在可视区域的图片
+         * 
+         * @param {Object} scroll 滚动条坐标
+         * @param {Object} size 窗口大小
+         * @private
+         */
+        load: function (scroll, size) {
+            var _src = this.options.src;
+
+            var imgs = [];
+            var offset = this.options.offset;
+
+            lib.each(this.imgs, function (img) {
+                var el = img.parentNode.parentNode;
+                var src = img.getAttribute(_src);
+                if (el.offsetHeight && src) {
+
+                    // 图片的坐标数据
+                    var cd = lib.getPosition(img);
+                    cd.right = cd.left + img.offsetWidth;
+                    cd.bottom = cd.top + img.offsetHeight;
+
+                    var isOverRight = cd.left - offset.x >= scroll.x + size.x;
+                    var isOverBottom = cd.top - offset.y >= scroll.y + size.y;
+                    var isLessLeft = cd.right + offset.x &lt;= scroll.x;
+                    var isLessTop = cd.bottom + offset.y &lt;= scroll.y;
+
+                    // 如果在可视区域之内
+                    if(!(isOverRight || isOverBottom) 
+                         && !(isLessLeft || isLessTop )
+                    ) {
+                        img.src = src;
+                        img.removeAttribute(_src);
+                    }
+                    // 保留在可视区域之外的图片
+                    else {
+                        imgs.push(img);
+                    }
+                }
+            });
+
+            // 剔除已加载的未加载图片元素数组
+            this.imgs = imgs;
+
+            // 如果图片全部加载过，可从监听集合中移除
+            if (!imgs.length) {
+                Lazy.remove(this.main);
+            }
+        }        
+    }).implement(lib.configurable);
+
+    /**
+     * 图片延迟加载的快捷 API
+     * 
+     * @param {?string=} className 要延迟加载的元素区域的 className
+     * @param {?Object=} options 实例化 LazyImg 的配置参数
+     * @see module:LazyImg#options
+     * @static
+     */
+    LazyImg.load = function (className, options) {
+        if (lib.isObject(className)) {
+            options = className;
+            className = null;
+        }
+        lib.each(lib.q(className || 'lazy-img'), function (el) {
+            /* jshint -W031 */
+            new LazyImg(lib.extend(options || {}, {main: el}));
+        });
+    };
+
+    return LazyImg;
+});
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarExtension.html">CalendarExtension</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Dialog.html">Dialog</a></li><li><a href="module-DialogFactory.html">DialogFactory</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FloatTip.html">FloatTip</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-PicUploader.html">PicUploader</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Rating.html">Rating</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tabs.html">Tabs</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="CalendarExtension-Menu.html#event:beforeShow">beforeShow</a></li><li><a href="CalendarExtension-Menu.html#event:click">click</a></li><li><a href="CalendarExtension-Menu.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Dialog.html#event:beforedispose">beforedispose</a></li><li><a href="module-Dialog.html#event:beforehide">beforehide</a></li><li><a href="module-Dialog.html#event:beforeshow">beforeshow</a></li><li><a href="module-Dialog.html#event:cancel">cancel</a></li><li><a href="module-Dialog.html#event:confirm">confirm</a></li><li><a href="module-Dialog.html#event:dispose">dispose</a></li><li><a href="module-Dialog.html#event:hide">hide</a></li><li><a href="module-Dialog.html#event:show">show</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-log.html#event:start">start</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="global.html#event:module:PicUploader:error">module:PicUploader:error</a></li><li><a href="global.html#event:module:PicUploader:remove">module:PicUploader:remove</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Rating.html#event:rated">rated</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tabs.html#event:change">change</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Dec 11 2013 21:58:44 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

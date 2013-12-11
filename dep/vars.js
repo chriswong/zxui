@@ -1,0 +1,1 @@
+var bds={se:{},su:{},util:{},use:{},comm : {}};
