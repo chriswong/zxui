@@ -9,8 +9,8 @@
 
 define(function (require) {
 
-    var lib = require('lib');
-    var Control = require('Control');
+    var lib = require('./lib');
+    var Control = require('./Control');
 
     /**
      * GUID计数
