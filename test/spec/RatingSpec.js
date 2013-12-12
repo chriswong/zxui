@@ -1,8 +1,8 @@
 define(
     function(require) {
-        var lib = require('lib');
+        var lib = require('ui/lib');
 
-        var Rating = require('Rating');
+        var Rating = require('ui/Rating');
 
         var rating;
 

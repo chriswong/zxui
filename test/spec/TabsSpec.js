@@ -1,6 +1,6 @@
 define(function (require) {
-    var lib = require('lib');        
-    var Tabs = require('Tabs');
+    var lib = require('ui/lib');        
+    var Tabs = require('ui/Tabs');
 
     var tabs;
 

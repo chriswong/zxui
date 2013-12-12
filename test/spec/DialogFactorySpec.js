@@ -1,6 +1,6 @@
     define(function (require) {
-        var DialogFactory = require('DialogFactory');
-        var lib = require('lib');
+        var DialogFactory = require('ui/DialogFactory');
+        var lib = require('ui/lib');
         var alertDialog, confirmDialog;
         var onConfirm, onCancel, confirmCount=0, cancelCount=0;
 

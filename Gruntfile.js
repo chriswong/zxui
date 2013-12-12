@@ -5,7 +5,7 @@ module.exports = function (grunt) {
         meta: {
             pkg: grunt.file.readJSON('package.json'),
             src: {
-                main: 'src/ui',
+                main: 'src',
                 test: 'test/spec'
             }
         },
@@ -15,7 +15,7 @@ module.exports = function (grunt) {
         
         jshint: {
             options: grunt.file.readJSON('.jshintrc'),
-            files: ['src/ui/*.js', 'test/spec/*.js']
+            files: ['<%=meta.src.main%>/ui/*.js', '<%=meta.src.test%>/*.js']
         },
 
         less: {
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
         requirejs: {
             compile: {
                 options: {
-                    baseUrl: 'src/ui',
+                    baseUrl: '<%=meta.src.main%>/ui',
                     dir: 'asset/ui',
                     skipDirOptimize: false,
                     preserveLicenseComments: false,
@@ -82,26 +82,26 @@ module.exports = function (grunt) {
 
         jasmine: {
             requirejs: {
-                src: 'src/ui/*.js',
+                src: './<%=meta.src.main%>/*/*.js',
                 options: {
                     outfile: 'SpecRunner.html',
                     keepRunner: true,
                     styles: '<%= csslint.src %>',
                     specs: 'test/spec/*Spec.js',
-                    helpers: 'test/spec/*Helper.js',
+                    // helpers: 'test/spec/*Helper.js',
                     vendor: [],
                     host: 'http://localhost:<%= connect.test.options.port %>',
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
                         requireConfig: {
-                            baseUrl: './src/ui/',
+                            baseUrl: './<%=meta.src.main%>/',
                             urlArgs: '?' + (+new Date).toString(36)
                         }
                     }
                 }
             },
             istanbul: {
-                src: './<%=meta.src.main%>/*.js',
+                src: './<%=meta.src.main%>/*/*.js',
                 options: {
                     specs: ['test/spec/*Spec.js'],
                     vendor: [],
@@ -112,7 +112,7 @@ module.exports = function (grunt) {
                     templateOptions: {
                         coverage: 'test/coverage/coverage.json',
                         report: 'test/coverage',
-                        helpers: 'test/spec/*Helper.js',
+                        // helpers: 'test/spec/*Helper.js',
                         host: 'http://localhost:<%= connect.test.options.port %>',
                         template: require('grunt-template-jasmine-requirejs'),
                         templateOptions: {

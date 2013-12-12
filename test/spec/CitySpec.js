@@ -1,7 +1,7 @@
     define(function (require) {
-        var lib = require('lib');
+        var lib = require('ui/lib');
         
-        var City = require('City');
+        var City = require('ui/City');
         
         var city;
         var triggers;

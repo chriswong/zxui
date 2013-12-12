@@ -1,8 +1,8 @@
     define(function (require) {
         
-        var lib = require('lib');
-        var Lazy = require('Lazy');
-        var LazyImg = require('LazyImg');
+        var lib = require('ui/lib');
+        var Lazy = require('ui/Lazy');
+        var LazyImg = require('ui/LazyImg');
         
         var lazyImg;
         var main;

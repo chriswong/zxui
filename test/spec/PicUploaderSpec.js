@@ -1,6 +1,6 @@
     define(function (require) {
-        var PicUploader = require('PicUploader');
-        var lib = require('lib');
+        var PicUploader = require('ui/PicUploader');
+        var lib = require('ui/lib');
         var picUploader;
         var removeEventCount=0;
 

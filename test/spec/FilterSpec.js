@@ -1,6 +1,6 @@
     define(function (require) {
-        var lib = require('lib');
-        var Filter = require('Filter');
+        var lib = require('ui/lib');
+        var Filter = require('ui/Filter');
         
         
         var filter;

@@ -1,6 +1,6 @@
     define(function (require) {
-        var lib = require('lib');
-        var Tip = require('Tip');
+        var lib = require('ui/lib');
+        var Tip = require('ui/Tip');
         
         var tip;
 

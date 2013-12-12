@@ -1,7 +1,7 @@
     define(function (require) {
-        var lib = require('lib');
+        var lib = require('ui/lib');
         
-        var Lazy = require('Lazy');
+        var Lazy = require('ui/Lazy');
         
 
         var main;

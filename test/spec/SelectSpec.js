@@ -1,6 +1,6 @@
     define(function (require) {
-        var lib = require('lib');        
-        var Select = require('Select');
+        var lib = require('ui/lib');        
+        var Select = require('ui/Select');
         
         var select;
 

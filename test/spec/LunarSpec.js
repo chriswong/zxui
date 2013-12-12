@@ -1,7 +1,7 @@
     define(function (require) {
-        var lib = require('lib');
+        var lib = require('ui/lib');
         
-        var Lunar = require('Lunar');
+        var Lunar = require('ui/Lunar');
         
         var lunar;
 

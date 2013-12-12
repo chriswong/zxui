@@ -1,6 +1,6 @@
     define(function (require) {
-        var Dialog = require('Dialog');
-        var lib = require('lib');
+        var Dialog = require('ui/Dialog');
+        var lib = require('ui/lib');
         var dialog;
 
         beforeEach(function () {

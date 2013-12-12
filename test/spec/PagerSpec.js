@@ -1,6 +1,6 @@
     define(function (require) {
-        var lib = require('lib');
-        var Pager = require('Pager');
+        var lib = require('ui/lib');
+        var Pager = require('ui/Pager');
         
         var pager;
 

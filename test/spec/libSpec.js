@@ -1,5 +1,5 @@
     define(function (require) {
-        var lib = require('lib');
+        var lib = require('ui/lib');
         
 
         beforeEach(function () {

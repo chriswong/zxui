@@ -1,7 +1,7 @@
 define(function (require) {
 
-    var lib = require('lib');
-    var log = require('log');
+    var lib = require('ui/lib');
+    var log = require('ui/log');
     
 
     var container;

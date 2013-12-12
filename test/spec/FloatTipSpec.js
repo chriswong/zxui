@@ -1,6 +1,6 @@
     define(function (require) {
-        var lib = require('lib');
-        var FloatTip = require('FloatTip');
+        var lib = require('ui/lib');
+        var FloatTip = require('ui/FloatTip');
 
         beforeEach(function () {
 
