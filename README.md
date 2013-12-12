@@ -51,3 +51,7 @@ git、nodejs、grunt-cli
 - 农历控件 [Lunar](http://chriswong.github.io/zxui/example/Lunar.html)
 - 延迟加载 [Lazy](http://chriswong.github.io/zxui/example/Lazy.html)
 - 选 项 卡 [Tabs](http://chriswong.github.io/zxui/example/Tabs.html)
+- 对 话 框 [Dialog](http://chriswong.github.io/zxui/example/dialog.html)
+- 浮动提示 [FloatTip](http://chriswong.github.io/zxui/example/floattip.html)
+- 图片上传 [PicUploader](http://chriswong.github.io/zxui/example/picuploader.html)
+- 星号评级 [Rating](http://chriswong.github.io/zxui/example/Rating.html)
