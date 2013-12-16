@@ -20,10 +20,8 @@ define(function (require) {
     
     /**
      * 获得GUID的函数
-     * @param {string} tag GUID标签
-     * @return {string} 一个不重复的guid字符串
      * 
-     * @inner 
+     * @return {string} 一个不重复的guid字符串
      */
     function guid(tag) {
         return 'ui-dlg-' + (tag ? tag + '-' : '') + (counter++);
@@ -33,22 +31,21 @@ define(function (require) {
      * 移除当前的元素
      * 
      * @param {HTMLDomElement} domElement 当前元素
-     * @inner
      */
     function remove(domElement) {
-        domElement && domElement.parentNode.removeChild(domElement);
+        if (domElement && domElement.parentNode) {
+            domElement.parentNode.removeChild(domElement);
+        }
     }
-    
+
     /**
      * 对目标字符串进行格式化
-     * 从tangram中抽出
-     * @see http://1.5.13-tangram.baidu.com.r.bae.baidu.com:8081
-     * /api.html#baidu.string.format|tangram
+     * @see tangram#baidu.string.format
      * 
+     * @function
      * @param {string} source 目标字符串
-     * @param {(...Object|...string)} opts 提供相应数据的对象或多个字符串
-     * @return {string} 格式化后的字符串
-     * @inner
+     * @param {(Object|...string)} opts 提供相应数据的对象或多个字符串
+     * @returns {string} 格式化后的字符串
      */
     function format(source, opts) {
         source = String(source);
@@ -92,8 +89,7 @@ define(function (require) {
          * 
          * @private
          * @param {Object} opts 初始化选项
-         * @see module:Mask#create
-         * @private
+         * @see module:Mask.create
          */
         _init: function(opts) {
             var div = document.createElement('div');
@@ -119,11 +115,8 @@ define(function (require) {
 
         /**
          * 重新绘制遮盖层的位置
-         * 参考esui2 
-         * @see https://github.com
-         * /erik168/ER/blob/master/src/esui/Mask.js
          * 
-         * @public
+         * @see esui.2.1.2#esui.Mask
          */
         repaint: function () {
             var width = Math.max(
@@ -154,7 +147,6 @@ define(function (require) {
         /**
          * 显示一个遮罩层
          * 
-         * @public
          */
         show: function() {
             if(Mask.ie6frame) {
@@ -167,7 +159,6 @@ define(function (require) {
         /**
          * 隐藏一个遮罩层
          * 
-         * @public
          */
         hide: function() {
             if(Mask.ie6frame) {
@@ -179,7 +170,6 @@ define(function (require) {
         /**
          * 注销一个遮罩层
          * 
-         * @public
          */
         dispose: function() {
             remove(this.mask);
@@ -197,7 +187,6 @@ define(function (require) {
      * 当前已经生成的Mask个数
      * 
      * @type {number}
-     * @private
      */
     Mask.curMasks = 0;
 
@@ -467,7 +456,7 @@ define(function (require) {
         /**
          * 设置dialog的标题
          * 
-         * @param {string} content 对话框的标题
+         * @param {string} title 对话框的标题
          * @public
          */
         setTitle: function(content) {
@@ -496,7 +485,7 @@ define(function (require) {
 
         /**
          * 调整弹窗位置
-         * @public
+         * @private
          */
         adjustPos: function() {
             var left = this.options.left;
@@ -727,7 +716,6 @@ define(function (require) {
 
     /**
      * 获得guid的函数
-     * @see guid
      * 
      * @type {string}
      * @static

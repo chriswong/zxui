@@ -21,10 +21,8 @@ define(function (require) {
     
     /**
      * 获得GUID的函数
-     * @param {string} tag GUID标签
-     * @return {string} 一个不重复的guid字符串
      * 
-     * @inner 
+     * @return {string} 一个不重复的guid字符串
      */
     function guid(tag) {
         return 'ui-pic-uploader-' + (tag ? tag + '-' : '') + (counter++);
@@ -42,7 +40,7 @@ define(function (require) {
      * 获取本地图片数据
      * 
      * @param {string} filePath 文件名
-     * @param {Function=} callBack 回调函数，返回图片的base64编码
+     * @param {Function} callBack 回调函数，返回图片的base64编码
      */
     function getLocalImageData(filePath, callBack) {
         var reader = new FileReader(filePath);
@@ -57,10 +55,9 @@ define(function (require) {
      * 创建一个file节点
      * 
      * @param {Object} options 选项设置
-     * @param {string} options.className 类名
+     * options.className {string} 类名
      * 
      * @return {HTMLElement} dom节点
-     * @inner
      */
     function createFileNode( options ) {
         var node = document.createElement('input');
@@ -149,7 +146,6 @@ define(function (require) {
          * 当前已经选择的图片框个数
          * 
          * @type {number}
-         * @private
          */
         count: 0,
 
@@ -234,7 +230,7 @@ define(function (require) {
                 lib.addClass(picker, this.getClass('error'));
 
                 /**
-                 * @event module:PicUploader#error
+                 * @event module:PicUploader:error
                  * @property {Object} event 事件源对象
                  * event.fileName {string} 被移除的文件名
                  */
@@ -283,9 +279,9 @@ define(function (require) {
                 }
                 
                 /**
-                 * @event module:PicUploader#error
-                 * @param {Object} e 选择文件事件
-                 * @param {string} e.fileName 被移除的文件名
+                 * @event module:PicUploader:error
+                 * @property {Object} event 事件源对象
+                 * event.fileName {string} 被移除的文件名
                  */
                 this.fire('pick', {
                     fileName: filePath
@@ -329,8 +325,8 @@ define(function (require) {
 
             /**
              * @event module:PicUploader:remove
-             * @param {Object} e 事件源对象
-             * @param {string} e.fileName 被移除的文件名
+             * @property {Object} event 事件源对象
+             * event.fileName {string} 被移除的文件名
              */
             this.fire('remove', {
                 fileName: fileName
@@ -341,7 +337,7 @@ define(function (require) {
          * 绑定图片选择
          * 
          * @private
-         * @param {(string|HTMLElement)} id 当前的picker对象
+         * @param {string|HTMLElement} id 当前的picker对象
          */
         _bindPicker: function(id) {
             //绑定文件选择
@@ -361,7 +357,6 @@ define(function (require) {
 
         /**
          * 创建一个上传框
-         * @private
          */
         create: function() {
             var id = guid('picker');
@@ -461,8 +456,7 @@ define(function (require) {
          * 根据文件路径移除图片框
          * 
          * @param {string} filePath 文件路径
-         * @return {module:PicUploader} 本对象
-         * @private
+         * @return {PicUploader} 本对象
          */
         remove: function(filePath, checker) {
             var me = this;
@@ -490,9 +484,8 @@ define(function (require) {
         /**
          * 根据索引移除图片框
          * 
-         * @param {number} index 索引
-         * @return {module:PicUploader} 本对象
-         * @private
+         * @param {string} index 索引
+         * @return {PicUploader} 本对象
          */
         removeAt: function(index) {
             var list = lib.q( this.getClass('picker'), this.options.main);
@@ -524,7 +517,7 @@ define(function (require) {
         /**
          * 启用组件
          * 
-         * @return {module:PicUploader} 本对象
+         * @return {PicUploader} 本对象
          */
         enable: function() {
 
