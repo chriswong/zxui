@@ -21,8 +21,10 @@ define(function (require) {
     
     /**
      * 获得GUID的函数
-     * 
+     * @param {string} tag GUID标签
      * @return {string} 一个不重复的guid字符串
+     * 
+     * @inner 
      */
     function guid(tag) {
         return 'ui-float-tip-' + (tag ? tag + '-' : '') + (counter++);
@@ -152,6 +154,7 @@ define(function (require) {
 
         /**
          * 构造主元素
+         * @private
          */
         create: function() {
             var opt = this.options;
@@ -216,7 +219,8 @@ define(function (require) {
 
         /**
          * 调整弹窗位置
-         * @private
+         * 
+         * @public
          */
         adjustPos: function() {
             var left = this.options.left;
@@ -280,6 +284,7 @@ define(function (require) {
 
         /**
          * 显示组件
+         * @public
          */
         show: function() {
             lib.removeClass(this.main, this.getClass('hide') );
@@ -289,6 +294,7 @@ define(function (require) {
 
         /**
          * 隐藏组件
+         * @public
          */
         hide: function() {
             lib.addClass(this.main, this.getClass('hide') );
