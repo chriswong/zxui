@@ -15,10 +15,11 @@ define(function (require) {
      * 获得同Dialog相同的class创建规则
      * 
      * @param {Object} opts 初始化选项
-     * @see module:Dialog.options
+     * @see module:Dialog#options
      * 
      * @param {string} name 名称
-     * @returns {Object} 构建好的dialog对象
+     * @return {module:Dialog} 构建好的dialog对象
+     * @inner
      */
     function getClass(opts, name) {
         name = name ? '-' + name : '';
@@ -32,11 +33,13 @@ define(function (require) {
      * 创建Dialog对象
      * 
      * @param {Object} opts 初始化选项
-     * @see module:Dialog.options
+     * @see module:Dialog#options
      *
-     * @returns {Object} 构建好的dialog对象
+     * @return {module:Dialog} 构建好的dialog对象
+     * 
      * @fires module:Dialog#confirm
      * @fires module:Dialog#cancel
+     * @inner
      */
     function genDialog(opts) {
         
@@ -87,10 +90,11 @@ define(function (require) {
             dlg.onConfirm && dlg.on('confirm', dlg.onConfirm);
 
             lib.on(lib.g(opts.confirmId), 'click', 
-                /**
-                 * @event module:Dialog#confirm
-                 * */
+
                 opts.confirmHandler = function() {
+                    /**
+                     * @event module:Dialog#confirm
+                     */
                     dlg.fire('confirm');
                 }
             );
@@ -102,10 +106,11 @@ define(function (require) {
             dlg.onCancel && dlg.on('cancel', dlg.onCancel);
 
             lib.on(lib.g(opts.cancelId), 'click', 
-                /**
-                 * @event module:Dialog#cancel
-                 * */
+
                 opts.cancelHandler =function() {
+                     /**
+                      * @event module:Dialog#cancel
+                      */
                     dlg.fire('cancel');
                     dlg.hide();
                 }
@@ -143,11 +148,12 @@ define(function (require) {
         /**
          * 创建一个基本对话框对象
          * 
-         * @see module:Dialog#options
          * @param {Object} opts 初始化选项
-         * @param {Function} opts.onConfirm 在确认时的回调函数
+         * @see module:Dialog#options
          * 
-         * @returns {Object} 构建好的dialog对象
+         * @param {Function} options.onConfirm 在确认时的回调函数
+         * 
+         * @return {module:Dialog} 构建好的dialog对象
          * @public
          */
         create: function(opts) {
@@ -157,9 +163,9 @@ define(function (require) {
         /**
          * 创建一个带确定按钮的对话框对象
          * 
-         * @see module:Dialog#options
          * @param {Object} opts 初始化选项
-         * @returns {Object} 构建好的dialog对象
+         * @see module:Dialog#options
+         * @return {Object} 构建好的dialog对象
          * @public
          */
         alert: function(opts) {
@@ -170,11 +176,12 @@ define(function (require) {
         /**
          * 创建一个带确定和取消按钮的对话框对象
          * 
-         * @see module:Dialog#options
          * @param {Object} opts 初始化选项
          * @param {Function} opts.onConfirm 在确认时的回调函数
          * @param {Function} opts.onCancel 在取消时的回调函数
-         * @returns {Object} 构建好的dialog对象
+         * 
+         * @see module:Dialog#options
+         * @return {module:Dialog} 构建好的dialog对象
          * @public
          */
         confirm: function(opts) {
