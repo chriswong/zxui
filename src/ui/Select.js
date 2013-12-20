@@ -441,7 +441,7 @@ define(function (require) {
          * @public
          */
         getValue: function (isNumber) {
-            var options = this.optioins;
+            var options = this.options;
             var klass = optioins.prefix + '-' + options.selectedClass;
             var selected = this.popup.query(klass)[0];
             var value = selected ? selected.getAttribute('data-value'): '';
