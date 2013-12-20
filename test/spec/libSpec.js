@@ -466,6 +466,7 @@
                 preventDefault = true;
                 lib.fire(link, 'click');
                 expect(location.hash).toBe('#changed');
+                location.hash = '';
 
                 lib.un(link, 'click', onClick);
                 lib.un(document.body, 'click', onClick);
