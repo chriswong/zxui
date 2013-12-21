@@ -83,6 +83,37 @@ define(function (require) {
          * @type {Object}
          * @property {boolean} options.disabled 控件的不可用状态
          * @property {(string | HTMLElement)} options.main 控件渲染容器
+         * 
+         * @property {HTMLElement=} options.stage 控件动画容器，
+         *      如果不设则按class规则查找`options.prefix` + `stage`
+         * 
+         * @property {HTMLElement=} options.prevElement prev按钮的容器，
+         *      如果不设则按class规则查找`options.prefix` + `prev`
+         * 
+         * @property {HTMLElement=} options.nextElement next按钮的容器，
+         *      如果不设则按class规则查找`options.prefix` + `next`
+         * 
+         * @property {HTMLElement=} options.indexElment 轮播索引按钮的容器，
+         *      会将第一级子元素设为索引元素，
+         *      如果不设则按class规则查找`options.prefix` + `index`
+         * 
+         * @property {boolean} options.auto 是否自动轮播
+         * @property {boolean} options.circle 是否播放到结尾时回到起始，
+         *      在自动轮播下，需要设置为true
+         * @property {Number} options.autoInterval 自动切换动画的延迟时间
+         * @property {Number} options.switchDelay 点击切换索引的延迟时间
+         * @property {Function} options.onChange 当播放索引改变时的事件
+         * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
+         * 
+         * @property {string} options.anim 使用的轮播动画
+         * @property {Object} options.animOptions 轮播动画选项，
+         *      不同的动画效果配置可能不一样
+         * @property {string} options.animOptions.easing 使用的动画算子
+         * @property {Number} options.animOptions.interval 每次动画时间间隔
+         * @property {string} options.animOptions.direction 滑动门的滚动方向 
+         *      `horizontal` or `vertical`
+         * 
+         * 
          * @private
          */
         options: {
@@ -93,17 +124,16 @@ define(function (require) {
             // 控件主容器
             main: '',
 
-            // 控件动画容器，如果不设则按class规则查找`options.prefix` + `stage`
+            // 控件动画容器
             stage: '',
 
-            //prev按钮的容器，如果不设则按class规则查找`options.prefix` + `stage`
+            //prev按钮的容器
             prevElement: '',
 
-            //next按钮的容器，如果不设则按class规则查找`options.prefix` + `stage`
+            //next按钮的容器
             nextElement: '',
 
             //轮播索引按钮的容器，会将第一级子元素设为索引元素，
-            // 如果不设则按class规则查找`options.prefix` + `stage`
             indexElment: '',
 
             //是否自动轮播
@@ -112,16 +142,22 @@ define(function (require) {
             //是否播放到结尾时回到起始，在自动轮播下，需要设置为true
             circle: true,
 
-            //点击切换动画的延迟时间
+            //自动切换动画的延迟时间
             autoInterval: 2000,
 
             //点击切换索引的延迟时间
             switchDelay: 50,
 
-            //使用的轮播动画
-            anim: 'default',
+            //当播放索引改变时的事件
+            onChange: null,
 
-            //轮播动画选项，不同的动画效果配置可能不一样
+            // 控件class前缀，同时将作为main的class之一
+            prefix: 'ecl-ui-slider',
+
+            //使用的轮播动画
+            anim: 'slide',
+
+            //轮播动画选项
             animOptions: {
 
                 //使用的动画算子
@@ -130,15 +166,9 @@ define(function (require) {
                 //每次动画时间间隔
                 interval: 200,
 
-                //滑动门门的滚动方向
+                //滑动门的滚动方向
                 direction: ''
-            },
-
-            //当播放位置改变时的事件
-            onChange: null,
-
-            // 控件class前缀，同时将作为main的class之一
-            prefix: 'ecl-ui-slider'
+            }
         },
 
         /**
@@ -164,6 +194,14 @@ define(function (require) {
         },
 
         /**
+         * 清除自动播放计时器
+         */
+        clearSwitchTimer: function() {
+            clearTimeout(this.switchTimer);
+            this.switchTimer = 0;
+        },
+
+        /**
          * 进入主窗口的事件
          * 
          * @param {HTMLEvent} e dom事件
@@ -171,7 +209,7 @@ define(function (require) {
          */
         onEnter: function(e) {
             if(this.options.auto) {
-                clearTimeout(this.switchTimer);
+                this.clearSwitchTimer();
             }
         },
 
@@ -203,7 +241,7 @@ define(function (require) {
          */
         play: function() {
             if(this.options.auto) {
-                clearTimeout(this.switchTimer);
+                this.clearSwitchTimer();
                 this.switchTimer = setTimeout(
                     this.switchHandler, 
                     this.options.autoInterval
@@ -389,9 +427,10 @@ define(function (require) {
             me.stage = opt.stage;
             me.index = 0;
             me.count = childNodes.length;
+            //这里IE6在初始化的时候clientWidth有为0的情况
             me.stageWidth = opt.stage.clientWidth;
             me.stageHeight = opt.stage.clientHeight;
-
+            alert(me.stageWidth);
             me.setCurrent();
             me.curAnim.refresh();
         },
@@ -506,6 +545,43 @@ define(function (require) {
                  */
                 this.fire('change', event);
             }
+        },
+
+        /**
+         * 销毁，注销事件，解除引用
+         * 
+         * @public
+         * @fires module:Slider#dispose
+         */
+        dispose: function() {
+            //停止动画
+            this.clearSwitchDelayTimer();
+            this.clearSwitchTimer();
+
+            this.curAnim.dispose();
+            this.curAnim = null;
+
+            //注销按钮事件
+            var options = this.options;
+            if(options.prevElement) {
+                lib.un(options.prevElement, 'click', this.onPrevClick);
+            }
+
+            if(options.nextElement) {
+                lib.un(options.nextElement, 'click', this.onNextClick);
+            }
+
+            if(options.indexElment) {
+                lib.un(options.indexElment, 'click', this.onIndexClick);
+            }
+
+            //注销舞台事件
+            lib.un(this.main, 'mouseenter', this.onEnter);
+            lib.un(this.main, 'mouseleave', this.onLeave);
+
+            this.main = this.stage = this.options = null;
+
+            this.parent('dispose');
         }
 
     });

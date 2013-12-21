@@ -131,7 +131,41 @@ define(function(require) {
             if ((p /= 0.5) < 1) return 1 / 2 * p * p;
             return -1 / 2 * ((--p) * (p - 2) - 1);
         },
-        
+
+        /**
+         * backIn
+         * 
+         * @param {Number} p 当前百分比
+         * @return {Number} 算子百分比
+         */
+        backIn: function(p) {
+            var s = 1.70158;
+            return p * p * ((s + 1) * p - s);
+        },
+
+        /**
+         * backOut
+         * 
+         * @param {Number} p 当前百分比
+         * @return {Number} 算子百分比
+         */
+        backOut: function(p) {
+            var s = 1.70158;
+            return ((p = p - 1) * p * ((s + 1) * p + s) + 1);
+        },
+
+        /**
+         * backBoth
+         * 
+         * @param {Number} p 当前百分比
+         * @return {Number} 算子百分比
+         */
+        backBoth: function(p) {
+            var s = 1.70158;
+            if ((p /= 0.5) < 1) return 1 / 2 * (p * p * (((s *= (1.525)) + 1) * p - s));
+            return 1 / 2 * ((p -= 2) * p * (((s *= (1.525)) + 1) * p + s) + 2);
+        },
+
         /**
          * lineer
          * 
@@ -280,8 +314,6 @@ define(function(require) {
 
     /**
      * 基本的轮播效果，无动画切换
-     * 
-     * @type {Anim}
      */
     Anim.add('default', 
         Anim.extend({
@@ -301,8 +333,6 @@ define(function(require) {
 
     /**
      * 滑动门动画组件
-     * 
-     * @type {Anim}
      */
     Anim.add('slide',
         BaseAnim.extend({
@@ -362,8 +392,6 @@ define(function(require) {
 
     /**
      * 渐变动画组件，通过改变元素的z-index和透明度来改变
-     * 
-     * @type {Anim}
      */
     Anim.add('opacity',
         BaseAnim.extend({
@@ -449,6 +477,14 @@ define(function(require) {
                 if(percent == 1) {
                     this.curElement = null;
                 } 
+            },
+
+            /**
+             * 注销动画
+             */
+            dispose: function() {
+                this.parent('dispose');
+                this.curElement = null;
             }
         })
     );
