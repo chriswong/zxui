@@ -1,0 +1,457 @@
+/**
+ * ZXUI (Zhixin UI)
+ * Copyright 2013 Baidu Inc. All rights reserved.
+ * 
+ * @file 轮播组件动画库
+ * @author  mengke01(mengke01@baidu.com)
+ */
+
+define(function(require) {
+
+    var lib = require('./lib');
+
+    /**
+     * requestAnimationFrame接口
+     * 
+     * @type {Function}
+     */
+    var requestAnimationFrame = (function () {
+        return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                // if all else fails, use setTimeout
+                function (callback) {
+                    return setTimeout(callback, 1000 / 60); // shoot for 60 fps
+                };
+    })();
+
+    /**
+     * cancelAnimationFrame接口
+     * 
+     * @type {Function}
+     */
+    var cancelAnimationFrame = (function () {
+        return window.cancelAnimationFrame ||
+                window.webkitCancelAnimationFrame ||
+                window.mozCancelAnimationFrame ||
+                window.oCancelAnimationFrame ||
+                function (id) {
+                    clearTimeout(id);
+                };
+    })();
+
+    /**
+     * anim对象接口，提供基本的动画效果
+     * 
+     * @constructor
+     * @param {module:Slider} slider slider主对象
+     * @param {Object} options anim对象参数
+     */
+    Anim = lib.newClass(/*@lends Anim.prototype*/{
+
+        /**
+         * 初始化函数
+         * 
+         * @param {module:Slider} slider slider主对象
+         * @param {Object} options anim对象参数
+         * @constructor
+         */
+        initialize: function(slider, options) {
+            this.slider = slider;
+            this.auto = options.auto;
+            this.circle = options.circle;
+        },
+
+        /**
+         * 切换到指定的索引
+         * 
+         * @param {Number} index 指定的索引
+         * @param {Number} lastIndex 上一个索引
+         * @return {boolean} 是否能够切换成功
+         * @protected
+         */
+        switchTo: function(index, lastIndex) {
+        },
+
+        /**
+         * 是否动画正在进行
+         * @return {boolean} 是否能够切换成功
+         * @protected
+         */
+        isBusy: function() {
+        },
+
+        /**
+         * 启用动画，用于多动画效果切换
+         * @protected
+         */
+        enable: function() {
+        },
+
+        /**
+         * 禁用动画，用于多动画效果切换
+         * @protected
+         */
+        disable: function() {
+        },
+
+        /**
+         * 刷新动画，用于在更新dom节点的时候进行更新
+         * @protected
+         */
+        refresh: function() {
+        },
+
+        /**
+         * 注销动画
+         * @protected
+         */
+        dispose: function() {
+            this.slider = null;
+        }
+    });
+    
+    /**
+     * 动画算子
+     * 
+     * @type {Object}
+     */
+    Anim.easing = {
+
+        /**
+         * easing
+         * get from qwrap
+         * @see http://dev.qwrap.com/resource/js/components/anim/easing.js 
+         * 
+         * @param {Number} p 当前百分比
+         * @return {Number} 算子百分比
+         */
+        easing: function(p) {
+            if ((p /= 0.5) < 1) return 1 / 2 * p * p;
+            return -1 / 2 * ((--p) * (p - 2) - 1);
+        },
+        
+        /**
+         * lineer
+         * 
+         * @param {Number} p 当前百分比
+         * @return {Number} 算子百分比
+         */
+        lineer: function(p) {
+            return p;
+        },
+
+        /**
+         * bounce
+         * 
+         * @param {Number} p 当前百分比
+         * @return {Number} 算子百分比
+         */
+        bounce: function(p) {
+            if (p < (1 / 2.75)) {
+                return (7.5625 * p * p);
+            } else if (p < (2 / 2.75)) {
+                return (7.5625 * (p -= (1.5 / 2.75)) * p + 0.75);
+            } else if (p < (2.5 / 2.75)) {
+                return (7.5625 * (p -= (2.25 / 2.75)) * p + 0.9375);
+            }
+            return (7.5625 * (p -= (2.625 / 2.75)) * p + 0.984375);
+        }
+    };
+
+    /**
+     * 动画组件列表
+     * 
+     * @type {Object}
+     */
+    Anim.anims = {};
+
+    /**
+     * 添加动画组件
+     * 
+     * @param {string} name 名字
+     * @param {Anim} Class 动画组件类
+     * @return {boolean} 是否添加成功
+     */
+    Anim.add = function(name, Class) {
+        if(!this.anims[name]) {
+            this.anims[name] = Class;
+            return true;
+        }
+        return false;
+    };
+
+    /**
+     * 按时间线轮播组件基类
+     * 
+     * @type {BaseAnim}
+     */
+    var BaseAnim = Anim.extend(/*@lends BaseAnim.prototype*/ {
+
+        /**
+         * 初始化函数
+         * @constructor
+         */
+        initialize: function(slider, options) {
+            var me = this;
+            me.slider = slider;
+            me.interval = options.interval || 200;
+            me.easingFn = Anim.easing[options.easing || 'easing'];
+
+            var _timeHandler = me.timeHandler;
+            me.timeHandler = function() {
+                _timeHandler.apply(me);
+            };
+        },
+
+        /**
+         * 切换到指定的索引
+         * 
+         * @param {Number} index 目标索引
+         * @param {Number} lastIndex 上一个索引
+         * @return {boolean} 是否成功切换
+         */
+        switchTo: function(index, lastIndex) {
+            this.beforeSwitch(index, lastIndex);
+            this.startTime = new Date();
+            if(!this.timer) {
+                this.timer = requestAnimationFrame(this.timeHandler);
+            }
+        },
+
+        /**
+         * 计时器函数
+         * @private
+         */
+        timeHandler: function() {
+            var timePast = new Date() - this.startTime;
+            if(timePast >= this.interval) {
+                this.tick(1);
+                this.timer = 0;
+            }
+            else {
+                this.tick(timePast/this.interval);
+                this.timer = requestAnimationFrame(this.timeHandler);
+            }
+        },
+
+        /**
+         * 是否动画正在进行
+         */
+        isBusy: function() {
+            return this.timer !== 0;
+        },
+
+        /**
+         * 禁用动画，用于多动画效果切换
+         */
+        disable: function() {
+            cancelAnimationFrame(this.timer);
+            this.timer = 0;
+        },
+
+        /**
+         * 注销动画
+         */
+        dispose: function() {
+            this.disable();
+            this.slider = null;
+        },
+
+        /**
+         * 当前动画的tick函数，子类基于此设置动画
+         * 
+         * @param {Number} percent 当前动画进行的百分比
+         * @protected
+         */
+        tick: function(percent) {
+        }
+    });
+    
+    /**
+     * 导出动画基类，方便外层扩展
+     * 
+     * @type {BaseAnim}
+     */
+    Anim.TimeLine = BaseAnim;
+
+
+
+    /**
+     * 基本的轮播效果，无动画切换
+     * 
+     * @type {Anim}
+     */
+    Anim.add('default', 
+        Anim.extend({
+            /**
+             * 切换到指定的索引
+             * 
+             * @param {Number} index 指定的索引
+             * @param {Number} lastIndex 上一个索引
+             * @return {boolean} 是否能够切换成功
+             */
+            switchTo: function(index, lastIndex) {
+                this.slider.stage.scrollLeft = this.slider.stageWidth * index;
+            }
+        })
+    );
+
+
+    /**
+     * 滑动门动画组件
+     * 
+     * @type {Anim}
+     */
+    Anim.add('slide',
+        BaseAnim.extend({
+
+            /**
+             * 初始化函数
+             * @constructor
+             */
+            initialize: function(slider, options) {
+                this.parent('initialize', slider, options);
+
+                //设置滑动门的方向 `horizontal` or `vertical`
+                this.direction = options.direction || 'horizontal';
+            },
+
+            /**
+             * 在切换索引之前的动作
+             * @param {Number} index 指定的索引
+             * @param {Number} lastIndex 上一个索引
+             */
+            beforeSwitch: function(index, lastIndex) {
+                var scrollPos;
+                var stageLength;
+
+                //这里为了方便书写进行了一次reflow，可以避免
+                if(this.direction == 'vertical') {
+                    scrollPos = this.slider.stage.scrollTop;
+                    stageLength = this.slider.stageHeight;
+                }
+                else {
+                    scrollPos = this.slider.stage.scrollLeft;
+                    stageLength = this.slider.stageWidth;
+                }
+
+                this.curPos = this.isBusy() ? 
+                    scrollPos
+                    : stageLength * lastIndex;
+                this.targetPos = stageLength * index;
+            },
+
+            /**
+             * 当前动画的tick函数，子类基于此设置动画
+             * 
+             * @param {Number} percent 当前动画进行的百分比
+             * @protected
+             */
+            tick: function(percent) {
+                var move = (this.targetPos - this.curPos) 
+                    * this.easingFn(percent);
+                this.slider.stage[
+                    this.direction == 'vertical' 
+                    ? 'scrollTop' : 'scrollLeft'
+                    ] = this.curPos + move;
+            }
+        })
+    );
+
+    /**
+     * 渐变动画组件，通过改变元素的z-index和透明度来改变
+     * 
+     * @type {Anim}
+     */
+    Anim.add('opacity',
+        BaseAnim.extend({
+
+            /**
+             * 设置目标元素的透明度
+             * 
+             * @param {HTMLElement} element dom元素
+             * @param {Number} opacity 透明度
+             * @private
+             */
+            setOpacity: function(element, opacity) {
+                if(opacity == 1) {
+                    element.style.filter = '';
+                    element.style.opacity = '';
+                }
+                else if(lib.browser.ie < 9) {
+                    element.style.filter = 'alpha(opacity='+ (100*opacity) +')';  
+                }
+                else {
+                    element.style.opacity = opacity;
+                }
+            },
+
+            /**
+             * 在切换索引之前的动作
+             * @param {Number} index 指定的索引
+             * @param {Number} lastIndex 上一个索引
+             */
+            beforeSwitch: function(index, lastIndex) {
+                var childNodes = this.slider.getChildren(this.slider.stage);
+                var l = childNodes.length;
+
+                if(undefined == this.index) {
+                    this.index = l - 1;
+                }
+
+                if(undefined == this.lastIndex) {
+                    this.lastIndex = l - 1;
+                }
+
+                //还原
+                this.setOpacity(childNodes[this.index], 1);
+
+                //设置当前的元素为cover元素
+                // 移出顶层元素
+                lib.removeClass(
+                    childNodes[this.index], 
+                    this.slider.getClass('top')
+                );
+                //将顶层元素作为北京
+                lib.removeClass(
+                    childNodes[this.lastIndex], 
+                    this.slider.getClass('cover')
+                );
+                //移出背景元素
+                lib.addClass(
+                    childNodes[this.index], 
+                    this.slider.getClass('cover')
+                );
+
+
+                this.lastIndex = this.index;
+
+                //设置当前元素
+                lib.addClass(
+                    childNodes[this.index = index], 
+                    this.slider.getClass('top')
+                );
+
+                this.setOpacity(this.curElement = childNodes[index], 0);
+            },
+
+            /**
+             * 当前动画的tick函数，子类基于此设置动画
+             * 
+             * @param {Number} percent 当前动画进行的百分比
+             * @protected
+             */
+            tick: function(percent) {
+                var move = this.easingFn(percent);
+                this.setOpacity(this.curElement, move);
+                if(percent == 1) {
+                    this.curElement = null;
+                } 
+            }
+        })
+    );
+    
+    return Anim;
+})
