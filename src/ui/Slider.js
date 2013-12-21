@@ -427,10 +427,9 @@ define(function (require) {
             me.stage = opt.stage;
             me.index = 0;
             me.count = childNodes.length;
-            //这里IE6在初始化的时候clientWidth有为0的情况
             me.stageWidth = opt.stage.clientWidth;
             me.stageHeight = opt.stage.clientHeight;
-            alert(me.stageWidth);
+            
             me.setCurrent();
             me.curAnim.refresh();
         },
