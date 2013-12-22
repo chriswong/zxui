@@ -12,37 +12,6 @@ define(function (require) {
     var Control = require('./Control');
 
     /**
-     * requestAnimationFrame接口
-     * 
-     * @type {Function}
-     */
-    var requestAnimationFrame = (function () {
-        return window.requestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.oRequestAnimationFrame ||
-                // if all else fails, use setTimeout
-                function (callback) {
-                    return setTimeout(callback, 1000 / 60); // shoot for 60 fps
-                };
-    })();
-
-    /**
-     * cancelAnimationFrame接口
-     * 
-     * @type {Function}
-     */
-    var cancelAnimationFrame = (function () {
-        return window.cancelAnimationFrame ||
-                window.webkitCancelAnimationFrame ||
-                window.mozCancelAnimationFrame ||
-                window.oCancelAnimationFrame ||
-                function (id) {
-                    clearTimeout(id);
-                };
-    })();
-
-    /**
      * 设置文本不能拖选
      * @param {boolean} enabled 是否启用
      * @param {string} noSelectClass 使用class设置禁止选择
@@ -52,23 +21,28 @@ define(function (require) {
         var selectEvent;
         return supportCss
             ? function(enabled, noSelectClass) {
-                lib[enabled ? 'addClass' : 'removeClass'](document.body, noSelectClass);
+                lib[
+                enabled 
+                ? 'addClass' 
+                : 'removeClass'
+                ](document.body, noSelectClass);
             }
-            : function(enabled, noSelectClass) {
+            : function(enabled) {
                 if(enabled) {
                     selectEvent = document.body.onselectstart;
-                    document.body.onselectstart = new Function('event.returnValue = false');
+                    document.body.onselectstart = 
+                        new Function('event.returnValue = false');
                 }
                 else {
                     document.body.onselectstart = selectEvent;
                 }
-            }
-    })( !(lib.browser.ie < 9) ) ;
+            };
+    })( lib.browser.ie < 9 ? false : true ) ;
 
 
 
     /**
-     * 对话框
+     * 滚动条组件
      * 
      * @extends module:ScrollBar
      * @requires lib
@@ -76,9 +50,11 @@ define(function (require) {
      * @exports ScrollBar
      * @example
      * 
-     * ScrollBar.show('上传成功', 2000, function(e) {
-     *      console.log('隐藏了');
-     * });
+     * var scrollbar = new ScrollBar({
+     *     main: lib.g('ecl-ui-scrollbar-main'),
+     *     thumb: lib.g('ecl-ui-scrollbar-thumb'),
+     *     disabled: 0
+     *});
      * 
      * 
      */
@@ -99,10 +75,10 @@ define(function (require) {
          * @name module:ScrollBar#options
          * @type {Object}
          * @property {boolean} options.disabled 是否禁用组件
-         * @property {HTMLElement} options.main 需要滚动的元素
-         * @property {HTMLElement} options.thumb 滚动条按钮元素
+         * @property {(string | HTMLElement)} options.main 需要滚动的元素
+         * @property {(string | HTMLElement)} options.thumb 滚动条按钮元素
          * 
-         * @property {Number} options.wheelspeed 滚动速度
+         * @property {Number} options.wheelspeed 滚动速度，百分比，越大滚动越快
          * @property {string} options.direction 滚动方向
          * @property {string} options.prefix class默认前缀
          * 
@@ -243,6 +219,7 @@ define(function (require) {
          * 
          * @param {Number} pos 设置滚动的位置比例
          * @private
+         * @fires module:ScrollBar#event
          */
         setScrollPercent: function(pos) {
 
@@ -261,6 +238,16 @@ define(function (require) {
                 pos * this.mainSize * (1-this.scrollRatio);
 
             this.curPos = pos;
+            var event = {
+                position: pos
+            };
+
+            this.options.onChange && this.options.onChange(event);
+            /**
+             * @event  module:ScrollBar#change
+             * @property {Number} position 当前的滚动比例
+             */
+            this.fire('change', event);
         },
 
         /**
@@ -314,7 +301,8 @@ define(function (require) {
 
         /**
          * 滚动到指定位置
-         * @param {(Number|string)} pos 位置距离
+         * @param { ( Number | string ) } pos 滚动的距离，
+         *   可以设置·begin· or ·end· 或者百分比
          * @return {module:ScrollBar} 本对象
          * @public
          */
@@ -337,6 +325,39 @@ define(function (require) {
         },
 
         /**
+         * 重新计算滚动比例
+         * 
+         * @return {module:ScrollBar} 本对象
+         */
+        refresh: function() {
+
+            this.mainSize = this.main[this.scrollProp];
+            this.trackSize = this.track[this.clientProp] 
+                - this.thumb[this.offsetProp];
+
+            //当前内容的缩放级别
+            this.scrollRatio = 
+                this.main.parentNode[this.clientProp]/
+                this.mainSize;
+
+            //设置祖先元素为禁用
+            var container = lib.getAncestorByClass(
+                this.main, this.getClass('')
+            );
+            if(container) {
+                lib[this.scrollRatio >=1 
+                    ? 'addClass' : 'removeClass']
+                    (
+                        container, 
+                        this.getClass('noscroll')
+                    );
+            }
+            
+            this.scrollTo(this.curPos);
+            return this;
+        },
+
+        /**
          * 绘制控件
          * 
          * @override
@@ -347,25 +368,7 @@ define(function (require) {
                 throw new Error('invalid main or thumb');
             }
 
-            //重新计算滚动比例
-            this.mainSize = this.main[this.scrollProp];
-            this.thumbSize = this.thumb[this.offsetProp];
-            this.trackSize = this.track[this.clientProp] - this.thumbSize;
-
-            //当前内容的缩放级别
-            this.scrollRatio = 
-                this.main.parentNode[this.clientProp]/
-                this.mainSize;
-
-            //设置祖先元素为禁用
-            var container = lib.getAncestorByClass(this.main, this.getClass(''));
-            if(container) {
-                lib[this.scrollRatio >=1 ? 'addClass' : 'removeClass'](
-                    container, 
-                    this.getClass('noscroll')
-                );
-            }
-
+            this.refresh();
             return this;
         },
 
@@ -378,7 +381,10 @@ define(function (require) {
         setEnabled: function(enabled) {
             var disabled = !enabled;
             //设置祖先元素为禁用
-            var container = lib.getAncestorByClass(this.main, this.getClass(''));
+            var container = lib.getAncestorByClass(
+                this.main, 
+                this.getClass('')
+            );
             if(container) {
                 lib[ disabled ? 'addClass' : 'removeClass'](
                     container, 

@@ -20,9 +20,8 @@ define(function(require) {
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame ||
                 window.oRequestAnimationFrame ||
-                // if all else fails, use setTimeout
                 function (callback) {
-                    return setTimeout(callback, 1000 / 60); // shoot for 60 fps
+                    return setTimeout(callback, 1000 / 60);
                 };
     })();
 
@@ -44,23 +43,25 @@ define(function(require) {
     /**
      * anim对象接口，提供基本的动画效果
      * 
+     * @extends module:SliderAnim
+     * @requires lib
      * @constructor
      * @param {module:Slider} slider slider主对象
-     * @param {Object} options anim对象参数
+     * @example
+     * new SliderAnim(slider, animOptions)
+     * @memberof module:Slider
      */
-    Anim = lib.newClass(/*@lends Anim.prototype*/{
+    SliderAnim = lib.newClass(/*@lends SliderAnim.prototype*/{
 
         /**
          * 初始化函数
          * 
          * @param {module:Slider} slider slider主对象
-         * @param {Object} options anim对象参数
          * @constructor
          */
         initialize: function(slider, options) {
             this.slider = slider;
-            this.auto = options.auto;
-            this.circle = options.circle;
+            this.options = options;
         },
 
         /**
@@ -71,7 +72,10 @@ define(function(require) {
          * @return {boolean} 是否能够切换成功
          * @protected
          */
-        switchTo: function(index, lastIndex) {
+        switchTo: function(
+            /*index, lastIndex*/
+            ) {
+            //overwrite here
         },
 
         /**
@@ -109,6 +113,7 @@ define(function(require) {
          */
         dispose: function() {
             this.slider = null;
+            this.options = null;
         }
     });
     
@@ -117,7 +122,7 @@ define(function(require) {
      * 
      * @type {Object}
      */
-    Anim.easing = {
+    SliderAnim.easing = {
 
         /**
          * easing
@@ -128,7 +133,9 @@ define(function(require) {
          * @return {Number} 算子百分比
          */
         easing: function(p) {
-            if ((p /= 0.5) < 1) return 1 / 2 * p * p;
+            if ((p /= 0.5) < 1) {
+                return 1 / 2 * p * p;
+            }
             return -1 / 2 * ((--p) * (p - 2) - 1);
         },
 
@@ -162,8 +169,13 @@ define(function(require) {
          */
         backBoth: function(p) {
             var s = 1.70158;
-            if ((p /= 0.5) < 1) return 1 / 2 * (p * p * (((s *= (1.525)) + 1) * p - s));
-            return 1 / 2 * ((p -= 2) * p * (((s *= (1.525)) + 1) * p + s) + 2);
+            if ((p /= 0.5) < 1){
+                return 1 / 2 * (p * p 
+                    * (((s *= (1.525)) + 1) * p - s));
+            }
+            return 1 / 2 * ((p -= 2) 
+                * p 
+                * (((s *= (1.525)) + 1) * p + s) + 2);
         },
 
         /**
@@ -199,16 +211,16 @@ define(function(require) {
      * 
      * @type {Object}
      */
-    Anim.anims = {};
+    SliderAnim.anims = {};
 
     /**
      * 添加动画组件
      * 
      * @param {string} name 名字
-     * @param {Anim} Class 动画组件类
+     * @param {SliderAnim} Class 动画组件类
      * @return {boolean} 是否添加成功
      */
-    Anim.add = function(name, Class) {
+    SliderAnim.add = function(name, Class) {
         if(!this.anims[name]) {
             this.anims[name] = Class;
             return true;
@@ -219,9 +231,9 @@ define(function(require) {
     /**
      * 按时间线轮播组件基类
      * 
-     * @type {BaseAnim}
+     * @type {TimeLine}
      */
-    var BaseAnim = Anim.extend(/*@lends BaseAnim.prototype*/ {
+    var TimeLine = SliderAnim.extend(/*@lends TimeLine.prototype*/ {
 
         /**
          * 初始化函数
@@ -230,13 +242,23 @@ define(function(require) {
         initialize: function(slider, options) {
             var me = this;
             me.slider = slider;
-            me.interval = options.interval || 200;
-            me.easingFn = Anim.easing[options.easing || 'easing'];
+            me.interval = options.interval || 300;
+            me.easingFn = SliderAnim.easing[options.easing || 'easing'];
 
             var _timeHandler = me.timeHandler;
             me.timeHandler = function() {
                 _timeHandler.apply(me);
             };
+        },
+
+        /**
+         * 在切换索引之前的动作
+         * @param {Number} index 指定的索引
+         * @param {Number} lastIndex 上一个索引
+         */
+        beforeSwitch: function(
+            /*index, lastIndex*/
+            ) {
         },
 
         /**
@@ -299,32 +321,34 @@ define(function(require) {
          * @param {Number} percent 当前动画进行的百分比
          * @protected
          */
-        tick: function(percent) {
+        tick: function(
+            /*percent*/
+            ) {
+            //overwrite here
         }
     });
     
     /**
      * 导出动画基类，方便外层扩展
      * 
-     * @type {BaseAnim}
+     * @type {TimeLine}
      */
-    Anim.TimeLine = BaseAnim;
+    SliderAnim.TimeLine = TimeLine;
 
 
 
     /**
      * 基本的轮播效果，无动画切换
      */
-    Anim.add('default', 
-        Anim.extend({
+    SliderAnim.add('no', 
+        SliderAnim.extend({
             /**
              * 切换到指定的索引
              * 
              * @param {Number} index 指定的索引
-             * @param {Number} lastIndex 上一个索引
              * @return {boolean} 是否能够切换成功
              */
-            switchTo: function(index, lastIndex) {
+            switchTo: function(index) {
                 this.slider.stage.scrollLeft = this.slider.stageWidth * index;
             }
         })
@@ -334,8 +358,8 @@ define(function(require) {
     /**
      * 滑动门动画组件
      */
-    Anim.add('slide',
-        BaseAnim.extend({
+    SliderAnim.add('slide',
+        TimeLine.extend({
 
             /**
              * 初始化函数
@@ -345,7 +369,7 @@ define(function(require) {
                 this.parent('initialize', slider, options);
 
                 //设置滑动门的方向 `horizontal` or `vertical`
-                this.direction = options.direction || 'horizontal';
+                this.yAxis = options.direction === 'vertical';
             },
 
             /**
@@ -354,23 +378,30 @@ define(function(require) {
              * @param {Number} lastIndex 上一个索引
              */
             beforeSwitch: function(index, lastIndex) {
-                var scrollPos;
-                var stageLength;
 
-                //这里为了方便书写进行了一次reflow，可以避免
-                if(this.direction == 'vertical') {
-                    scrollPos = this.slider.stage.scrollTop;
-                    stageLength = this.slider.stageHeight;
+                var stageWidth = this.slider.stageWidth;
+                var stageHeight = this.slider.stageHeight;
+
+                //这里为了避免reflow使用这种书写方式
+                if(this.yAxis) {
+
+                    if(this.isBusy()) {
+                        this.curPos = this.slider.stage.scrollTop;
+                    }
+                    else {
+                        this.curPos = stageHeight * lastIndex;
+                    }
+                    this.targetPos = stageHeight * index;
                 }
                 else {
-                    scrollPos = this.slider.stage.scrollLeft;
-                    stageLength = this.slider.stageWidth;
+                    if(this.isBusy()) {
+                        this.curPos = this.slider.stage.scrollLeft;
+                    }
+                    else {
+                        this.curPos = stageWidth * lastIndex;
+                    }
+                    this.targetPos = stageWidth * index;
                 }
-
-                this.curPos = this.isBusy() ? 
-                    scrollPos
-                    : stageLength * lastIndex;
-                this.targetPos = stageLength * index;
             },
 
             /**
@@ -383,7 +414,7 @@ define(function(require) {
                 var move = (this.targetPos - this.curPos) 
                     * this.easingFn(percent);
                 this.slider.stage[
-                    this.direction == 'vertical' 
+                    this.yAxis 
                     ? 'scrollTop' : 'scrollLeft'
                     ] = this.curPos + move;
             }
@@ -393,8 +424,8 @@ define(function(require) {
     /**
      * 渐变动画组件，通过改变元素的z-index和透明度来改变
      */
-    Anim.add('opacity',
-        BaseAnim.extend({
+    SliderAnim.add('opacity',
+        TimeLine.extend({
 
             /**
              * 设置目标元素的透明度
@@ -404,12 +435,14 @@ define(function(require) {
              * @private
              */
             setOpacity: function(element, opacity) {
-                if(opacity == 1) {
+                if(opacity === 1) {
                     element.style.filter = '';
                     element.style.opacity = '';
                 }
                 else if(lib.browser.ie < 9) {
-                    element.style.filter = 'alpha(opacity='+ (100*opacity) +')';  
+                    element.style.filter = ''
+                        + 'alpha(opacity='
+                        + (100*opacity) +')';  
                 }
                 else {
                     element.style.opacity = opacity;
@@ -419,21 +452,22 @@ define(function(require) {
             /**
              * 在切换索引之前的动作
              * @param {Number} index 指定的索引
-             * @param {Number} lastIndex 上一个索引
              */
-            beforeSwitch: function(index, lastIndex) {
-                var childNodes = this.slider.getChildren(this.slider.stage);
+            beforeSwitch: function(index) {
+                var childNodes = this.slider.getChildren(
+                    this.slider.stage
+                );
                 var l = childNodes.length;
 
-                if(undefined == this.index) {
+                if(undefined === this.index) {
                     this.index = l - 1;
                 }
 
-                if(undefined == this.lastIndex) {
+                if(undefined === this.lastIndex) {
                     this.lastIndex = l - 1;
                 }
 
-                //还原
+                //还原当前元素
                 this.setOpacity(childNodes[this.index], 1);
 
                 //设置当前的元素为cover元素
@@ -442,7 +476,7 @@ define(function(require) {
                     childNodes[this.index], 
                     this.slider.getClass('top')
                 );
-                //将顶层元素作为北京
+                //将顶层元素作为背景
                 lib.removeClass(
                     childNodes[this.lastIndex], 
                     this.slider.getClass('cover')
@@ -462,7 +496,10 @@ define(function(require) {
                     this.slider.getClass('top')
                 );
 
-                this.setOpacity(this.curElement = childNodes[index], 0);
+                this.setOpacity(
+                    this.curElement = childNodes[index], 
+                    0
+                );
             },
 
             /**
@@ -474,7 +511,7 @@ define(function(require) {
             tick: function(percent) {
                 var move = this.easingFn(percent);
                 this.setOpacity(this.curElement, move);
-                if(percent == 1) {
+                if(percent === 1) {
                     this.curElement = null;
                 } 
             },
@@ -489,5 +526,5 @@ define(function(require) {
         })
     );
     
-    return Anim;
-})
+    return SliderAnim;
+});

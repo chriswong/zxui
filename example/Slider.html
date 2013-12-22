@@ -63,7 +63,7 @@
       less.refresh();
       var def = new Slider({
         main: lib.g('slider-container-default'),
-        anim: 'default',
+        anim: 'no',
         auto: false,
         onChange: function(e) {
           if(window.console) {
@@ -79,7 +79,7 @@
         anim: 'slide',
         animOptions: {
           easing:'easing', //easing,backIn,backOut,backBoth,lineer,bounce
-          interval: 500
+          interval: 200
         }
       });
 

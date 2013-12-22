@@ -29,7 +29,7 @@ define(function (require) {
             curElement;
             curElement=curElement.nextSibling
         ){
-            if(curElement.nodeType==1){
+            if(curElement.nodeType === 1){
                 children.push(curElement);
             }
         }
@@ -70,13 +70,6 @@ define(function (require) {
         type: 'Slider',
 
         /**
-         * Anim对象，用来作为接口扩展
-         * 
-         * @type {Anim}
-         */
-        Anim: Anim,
-
-        /**
          * 控件配置项
          * 
          * @name module:Slider#optioins
@@ -104,7 +97,8 @@ define(function (require) {
          * @property {Function} options.onChange 当播放索引改变时的事件
          * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
          * 
-         * @property {string} options.anim 使用的轮播动画
+         * @property {string} options.anim 使用的轮播动画，
+         *      默认提供`no`,`slide`,`opacity`
          * @property {Object} options.animOptions 轮播动画选项，
          *      不同的动画效果配置可能不一样
          * @property {string} options.animOptions.easing 使用的动画算子
@@ -201,10 +195,9 @@ define(function (require) {
         /**
          * 进入主窗口的事件
          * 
-         * @param {HTMLEvent} e dom事件
          * @private
          */
-        onEnter: function(e) {
+        onEnter: function() {
             if(this.options.auto) {
                 this.clearSwitchTimer();
             }
@@ -213,10 +206,9 @@ define(function (require) {
         /**
          * 离开主窗口的事件
          * 
-         * @param {HTMLEvent} e dom事件
          * @private
          */
-        onLeave: function(e) {
+        onLeave: function() {
             //如果使用自动轮播，则触发轮播计时
             if(this.options.auto) {
                 this.play();
@@ -250,10 +242,10 @@ define(function (require) {
                 goTo = this.count - 1;
             }
             else {
-                goTo = index;
+                goTo = +index || 0;
             }
 
-            if(goTo == this.index) {
+            if(goTo === this.index) {
                 return -1;
             }
 
@@ -270,10 +262,9 @@ define(function (require) {
         /**
          * 上一个按钮点击事件
          * 
-         * @param {HTMLEvent} e dom事件
          * @private
          */
-        onPrevClick: function(e) {
+        onPrevClick: function() {
             var me = this;
             if(!me.switchDelayTimer) {
                 me.switchDelayTimer = setTimeout(function() {
@@ -286,10 +277,9 @@ define(function (require) {
         /**
          * 下一个按钮点击事件
          * 
-         * @param {HTMLEvent} e dom事件
          * @private
          */
-        onNextClick: function(e) {
+        onNextClick: function() {
             var me = this;
             if(!me.switchDelayTimer) {
                 me.switchDelayTimer = setTimeout(function() {
@@ -337,7 +327,7 @@ define(function (require) {
             //如果不是循环模式，则设置prev按钮为不可点击
             if(opt.prevElement) {
                 lib[
-                    this.index == 0 && !opt.circle
+                    this.index === 0 && !opt.circle
                     ? 'addClass' : 'removeClass'](
                         opt.prevElement,
                         this.getClass('prev-disable')
@@ -347,7 +337,7 @@ define(function (require) {
             //如果不是循环模式，则设置next按钮为不可点击
             if(opt.nextElement) {
                 lib[
-                    this.index == this.count -1 && !opt.circle
+                    this.index === this.count -1 && !opt.circle
                     ? 'addClass' : 'removeClass'](
                         opt.nextElement,
                         this.getClass('next-disable')
@@ -388,17 +378,17 @@ define(function (require) {
                 lib.on(this.main, 'mouseleave', this.onLeave);
 
                 //根据class查找未知的元素
-                options.stage = options.stage 
+                options.stage = lib.g(options.stage)
                     || lib.q(this.getClass('stage'), this.main)[0];
 
                 //根据class查找未知的元素
-                options.prevElement = options.prevElement 
+                options.prevElement = lib.g(options.prevElement)
                     || lib.q(this.getClass('prev'), this.main)[0];
 
-                options.nextElement = options.nextElement 
+                options.nextElement = lib.g(options.nextElement)
                     || lib.q(this.getClass('next'), this.main)[0];
 
-                options.indexElment = options.indexElment 
+                options.indexElment = lib.g(options.indexElment)
                     || lib.q(this.getClass('index'), this.main)[0];
 
                 if(options.prevElement) {
@@ -414,7 +404,7 @@ define(function (require) {
                 }
 
                 //设置当前的动画组件
-                var AnimClass  = typeof options.anim == 'string' ?
+                var AnimClass  = typeof options.anim === 'string' ?
                     Anim.anims[options.anim]
                     : options.anim;
                 this.curAnim = new AnimClass(
@@ -453,7 +443,7 @@ define(function (require) {
             //设置item样式
             lib.each(
                 childNodes, 
-                function(item, index) {
+                function(item) {
                     lib.addClass(item, me.getClass('item'));
                 }
             );
@@ -524,7 +514,7 @@ define(function (require) {
         go: function(index) {
 
             var goTo = this.getIndex(index);
-            if(goTo == -1) {
+            if(goTo === -1) {
                 return;
             }
 
@@ -590,6 +580,13 @@ define(function (require) {
         }
 
     });
+
+    /**
+     * Anim对象引用，用来作为接口扩展
+     * 
+     * @type {Anim}
+     */
+    Slider.Anim = Anim;
 
     return Slider;
 });
