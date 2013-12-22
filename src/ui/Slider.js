@@ -79,9 +79,8 @@ define(function (require) {
         /**
          * 控件配置项
          * 
-         * @name module:Pager#optioins
+         * @name module:Slider#optioins
          * @type {Object}
-         * @property {boolean} options.disabled 控件的不可用状态
          * @property {(string | HTMLElement)} options.main 控件渲染容器
          * 
          * @property {HTMLElement=} options.stage 控件动画容器，
@@ -117,9 +116,6 @@ define(function (require) {
          * @private
          */
         options: {
-
-            // 控件的不可用状态
-            disabled: false,
 
             // 控件主容器
             main: '',
@@ -195,6 +191,7 @@ define(function (require) {
 
         /**
          * 清除自动播放计时器
+         * @private
          */
         clearSwitchTimer: function() {
             clearTimeout(this.switchTimer);
@@ -233,20 +230,6 @@ define(function (require) {
         switchHandler: function() {
             this.next();
             this.play();
-        },
-
-        /**
-         * 如果是自动播放，则激活轮播
-         * @private
-         */
-        play: function() {
-            if(this.options.auto) {
-                this.clearSwitchTimer();
-                this.switchTimer = setTimeout(
-                    this.switchHandler, 
-                    this.options.autoInterval
-                );
-            }
         },
 
         /**
@@ -345,96 +328,6 @@ define(function (require) {
         },
 
         /**
-         * 控件初始化
-         * 
-         * @param {Object} options 控件配置项
-         * @see module:Pager#options
-         * @private
-         */
-        init: function (options) {
-
-            this.disabled  = options.disabled;
-
-            if (options.main) {
-                this.main = lib.g(options.main);
-                lib.addClass(this.main, options.prefix);
-                lib.on(this.main, 'mouseenter', this.onEnter);
-                lib.on(this.main, 'mouseleave', this.onLeave);
-
-                //根据class查找未知的元素
-                options.stage = options.stage 
-                    || lib.q(this.getClass('stage'), this.main)[0];
-
-                //根据class查找未知的元素
-                options.prevElement = options.prevElement 
-                    || lib.q(this.getClass('prev'), this.main)[0];
-
-                options.nextElement = options.nextElement 
-                    || lib.q(this.getClass('next'), this.main)[0];
-
-                options.indexElment = options.indexElment 
-                    || lib.q(this.getClass('index'), this.main)[0];
-
-                if(options.prevElement) {
-                    lib.on(options.prevElement, 'click', this.onPrevClick);
-                }
-
-                if(options.nextElement) {
-                    lib.on(options.nextElement, 'click', this.onNextClick);
-                }
-
-                if(options.indexElment) {
-                    lib.on(options.indexElment, 'click', this.onIndexClick);
-                }
-
-                //设置当前的动画组件
-                this.curAnim = new Anim.anims[options.anim](
-                    this, 
-                    options.animOptions
-                );
-            }
-        },
-
-        /**
-         * 刷新当前播放舞台
-         * 
-         * @return {module:Slider} 当前对象
-         */
-        refresh: function() {
-            //使用第一个轮播元素的宽和高为舞台的宽和高
-            var me = this;
-            var opt = this.options;
-            var childNodes = getChildren(opt.stage);
-
-            //设置item样式
-            lib.each(
-                childNodes, 
-                function(item, index) {
-                    lib.addClass(item, me.getClass('item'));
-                }
-            );
-
-            //设置索引项目
-            if(opt.indexElment) {
-                lib.each(
-                    getChildren(opt.indexElment), 
-                    function(item, index) {
-                        item.setAttribute('data-index', index);
-                    }
-                );
-            }
-
-            me.stage = opt.stage;
-            me.index = 0;
-            me.count = childNodes.length;
-            me.stageWidth = opt.stage.clientWidth;
-            me.stageHeight = opt.stage.clientHeight;
-            
-            me.setCurrent();
-            me.curAnim.refresh();
-        },
-
-        /**
          * 切换到当前索引，设置选中项目
          * @private
          */
@@ -478,6 +371,114 @@ define(function (require) {
         },
 
         /**
+         * 控件初始化
+         * 
+         * @param {Object} options 控件配置项
+         * @see module:Pager#options
+         * @private
+         */
+        init: function (options) {
+
+            this.disabled  = options.disabled;
+
+            if (options.main) {
+                this.main = lib.g(options.main);
+                lib.addClass(this.main, options.prefix);
+                lib.on(this.main, 'mouseenter', this.onEnter);
+                lib.on(this.main, 'mouseleave', this.onLeave);
+
+                //根据class查找未知的元素
+                options.stage = options.stage 
+                    || lib.q(this.getClass('stage'), this.main)[0];
+
+                //根据class查找未知的元素
+                options.prevElement = options.prevElement 
+                    || lib.q(this.getClass('prev'), this.main)[0];
+
+                options.nextElement = options.nextElement 
+                    || lib.q(this.getClass('next'), this.main)[0];
+
+                options.indexElment = options.indexElment 
+                    || lib.q(this.getClass('index'), this.main)[0];
+
+                if(options.prevElement) {
+                    lib.on(options.prevElement, 'click', this.onPrevClick);
+                }
+
+                if(options.nextElement) {
+                    lib.on(options.nextElement, 'click', this.onNextClick);
+                }
+
+                if(options.indexElment) {
+                    lib.on(options.indexElment, 'click', this.onIndexClick);
+                }
+
+                //设置当前的动画组件
+                var AnimClass  = typeof options.anim == 'string' ?
+                    Anim.anims[options.anim]
+                    : options.anim;
+                this.curAnim = new AnimClass(
+                    this, 
+                    options.animOptions
+                );
+            }
+        },
+
+        /**
+         * 如果是自动播放，则激活轮播
+         * @public
+         */
+        play: function() {
+            if(this.options.auto) {
+                this.clearSwitchTimer();
+                this.switchTimer = setTimeout(
+                    this.switchHandler, 
+                    this.options.autoInterval
+                );
+            }
+        },
+
+        /**
+         * 刷新当前播放舞台
+         * 
+         * @return {module:Slider} 当前对象
+         * @public
+         */
+        refresh: function() {
+            //使用第一个轮播元素的宽和高为舞台的宽和高
+            var me = this;
+            var opt = this.options;
+            var childNodes = getChildren(opt.stage);
+
+            //设置item样式
+            lib.each(
+                childNodes, 
+                function(item, index) {
+                    lib.addClass(item, me.getClass('item'));
+                }
+            );
+
+            //设置索引项目
+            if(opt.indexElment) {
+                lib.each(
+                    getChildren(opt.indexElment), 
+                    function(item, index) {
+                        item.setAttribute('data-index', index);
+                    }
+                );
+            }
+
+            me.stage = opt.stage;
+            me.index = 0;
+            me.count = childNodes.length;
+            me.stageWidth = opt.stage.clientWidth;
+            me.stageHeight = opt.stage.clientHeight;
+            
+            me.setCurrent();
+            me.curAnim.refresh();
+        },
+
+        /**
          * 绘制控件
          * 
          * @return {module:Slider} 当前实例
@@ -494,18 +495,22 @@ define(function (require) {
          * 切换到前一个
          * 
          * @return {module:Slider} 当前对象
+         * @public
          */
         prev: function() {
             this.go(this.index - 1);
+            return this;
         },
 
         /**
          * 切换到后一个
          * 
          * @return {module:Slider} 当前对象
+         * @public
          */
         next: function() {
             this.go(this.index + 1);
+            return this;
         },
 
         /**
@@ -514,6 +519,7 @@ define(function (require) {
          * @param {Number|string} index 切换到的索引，可以设置数字或者'start'|'end'
          * @return {module:Slider} 当前对象
          * @fires module:Slider#change
+         * @public
          */
         go: function(index) {
 
@@ -548,7 +554,7 @@ define(function (require) {
 
         /**
          * 销毁，注销事件，解除引用
-         * 
+         * @override
          * @public
          * @fires module:Slider#dispose
          */
