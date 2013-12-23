@@ -2,7 +2,7 @@
  * ZXUI (Zhixin UI)
  * Copyright 2013 Baidu Inc. All rights reserved.
  * 
- * @file 轮播组件
+ * @file 滚动条组件
  * @author  mengke01(mengke01@baidu.com)
  */
 
@@ -182,7 +182,7 @@ define(function (require) {
          * @private
          */
         onTrackUp: function(e) {
-            if(this.disabled) {
+            if(this.disabled || lib.getTarget(e) !== this.track) {
                 return;
             }
             var pos = Math.min(

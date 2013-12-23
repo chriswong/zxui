@@ -45,6 +45,7 @@ define(function(require) {
      * 
      * @extends module:SliderAnim
      * @requires lib
+     * @exports SliderAnim
      * @constructor
      * @param {module:Slider} slider slider主对象
      * @example
@@ -230,7 +231,7 @@ define(function(require) {
 
     /**
      * 按时间线轮播组件基类
-     * 
+     * @exports SliderAnim.TimeLine
      * @type {TimeLine}
      */
     var TimeLine = SliderAnim.extend(/*@lends TimeLine.prototype*/ {
