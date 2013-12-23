@@ -75,6 +75,9 @@ define(function (require) {
                 + '</div>'
         );
 
+        lib.g('ecl-ui-scrollbar-main').style.width = '490px';
+
+
         scrollbar = new ScrollBar({
            main: lib.g('ecl-ui-scrollbar-main'),
            thumb: lib.g('ecl-ui-scrollbar-thumb'),
@@ -82,6 +85,7 @@ define(function (require) {
         });
         scrollbar.render();               
         
+
     });
 
 
