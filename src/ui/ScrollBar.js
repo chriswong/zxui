@@ -12,6 +12,13 @@ define(function (require) {
     var Control = require('./Control');
 
     /**
+     * 鼠标滚轮事件，firefox命名不同
+     * 
+     * @type {string}
+     */
+    var wheelEvent = lib.browser.firefox ? 'DOMMouseScroll' : 'mousewheel';
+
+    /**
      * 设置文本不能拖选
      * @param {boolean} enabled 是否启用
      * @param {string} noSelectClass 使用class设置禁止选择
@@ -283,7 +290,11 @@ define(function (require) {
             
             lib.on(this.thumb, 'mousedown', this.onThumbdown);
             lib.on(this.track, 'mouseup', this.onTrackUp);
-            lib.on(this.main, 'mousewheel', this.onMouseWheel);
+            lib.on(
+                this.main, 
+                wheelEvent, 
+                this.onMouseWheel
+            );
         },
 
 
@@ -419,7 +430,7 @@ define(function (require) {
             lib.removeClass(document.body, this.getClass('noselect'));
             lib.un(this.thumb, 'mousedown', this.onThumbdown);
             lib.un(this.track, 'mouseup', this.onTrackUp);
-            lib.un(this.main, 'mousewheel', this.onMouseWheel);
+            lib.un(this.main, wheelEvent, this.onMouseWheel);
             lib.un(document, 'mousemove', this.onMousemove);
             lib.un(document, 'mouseup', this.onMouseup);
 
