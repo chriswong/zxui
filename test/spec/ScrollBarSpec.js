@@ -15,6 +15,7 @@ define(function (require) {
                 +   '<div class="ecl-ui-scrollbar-panel" style="width:490px">'
                 +     '<div id="ecl-ui-scrollbar-main" '
                 +       'style="width:490px;height:500px">'
+                +           '测试文本'
                 +     '</div>'
                 +   '</div>'
                 + '</div>'
