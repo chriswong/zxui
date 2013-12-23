@@ -41,7 +41,7 @@ define(function(require) {
     })();
 
     /**
-     * anim对象接口，提供基本的动画效果
+     * anim对象接口，子类需重写动画相关函数
      * 
      * @extends module:SliderAnim
      * @requires lib
@@ -58,6 +58,7 @@ define(function(require) {
          * 初始化函数
          * 
          * @param {module:Slider} slider slider主对象
+         * @param {Object} options 动画组件选项
          * @constructor
          */
         initialize: function(slider, options) {
@@ -239,6 +240,11 @@ define(function(require) {
         /**
          * 初始化函数
          * @constructor
+         * 
+         * @param {module:Slider} slider slider对象
+         * @param {Object} options 动画配置选项
+         * @param {Object} options.interval 每一次动画换的执行时间
+         * @param {string} options.easing 动画算子
          */
         initialize: function(slider, options) {
             var me = this;
@@ -317,7 +323,7 @@ define(function(require) {
         },
 
         /**
-         * 当前动画的tick函数，子类基于此设置动画
+         * 当前动画的tick函数，子类需重写此函数
          * 
          * @param {Number} percent 当前动画进行的百分比
          * @protected
@@ -365,6 +371,13 @@ define(function(require) {
             /**
              * 初始化函数
              * @constructor
+             * 
+             * @param {module:Slider} slider slider对象
+             * @param {string} options.direction 滑动方向，
+             *      `horizontal` or `vertical`
+             * 
+             * 其他选项参考TimeLine的初始化函数
+             * @see module:SliderAnim.TimeLine#initialize
              */
             initialize: function(slider, options) {
                 this.parent('initialize', slider, options);
@@ -521,8 +534,8 @@ define(function(require) {
              * 注销动画
              */
             dispose: function() {
-                this.parent('dispose');
                 this.curElement = null;
+                this.parent('dispose');
             }
         })
     );
