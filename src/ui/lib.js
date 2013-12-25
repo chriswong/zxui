@@ -1763,8 +1763,8 @@ define(function () {
         var scrollLeft = window.pageXOffset || root.scrollLeft;
 
         return {
-            left: (bound.left | 0) + scrollLeft - clientLeft,
-            top: (bound.top | 0) + scrollTop - clientTop
+            left: parseFloat(bound.left) + scrollLeft - clientLeft,
+            top: parseFloat(bound.top) + scrollTop - clientTop
         };
     };
 
