@@ -226,6 +226,10 @@ define(function (require) {
         render: function () {
             var main = this.main;
 
+            if (this.content) {
+                main.innerHTML = this.content;
+            }
+
             if (!this.rendered) {
                 this.rendered = true;
                 document.body.appendChild(main);
@@ -246,10 +250,6 @@ define(function (require) {
                     }
                 );
 
-            }
-
-            if (this.content) {
-                main.innerHTML = this.content;
             }
 
             return this;
