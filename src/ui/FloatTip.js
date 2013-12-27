@@ -46,7 +46,7 @@ define(function (require) {
      * 
      * 
      */
-    var FloatTip = Control.extend(/** @lends module:PicUploader.prototype */{
+    var FloatTip = Control.extend(/** @lends module:FloatTip.prototype */{
 
         /**
          * 控件类型标识
