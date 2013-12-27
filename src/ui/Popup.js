@@ -228,7 +228,7 @@ define(function (require) {
 
             if (!this.rendered) {
                 this.rendered = true;
-                !this.options.main && document.body.appendChild(main);
+                document.body.appendChild(main);
 
                 var me = this;
 
