@@ -1,7 +1,7 @@
 {
   "name": "zxui",
-  "version": "0.5.7",
-  "description": "知心UI组件组件库",
+  "version": "0.5.8",
+  "description": "知心UI组件库",
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-clean": "~0.4.1",
@@ -20,12 +20,13 @@
     "grunt-template-jasmine-istanbul": "~0.2.3",
     "jsdoc": "git+https://github.com/jsdoc3/jsdoc"
   },
-  "main": "Gruntfile.js",
+  "main": "src/ui/lib.js",
   "directories": {
     "doc": "doc",
-    "example": "examples"
+    "example": "example"
   },
   "scripts": {
+    "doc": "grunt jsdoc",
     "test": "grunt test"
   },
   "repository": {
@@ -36,7 +37,32 @@
     "javascript",
     "UI"
   ],
-  "author": "chris",
+  "author": {
+      "name": "chris",
+      "email": "wfsr@foxmail.com"
+  },
+  "contributors": [
+      {
+        "name": "hushicai",
+        "email": "bluthcy@gmail.com"
+      },
+      {
+        "name": "jinzhubaofu",
+        "email": "jinzhubaofu@gmail.com"
+      },
+      {
+        "name": "kekee000",
+        "email": "kekee000@gmail.com"
+      },
+      {
+        "name": "plhyc1216",
+        "email": "plhyc11081216@gmail.com"
+      },
+      {
+        "name": "Virola",
+        "email": "virola@foxmail.com"
+      }
+  ],
   "license": "BSD",
   "readmeFilename": "README.md",
   "gitHead": "dd5a15426b0aad6fc2dfe264b3a8d130e582c024"
