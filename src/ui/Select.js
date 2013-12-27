@@ -106,6 +106,12 @@ define(function (require) {
          * @property {number} options.cols 选项显示的列数，默认为 1 列
          * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
          * @property {string} options.isNumber 控件值的类型是否限制为数字
+         * @property {?Array=} options.datasource 填充下拉项的数据源
+         * 推荐格式 { text: '', value: '' }, 未指定 value 时会根据 valueUseIndex 的
+         * 设置使用 text 或自动索引值，可简写成字符串 '北京, 上海, 广州' 或 
+         * '北京:010, 上海:021, 广州:020'
+         * @property {bool} options.valueUseIndex datasource 未指定 value 时是否
+         * 使用自动索引值
          */
         options: {
 
@@ -134,7 +140,13 @@ define(function (require) {
             prefix: 'ecl-ui-sel',
 
             // 控件值的类型是否为数字
-            isNumber: true
+            isNumber: true,
+
+            // 数据源
+            datasource: null,
+
+            // datasource 项未指定 value 时
+            valueUseIndex: false
         },
 
         /**
@@ -176,12 +188,17 @@ define(function (require) {
                 this.rendered = true;
 
                 this.target = lib.g(options.target);
-                this.realTarget = lib.dom.first(this.target);
-                this.defaultValue = this.realTarget.innerHTML;
+                this.realTarget = lib.dom.first(this.target) || this.target;
+                this.defaultValue = this.realTarget.innerHTML
+                    || this.realTarget.value
+                    || '';
+
                 this.srcOptions.triggers = [this.target];
 
                 var popup = this.popup = new Popup(this.srcOptions);
                 this.addChild(popup);
+
+                options.datasource && this.fill(options.datasource);
 
                 popup.on('click', this.onClick);
                 popup.on('beforeShow', this.onBeforeShow);
@@ -200,6 +217,9 @@ define(function (require) {
                     );
                     //lib.addClass(this.main, 'c-clearfix');
                 }
+            }
+            else {
+                this.popup.render();
             }
 
             return this;
@@ -359,7 +379,7 @@ define(function (require) {
             var selectedClass = options.prefix + '-' + options.selectedClass;
 
             var value  = el.getAttribute('data-value');
-            value = options.isNumber ? (value | 0) : value;
+            value = isNaN(parseInt(value)) ? value : (value | 0);
 
             var text = value ? el.innerHTML : this.defaultValue;
             var shortText = value
@@ -430,6 +450,47 @@ define(function (require) {
                     shortText: shortText
                 });           
             }
+
+        },
+
+        /**
+         * 填充数据
+         * 
+         * @param {(Array | string)} datasource 要填充的数据源
+         * 参考 options.datasource
+         * @public
+         */
+        fill: function (datasource) {
+
+            if (!datasource || !datasource.length) {
+                return;
+            }
+
+            if (!lib.isObject(datasource)) {
+                datasource = String(datasource).split(/\s*[,，]\s*/);
+            }
+
+            var html = [];
+            var valueUseIndex = !!this.options.valueUseIndex;
+            for ( var i = 0; i < datasource.length; i++ ) {
+                var item = datasource[i];
+
+                if (!lib.isObject(item)) {
+                    var data = item.split(/\s*[:：]\s*/);
+                    item = {text: data[0]};
+                    item.value = data.length > 1
+                        ? data[1] 
+                        : (valueUseIndex ? i : data[0]); 
+                }
+
+                html.push(''
+                    + '<a href="#" data-value="' + item.value + '">'
+                    +   item.text
+                    + '</a>'
+                );
+            }
+            
+            this.popup.main.innerHTML = html.join('');
 
         },
 

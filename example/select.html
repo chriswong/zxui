@@ -15,7 +15,7 @@
 
 <div>
   筛选： 
-  <a href="#" class="ecl-ui-sel-target"><b>商圈</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>价格</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>星级</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>品牌</b><i></i></a>
+  <a href="#" class="ecl-ui-sel-target"><b>商圈</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>价格</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>星级</b><i></i></a><a href="#" class="ecl-ui-sel-target"><b>品牌</b><i></i></a> <input class="ecl-ui-sel-target" value="直辖市">
   <p class="ecl-ui-sel c-clearfix">
     <a href="#" data-value="0">不限</a>
     <a href="#" data-value="1">中关村、上地</a>
@@ -52,6 +52,7 @@
     <a href="#" data-value="3">汉庭酒店</a>
     <a href="#" data-value="4">99连锁</a>
   </p>
+
   <button class="reset">reset</button>
   <button class="disable">disable</button>
   <button class="enable">enable</button>
@@ -71,6 +72,20 @@ A.init(function () {
         var targets = me.q('ecl-ui-sel-target');
 
         var selects = [];
+
+        selects.push(new Select({
+            prefix: 'ecl-ui-sel',
+            target: targets.pop(),
+            datasource: '直辖市, 北京, 上海, 天津, 重庆',
+            //valueUseIndex: true,
+            maxLength: 8,
+            offset: {
+              y: -1
+            },
+            onChange: function (arg) {
+              window.console && console.log(arg);
+            }          
+        }).render());
 
         baidu.each(mains, function (main, i) {
 
