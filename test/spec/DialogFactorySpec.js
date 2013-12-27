@@ -1,122 +1,116 @@
-    define(function (require) {
-        var DialogFactory = require('ui/DialogFactory');
-        var lib = require('ui/lib');
-        var alertDialog, confirmDialog;
-        var onConfirm, onCancel, confirmCount=0, cancelCount=0;
+define(function (require) {
+    var DialogFactory = require('ui/DialogFactory');
+    var lib = require('ui/lib');
+    var alertDialog, confirmDialog;
+    var onConfirm, onCancel, confirmCount=0, cancelCount=0;
 
-        beforeEach(function () {
+    beforeEach(function () {
 
-            alertDialog = DialogFactory.alert({
-                content: '内容',
-                footer: '底部',
-                width: '600px',
-                title: '标题',
-                top: '50px',
-                left: '',
-                fixed: 1,
-                showMask: 1,
-                leve: 10,
-                onConfirm: function() {
-                    onConfirm.apply(this);
-                }
-              });
+        alertDialog = DialogFactory.alert({
+            content: '内容',
+            footer: '底部',
+            width: '600px',
+            title: '标题',
+            top: '50px',
+            left: '',
+            fixed: 1,
+            showMask: 1,
+            leve: 10,
+            onConfirm: function() {
+                onConfirm.apply(this);
+            }
+          });
 
-            confirmDialog = DialogFactory.confirm({
-                content: '内容',
-                footer: '底部',
-                width: '600px',
-                title: '标题',
-                top: '50px',
-                left: '',
-                fixed: 1,
-                showMask: 1,
-                leve: 11,
-                onCancel: function() {
-                    onCancel.apply(this);
-                }
-              });
-        });
+        confirmDialog = DialogFactory.confirm({
+            content: '内容',
+            footer: '底部',
+            width: '600px',
+            title: '标题',
+            top: '50px',
+            left: '',
+            fixed: 1,
+            showMask: 1,
+            leve: 11,
+            onCancel: function() {
+                onCancel.apply(this);
+            }
+          });
+    });
 
 
-        afterEach(function () {
-            alertDialog.dispose();
-            confirmDialog.dispose();
-            onConfirm = null;
-            onCancel = null;
+    afterEach(function () {
+        alertDialog.dispose();
+        confirmDialog.dispose();
+        onConfirm = null;
+        onCancel = null;
 
-        });
-      
-        describe('基本接口', function () {
+    });
+  
+    describe('基本接口', function () {
 
-            it('event:confirm', function () {
+        it('event:confirm', function () {
 
-                alertDialog.on('confirm', function() {
-                    confirmCount++;
-                });
+            alertDialog.on('confirm', function() {
+                confirmCount++;
+            });
 
-                onConfirm = function() {
-                    confirmCount++;
-                };
+            onConfirm = function() {
+                confirmCount++;
+            };
 
-                alertDialog.on('dispose', function() {
-                    expect(confirmCount).toBe(2);
-                });
+            alertDialog.on('dispose', function() {
+                expect(confirmCount).toBe(2);
+            });
 
-                alertDialog.show();
+            alertDialog.show();
 
-                expect(
-                    lib.q(
-                        'ecl-ui-dialog-confirm-btn', 
-                        alertDialog.main
-                    )[0]
-                    ).toBeTruthy();
-
-                lib.fire(
-                    lib.q(
+            expect(
+                lib.q(
                     'ecl-ui-dialog-confirm-btn', 
                     alertDialog.main
-                    )[0], 
-                    'click'
-                );
+                )[0]
+                ).toBeTruthy();
 
+            lib.fire(
+                lib.q(
+                'ecl-ui-dialog-confirm-btn', 
+                alertDialog.main
+                )[0], 
+                'click'
+            );
+
+        });
+
+        it('event:cancel', function () {
+
+            confirmDialog.on('cancel', function() {
+                cancelCount++;
             });
 
-            it('event:cancel', function () {
+            onCancel = function() {
+                cancelCount++;
+            };
 
-                confirmDialog.on('cancel', function() {
-                    cancelCount++;
-                });
+            confirmDialog.on('dispose', function() {
+                expect(cancelCount).toBe(2);
+            });
 
-                onCancel = function() {
-                    cancelCount++;
-                };
+            confirmDialog.show();
 
-                confirmDialog.on('dispose', function() {
-                    expect(cancelCount).toBe(2);
-                });
-
-                confirmDialog.show();
-
-                expect(
-                    lib.q(
-                        'ecl-ui-dialog-cancel-btn', 
-                        confirmDialog.main
-                    )[0]
-                    ).toBeTruthy();
-
-                lib.fire(
-                    lib.q(
+            expect(
+                lib.q(
                     'ecl-ui-dialog-cancel-btn', 
                     confirmDialog.main
-                    )[0], 
-                    'click'
-                );
-            });
+                )[0]
+                ).toBeTruthy();
 
-
-
-
-
+            lib.fire(
+                lib.q(
+                'ecl-ui-dialog-cancel-btn', 
+                confirmDialog.main
+                )[0], 
+                'click'
+            );
         });
 
 
@@ -124,3 +118,9 @@
 
 
     });
+
+
+
+
+
+});
