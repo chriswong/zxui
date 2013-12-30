@@ -1,4 +1,4 @@
-知心组件库 (zxui)
+知心组件库 (不再更新) 请移步 [Moye](https://github.com/ecomfe/Moye)
 =====================
 
 知心组件库是 ecom ui 1.1 规范的一个轻量级实现。依赖于 [Tangram 1.3.9](https://github.com/BaiduFE/Tangram-base) 和 [ESL](https://github.com/ecomfe/esl)
