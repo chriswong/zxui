@@ -91,7 +91,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="initialize"><span class="type-signature">&lt;private> </span>initialize<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="beforeSwitch"><span class="type-signature"></span>beforeSwitch<span class="signature">(index, lastIndex)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -99,7 +99,7 @@
     
     
     <div class="description">
-        初始化
+        在切换索引之前的动作
     </div>
     
 
@@ -133,13 +133,13 @@
 	
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>index</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">Number</span>
 
 
             
@@ -149,7 +149,30 @@
             
             
             
-            <td class="description last">透传给 module:Calendar 的配置参数</td>
+            <td class="description last">指定的索引</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lastIndex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">上一个索引</td>
         </tr>
 	
 	
@@ -180,29 +203,18 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CalendarExtension.js.html">CalendarExtension.js</a>, <a href="CalendarExtension.js.html#line351">line 351</a>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 266
     </li></ul></dd>
     
     
     
     
     
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="module-Calendar.html#options">module:Calendar#options</a></li>
-        </ul>
-    </dd>
-    
     
     
 </dl>
 
     
-    
-
-    
-
     
     
     
@@ -215,7 +227,7 @@
         
             
 <dt>
-    <h4 class="name" id="onClick"><span class="type-signature">&lt;private> </span>onClick<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="beforeSwitch"><span class="type-signature"></span>beforeSwitch<span class="signature">(index, lastIndex)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -223,7 +235,7 @@
     
     
     <div class="description">
-        鼠标点击事件处理
+        在切换索引之前的动作
     </div>
     
 
@@ -257,13 +269,13 @@
 	
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>index</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Event</span>
+<span class="param-type">Number</span>
 
 
             
@@ -273,7 +285,30 @@
             
             
             
-            <td class="description last">DOM 事件源对象</td>
+            <td class="description last">指定的索引</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lastIndex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">上一个索引</td>
         </tr>
 	
 	
@@ -304,7 +339,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CalendarExtension.js.html">CalendarExtension.js</a>, <a href="CalendarExtension.js.html#line469">line 469</a>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 394
     </li></ul></dd>
     
     
@@ -317,10 +352,6 @@
 
     
     
-
-    
-
-    
     
     
     
@@ -332,7 +363,7 @@
         
             
 <dt>
-    <h4 class="name" id="onHide"><span class="type-signature">&lt;private> </span>onHide<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="beforeSwitch"><span class="type-signature"></span>beforeSwitch<span class="signature">(index)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -340,7 +371,7 @@
     
     
     <div class="description">
-        隐藏前事件处理
+        在切换索引之前的动作
     </div>
     
 
@@ -374,13 +405,13 @@
 	
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>index</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Event</span>
+<span class="param-type">Number</span>
 
 
             
@@ -390,7 +421,7 @@
             
             
             
-            <td class="description last">DOM 事件源对象</td>
+            <td class="description last">指定的索引</td>
         </tr>
 	
 	
@@ -421,7 +452,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CalendarExtension.js.html">CalendarExtension.js</a>, <a href="CalendarExtension.js.html#line479">line 479</a>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 470
     </li></ul></dd>
     
     
@@ -434,127 +465,6 @@
 
     
     
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="onOut"><span class="type-signature">&lt;private> </span>onOut<span class="signature">(e)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        鼠标移出事件处理
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>e</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Event</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">DOM 事件源对象</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CalendarExtension.js.html">CalendarExtension.js</a>, <a href="CalendarExtension.js.html#line450">line 450</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
     
     
     
@@ -566,7 +476,7 @@
         
             
 <dt>
-    <h4 class="name" id="onOver"><span class="type-signature">&lt;private> </span>onOver<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="disable"><span class="type-signature">&lt;protected> </span>disable<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -574,124 +484,7 @@
     
     
     <div class="description">
-        鼠标进入事件处理
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>e</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Event</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">DOM 事件源对象</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CalendarExtension.js.html">CalendarExtension.js</a>, <a href="CalendarExtension.js.html#line432">line 432</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="module-Calendar.html">module:Calendar</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        绘制控件
+        禁用动画，用于多动画效果切换
     </div>
     
 
@@ -724,19 +517,12 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CalendarExtension.js.html">CalendarExtension.js</a>, <a href="CalendarExtension.js.html#line372">line 372</a>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 102
     </li></ul></dd>
     
     
     
     
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="module-Calendar.html#render">module:Calendar#render</a></li>
-        </ul>
-    </dd>
     
     
     
@@ -744,9 +530,395 @@
 
     
     
+    
+    
+    
+    
+    
+    
+</dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="disable"><span class="type-signature"></span>disable<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        禁用动画，用于多动画效果切换
+    </div>
     
 
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 312
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="dispose"><span class="type-signature">&lt;protected> </span>dispose<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        注销动画
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 116
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="dispose"><span class="type-signature"></span>dispose<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        注销动画
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 320
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="dispose"><span class="type-signature"></span>dispose<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        注销动画
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 536
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="enable"><span class="type-signature">&lt;protected> </span>enable<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        启用动画，用于多动画效果切换
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 95
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="isBusy"><span class="type-signature">&lt;protected> </span>isBusy<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        是否动画正在进行
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 88
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
     
     
     
@@ -756,7 +928,7 @@
     
             
 <div class="param-desc">
-    module:Calendar 实例
+    是否能够切换成功
 </div>
 
 
@@ -767,7 +939,7 @@
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="module-Calendar.html">module:Calendar</a></span>
+<span class="param-type">boolean</span>
 
 
 	</dd>
@@ -781,7 +953,7 @@
         
             
 <dt>
-    <h4 class="name" id="renderMenu"><span class="type-signature">&lt;private> </span>renderMenu<span class="signature">(related, type)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="isBusy"><span class="type-signature"></span>isBusy<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -789,7 +961,137 @@
     
     
     <div class="description">
-        绘制选择菜单
+        是否动画正在进行
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 305
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="refresh"><span class="type-signature">&lt;protected> </span>refresh<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        刷新动画，用于在更新dom节点的时候进行更新
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 109
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setOpacity"><span class="type-signature">&lt;private> </span>setOpacity<span class="signature">(element, opacity)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        设置目标元素的透明度
     </div>
     
 
@@ -823,7 +1125,7 @@
 	
         <tr>
             
-                <td class="name"><code>related</code></td>
+                <td class="name"><code>element</code></td>
             
             
             <td class="type">
@@ -839,20 +1141,20 @@
             
             
             
-            <td class="description last">作参考绑定的元素</td>
+            <td class="description last">dom元素</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>opacity</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Number</span>
 
 
             
@@ -862,7 +1164,7 @@
             
             
             
-            <td class="description last">要绘制的选择菜单类型</td>
+            <td class="description last">透明度</td>
         </tr>
 	
 	
@@ -893,7 +1195,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CalendarExtension.js.html">CalendarExtension.js</a>, <a href="CalendarExtension.js.html#line394">line 394</a>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 451
     </li></ul></dd>
     
     
@@ -906,9 +1208,860 @@
 
     
     
+    
+    
+    
+    
+    
+    
+</dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="switchTo"><span class="type-signature">&lt;protected> </span>switchTo<span class="signature">(index, lastIndex)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        切换到指定的索引
+    </div>
     
 
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">指定的索引</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lastIndex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">上一个索引</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 77
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    是否能够切换成功
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="switchTo"><span class="type-signature"></span>switchTo<span class="signature">(index, lastIndex)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        切换到指定的索引
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">目标索引</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lastIndex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">上一个索引</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 278
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    是否成功切换
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="switchTo"><span class="type-signature"></span>switchTo<span class="signature">(index)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        切换到指定的索引
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">指定的索引</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 358
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    是否能够切换成功
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="tick"><span class="type-signature">&lt;protected> </span>tick<span class="signature">(percent)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        当前动画的tick函数，子类需重写此函数
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>percent</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">当前动画进行的百分比</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 331
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="tick"><span class="type-signature">&lt;protected> </span>tick<span class="signature">(percent)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        当前动画的tick函数，子类基于此设置动画
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>percent</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">当前动画进行的百分比</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 427
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="tick"><span class="type-signature">&lt;protected> </span>tick<span class="signature">(percent)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        当前动画的tick函数，子类基于此设置动画
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>percent</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">当前动画进行的百分比</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 525
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="timeHandler"><span class="type-signature">&lt;private> </span>timeHandler<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        计时器函数
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SliderAnim.js.html">SliderAnim.js</a>, line 290
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
     
     
     
@@ -924,6 +2077,167 @@
     
     
     
+        <h3 class="subsection-title">Events</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="event:module:PicUploader:remove">module:PicUploader:remove</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">事件源对象
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">被移除的文件名</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PicUploader.js.html">PicUploader.js</a>, line 330
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
+    
 </article>
 
 </section>  
@@ -934,16 +2248,15 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarExtension.html">CalendarExtension</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tabs.html">Tabs</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="Menu.html#event:beforeShow">beforeShow</a></li><li><a href="Menu.html#event:click">click</a></li><li><a href="Menu.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tabs.html#event:change">change</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#onClick">onClick</a></li><li><a href="global.html#onHide">onHide</a></li><li><a href="global.html#onOut">onOut</a></li><li><a href="global.html#onOver">onOver</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#renderMenu">renderMenu</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarExtension.html">CalendarExtension</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Dialog.html">Dialog</a></li><li><a href="module-DialogFactory.html">DialogFactory</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FloatTip.html">FloatTip</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-PicUploader.html">PicUploader</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Rating.html">Rating</a></li><li><a href="module-ScrollBar.html">ScrollBar</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Slider.html">Slider</a></li><li><a href="module-Tabs.html">Tabs</a></li><li><a href="module-Tip.html">Tip</a></li><li><a href="TimeLine.html">TimeLine</a></li></ul><h3>Classes</h3><ul><li><a href="initialize.html">initialize</a></li><li><a href="module-Dialog-Mask.html">Mask</a></li><li><a href="module-Slider.SliderAnim.html">SliderAnim</a></li></ul><h3>Events</h3><ul><li><a href="CalendarExtension-Menu.html#event:beforeShow">beforeShow</a></li><li><a href="CalendarExtension-Menu.html#event:click">click</a></li><li><a href="CalendarExtension-Menu.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Dialog.html#event:beforedispose">beforedispose</a></li><li><a href="module-Dialog.html#event:beforehide">beforehide</a></li><li><a href="module-Dialog.html#event:beforeshow">beforeshow</a></li><li><a href="module-Dialog.html#event:cancel">cancel</a></li><li><a href="module-Dialog.html#event:confirm">confirm</a></li><li><a href="module-Dialog.html#event:dispose">dispose</a></li><li><a href="module-Dialog.html#event:hide">hide</a></li><li><a href="module-Dialog.html#event:show">show</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-log.html#event:start">start</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-PicUploader.html#event:error">error</a></li><li><a href="global.html#event:module:PicUploader:remove">module:PicUploader:remove</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Rating.html#event:rated">rated</a></li><li><a href="module-ScrollBar.html#event:change">change</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Slider.html#event:change">change</a></li><li><a href="module-Tabs.html#event:change">change</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeSwitch">beforeSwitch</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#isBusy">isBusy</a></li><li><a href="global.html#refresh">refresh</a></li><li><a href="global.html#setOpacity">setOpacity</a></li><li><a href="global.html#switchTo">switchTo</a></li><li><a href="global.html#tick">tick</a></li><li><a href="global.html#timeHandler">timeHandler</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Sep 18 2013 13:12:36 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Dec 28 2013 21:48:14 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
 </body>
 </html>

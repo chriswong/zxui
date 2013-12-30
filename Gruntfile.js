@@ -58,15 +58,15 @@ module.exports = function (grunt) {
         requirejs: {
             compile: {
                 options: {
-                    baseUrl: '<%=meta.src.main%>/ui',
-                    dir: 'asset/ui',
+                    baseUrl: '<%=meta.src.main%>',
+                    dir: 'asset/src',
                     skipDirOptimize: false,
                     preserveLicenseComments: false,
                     generateSourceMaps: true,
                     optimize: 'uglify2',
                     modules: [
-                        {name: 'Calendar'},
-                        {name: 'City'}
+                        {name: 'ui/Calendar'},
+                        {name: 'ui/City'}
                     ]
                 }
             }
@@ -139,8 +139,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
 
+    grunt.registerTask('foo', 'just for test', function (arg1, arg2) {
+        grunt.log.writeln('arg1:%s, arg2:%s', arg1, arg3);
+    });
 
     grunt.registerTask('base', ['clean', 'jshint', 'less', 'csslint']);
+    grunt.registerTask('build', ['base', 'requirejs']);
     grunt.registerTask('test', ['base', 'connect', 'jasmine:requirejs']);
     grunt.registerTask('cover', ['base', 'connect', 'jasmine:istanbul']);
     grunt.registerTask('default', ['base']);

@@ -133,6 +133,12 @@ define(function (require) {
          * @property {number} options.cols 选项显示的列数，默认为 1 列
          * @property {string} options.prefix 控件class前缀，同时将作为main的class之一
          * @property {string} options.isNumber 控件值的类型是否限制为数字
+         * @property {?Array=} options.datasource 填充下拉项的数据源
+         * 推荐格式 { text: '', value: '' }, 未指定 value 时会根据 valueUseIndex 的
+         * 设置使用 text 或自动索引值，可简写成字符串 '北京, 上海, 广州' 或 
+         * '北京:010, 上海:021, 广州:020'
+         * @property {bool} options.valueUseIndex datasource 未指定 value 时是否
+         * 使用自动索引值
          */
         options: {
 
@@ -161,7 +167,13 @@ define(function (require) {
             prefix: 'ecl-ui-sel',
 
             // 控件值的类型是否为数字
-            isNumber: true
+            isNumber: true,
+
+            // 数据源
+            datasource: null,
+
+            // datasource 项未指定 value 时
+            valueUseIndex: false
         },
 
         /**
@@ -203,12 +215,17 @@ define(function (require) {
                 this.rendered = true;
 
                 this.target = lib.g(options.target);
-                this.realTarget = lib.dom.first(this.target);
-                this.defaultValue = this.realTarget.innerHTML;
+                this.realTarget = lib.dom.first(this.target) || this.target;
+                this.defaultValue = this.realTarget.innerHTML
+                    || this.realTarget.value
+                    || '';
+
                 this.srcOptions.triggers = [this.target];
 
                 var popup = this.popup = new Popup(this.srcOptions);
                 this.addChild(popup);
+
+                options.datasource && this.fill(options.datasource);
 
                 popup.on('click', this.onClick);
                 popup.on('beforeShow', this.onBeforeShow);
@@ -227,6 +244,9 @@ define(function (require) {
                     );
                     //lib.addClass(this.main, 'c-clearfix');
                 }
+            }
+            else {
+                this.popup.render();
             }
 
             return this;
@@ -386,7 +406,7 @@ define(function (require) {
             var selectedClass = options.prefix + '-' + options.selectedClass;
 
             var value  = el.getAttribute('data-value');
-            value = options.isNumber ? (value | 0) : value;
+            value = isNaN(parseInt(value)) ? value : (value | 0);
 
             var text = value ? el.innerHTML : this.defaultValue;
             var shortText = value
@@ -461,6 +481,47 @@ define(function (require) {
         },
 
         /**
+         * 填充数据
+         * 
+         * @param {(Array | string)} datasource 要填充的数据源
+         * 参考 options.datasource
+         * @public
+         */
+        fill: function (datasource) {
+
+            if (!datasource || !datasource.length) {
+                return;
+            }
+
+            if (!lib.isObject(datasource)) {
+                datasource = String(datasource).split(/\s*[,，]\s*/);
+            }
+
+            var html = [];
+            var valueUseIndex = !!this.options.valueUseIndex;
+            for ( var i = 0; i &lt; datasource.length; i++ ) {
+                var item = datasource[i];
+
+                if (!lib.isObject(item)) {
+                    var data = item.split(/\s*[:：]\s*/);
+                    item = {text: data[0]};
+                    item.value = data.length > 1
+                        ? data[1] 
+                        : (valueUseIndex ? i : data[0]); 
+                }
+
+                html.push(''
+                    + '&lt;a href="#" data-value="' + item.value + '">'
+                    +   item.text
+                    + '&lt;/a>'
+                );
+            }
+            
+            this.popup.main.innerHTML = html.join('');
+
+        },
+
+        /**
          * 获取控件当前值
          * 
          * @param {bool} isNumber 是否需要返回数字类型的值
@@ -468,7 +529,7 @@ define(function (require) {
          * @public
          */
         getValue: function (isNumber) {
-            var options = this.optioins;
+            var options = this.options;
             var klass = optioins.prefix + '-' + options.selectedClass;
             var selected = this.popup.query(klass)[0];
             var value = selected ? selected.getAttribute('data-value'): '';
@@ -502,16 +563,15 @@ define(function (require) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarExtension.html">CalendarExtension</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Dialog.html">Dialog</a></li><li><a href="module-DialogFactory.html">DialogFactory</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FloatTip.html">FloatTip</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-PicUploader.html">PicUploader</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Rating.html">Rating</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Tabs.html">Tabs</a></li><li><a href="module-Tip.html">Tip</a></li></ul><h3>Events</h3><ul><li><a href="CalendarExtension-Menu.html#event:beforeShow">beforeShow</a></li><li><a href="CalendarExtension-Menu.html#event:click">click</a></li><li><a href="CalendarExtension-Menu.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Dialog.html#event:beforedispose">beforedispose</a></li><li><a href="module-Dialog.html#event:beforehide">beforehide</a></li><li><a href="module-Dialog.html#event:beforeshow">beforeshow</a></li><li><a href="module-Dialog.html#event:cancel">cancel</a></li><li><a href="module-Dialog.html#event:confirm">confirm</a></li><li><a href="module-Dialog.html#event:dispose">dispose</a></li><li><a href="module-Dialog.html#event:hide">hide</a></li><li><a href="module-Dialog.html#event:show">show</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-log.html#event:start">start</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="global.html#event:module:PicUploader:error">module:PicUploader:error</a></li><li><a href="global.html#event:module:PicUploader:remove">module:PicUploader:remove</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Rating.html#event:rated">rated</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Tabs.html#event:change">change</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarExtension.html">CalendarExtension</a></li><li><a href="module-City.html">City</a></li><li><a href="module-Control.html">Control</a></li><li><a href="module-Dialog.html">Dialog</a></li><li><a href="module-DialogFactory.html">DialogFactory</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FloatTip.html">FloatTip</a></li><li><a href="module-Lazy.html">Lazy</a></li><li><a href="module-LazyImg.html">LazyImg</a></li><li><a href="module-lib.html">lib</a></li><li><a href="module-log.html">log</a></li><li><a href="module-Lunar.html">Lunar</a></li><li><a href="module-Pager.html">Pager</a></li><li><a href="module-PicUploader.html">PicUploader</a></li><li><a href="module-Popup.html">Popup</a></li><li><a href="module-Rating.html">Rating</a></li><li><a href="module-ScrollBar.html">ScrollBar</a></li><li><a href="module-Select.html">Select</a></li><li><a href="module-Slider.html">Slider</a></li><li><a href="module-Tabs.html">Tabs</a></li><li><a href="module-Tip.html">Tip</a></li><li><a href="TimeLine.html">TimeLine</a></li></ul><h3>Classes</h3><ul><li><a href="initialize.html">initialize</a></li><li><a href="module-Dialog-Mask.html">Mask</a></li><li><a href="module-Slider.SliderAnim.html">SliderAnim</a></li></ul><h3>Events</h3><ul><li><a href="CalendarExtension-Menu.html#event:beforeShow">beforeShow</a></li><li><a href="CalendarExtension-Menu.html#event:click">click</a></li><li><a href="CalendarExtension-Menu.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:beforeShow">beforeShow</a></li><li><a href="module-Calendar.html#event:hide">hide</a></li><li><a href="module-Calendar.html#event:pick">pick</a></li><li><a href="module-Calendar.html#event:show">show</a></li><li><a href="module-City.html#event:beforeShow">beforeShow</a></li><li><a href="module-City.html#event:click">click</a></li><li><a href="module-City.html#event:hide">hide</a></li><li><a href="module-City.html#event:pick">pick</a></li><li><a href="module-City.html#event:show">show</a></li><li><a href="module-Control.html#event:disable">disable</a></li><li><a href="module-Control.html#event:dispose">dispose</a></li><li><a href="module-Control.html#event:enable">enable</a></li><li><a href="module-Dialog.html#event:beforedispose">beforedispose</a></li><li><a href="module-Dialog.html#event:beforehide">beforehide</a></li><li><a href="module-Dialog.html#event:beforeshow">beforeshow</a></li><li><a href="module-Dialog.html#event:cancel">cancel</a></li><li><a href="module-Dialog.html#event:confirm">confirm</a></li><li><a href="module-Dialog.html#event:dispose">dispose</a></li><li><a href="module-Dialog.html#event:hide">hide</a></li><li><a href="module-Dialog.html#event:show">show</a></li><li><a href="module-Filter.html#event:change">change</a></li><li><a href="module-Filter.html#event:click">click</a></li><li><a href="module-log.html#event:click">click</a></li><li><a href="module-log.html#event:send">send</a></li><li><a href="module-log.html#event:start">start</a></li><li><a href="module-Lunar.html#event:click">click</a></li><li><a href="module-Lunar.html#event:navigate">navigate</a></li><li><a href="module-Lunar.html#event:pick">pick</a></li><li><a href="module-Pager.html#event:change">change</a></li><li><a href="module-Pager.html#event:click">click</a></li><li><a href="module-PicUploader.html#event:error">error</a></li><li><a href="global.html#event:module:PicUploader:remove">module:PicUploader:remove</a></li><li><a href="module-Popup.html#event:beforeShow">beforeShow</a></li><li><a href="module-Popup.html#event:click">click</a></li><li><a href="module-Popup.html#event:hide">hide</a></li><li><a href="module-Popup.html#event:show">show</a></li><li><a href="module-Rating.html#event:rated">rated</a></li><li><a href="module-ScrollBar.html#event:change">change</a></li><li><a href="module-Select.html#event:beforeShow">beforeShow</a></li><li><a href="module-Select.html#event:change">change</a></li><li><a href="module-Select.html#event:hide">hide</a></li><li><a href="module-Select.html#event:pick">pick</a></li><li><a href="module-Select.html#event:show">show</a></li><li><a href="module-Slider.html#event:change">change</a></li><li><a href="module-Tabs.html#event:change">change</a></li><li><a href="module-Tip.html#event:beforeShow">beforeShow</a></li><li><a href="module-Tip.html#event:click">click</a></li><li><a href="module-Tip.html#event:hide">hide</a></li><li><a href="module-Tip.html#event:show">show</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-lib.array.html">array</a></li><li><a href="module-lib.browser.html">browser</a></li><li><a href="module-lib.configurable.html">configurable</a></li><li><a href="module-lib.date.html">date</a></li><li><a href="module-lib.dom.html">dom</a></li><li><a href="module-lib.event.html">event</a></li><li><a href="module-lib.fn.html">fn</a></li><li><a href="module-lib.object.html">object</a></li><li><a href="module-lib.observable.html">observable</a></li><li><a href="module-lib.page.html">page</a></li><li><a href="module-lib.string.html">string</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeSwitch">beforeSwitch</a></li><li><a href="global.html#disable">disable</a></li><li><a href="global.html#dispose">dispose</a></li><li><a href="global.html#enable">enable</a></li><li><a href="global.html#isBusy">isBusy</a></li><li><a href="global.html#refresh">refresh</a></li><li><a href="global.html#setOpacity">setOpacity</a></li><li><a href="global.html#switchTo">switchTo</a></li><li><a href="global.html#tick">tick</a></li><li><a href="global.html#timeHandler">timeHandler</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Dec 11 2013 21:58:44 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Dec 28 2013 21:48:14 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
 </body>
 </html>

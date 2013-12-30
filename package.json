@@ -17,8 +17,7 @@
     "grunt-template-jasmine-requirejs": "~0.1.1",
     "grunt-contrib-connect": "~0.3.0",
     "grunt-contrib-qunit": "~0.2.1",
-    "grunt-template-jasmine-istanbul": "~0.2.3",
-    "jsdoc": "git+https://github.com/jsdoc3/jsdoc"
+    "grunt-template-jasmine-istanbul": "~0.2.3"
   },
   "main": "src/ui/lib.js",
   "directories": {

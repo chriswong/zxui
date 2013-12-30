@@ -379,7 +379,7 @@ define(function (require) {
             var selectedClass = options.prefix + '-' + options.selectedClass;
 
             var value  = el.getAttribute('data-value');
-            value = isNaN(parseInt(value)) ? value : (value | 0);
+            value = isNaN(parseInt(value, 10)) ? value : (value | 0);
 
             var text = value ? el.innerHTML : this.defaultValue;
             var shortText = value
@@ -466,7 +466,7 @@ define(function (require) {
                 return;
             }
 
-            if (!lib.isObject(datasource)) {
+            if (!lib.isArray(datasource)) {
                 datasource = String(datasource).split(/\s*[,，]\s*/);
             }
 

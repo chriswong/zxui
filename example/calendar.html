@@ -8,6 +8,60 @@
 <script src="../dep/common-2.3.js"></script>
 <script src="../dep/esl.js"></script>
 <link rel="stylesheet/less" type="text/css" href="../src/css/Calendar.less" />
+<style>
+.ecl-ui-cal-menu-year-handler,
+.ecl-ui-cal-menu-month-handler {
+  text-decoration: none;
+  color: inherit;
+  cursor: default;
+}
+.ecl-ui-cal-menu-year-handler:hover,
+.ecl-ui-cal-menu-month-handler:hover {
+  color: red;
+}
+
+.ecl-ui-cal-month {
+  position: relative;
+}
+.menu-year-options,
+.menu-month-options {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 19px;
+  bottom: 0;
+  background-color: white;
+  overflow: hidden;
+}
+
+.menu-year-options a,
+.menu-month-options a {
+  display: inline-block;
+  padding: 8px 0;
+  width: 56px;
+  text-decoration: none;
+  color: #41537B;
+}
+
+.menu-month-options a {
+  padding: 8px 0;
+  width: 56px;
+}
+
+.menu-year-options a {
+  padding: 8px 0;
+  width: 34px;
+  font-size: 12px;
+}
+
+.menu-year-options .current,
+.menu-month-options .current,
+.menu-year-options a:hover,
+.menu-month-options a:hover {
+  background-color: #41537B;
+  color: white;
+}
+</style>
 </head>
 <body>
 <div id='content_left'><!--左侧最外层div-->
@@ -30,7 +84,7 @@ A.init(function () {
     require.config({
       baseUrl: '../src/ui'
     });
-    require(['Calendar'], function (Calendar) {
+    require(['Calendar', 'CalendarExtension'], function (Calendar, CalendarExtension) {
 
         var addDays = function (date, days) {
             return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
@@ -112,14 +166,14 @@ A.init(function () {
           }
         }).render();
 
-        new Calendar({
+        new CalendarExtension({
           prefix: 'ecl-ui-cal',
           main: me.qq('embed-calendar-holder'),
           triggers: 'calendar-trigger1',
           liveTriggers: me.qq('live-holder'),
           target: me.qq('calendar-target'),
           onHide: function () {
-            //console.log('hided');
+            console.log('hided');
           }
         }).render();
 
