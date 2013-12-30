@@ -52,7 +52,7 @@ define(function(require) {
      * new SliderAnim(slider, animOptions)
      * @memberof module:Slider
      */
-    SliderAnim = lib.newClass(/*@lends SliderAnim.prototype*/{
+    var SliderAnim = lib.newClass(/*@lends SliderAnim.prototype*/{
 
         /**
          * 初始化函数
