@@ -281,13 +281,6 @@ define(function (require) {
 
             var oldTarget = this.target;
 
-            /**
-             * @event module:Popup#beforeShow
-             * @type {Object}
-             * @property {DOMEvent} event 事件源对象
-             */
-            this.fire('beforeShow', { event: e });
-
             if (this.disabled) {
                 return;
             }
@@ -311,6 +304,13 @@ define(function (require) {
                     return;
                 }
             }
+
+            /**
+             * @event module:Popup#beforeShow
+             * @type {Object}
+             * @property {DOMEvent} event 事件源对象
+             */
+            this.fire('beforeShow', { event: e });
 
             this.show();
 
